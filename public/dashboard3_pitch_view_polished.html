@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA WC 2026 — Prediction Dashboard</title>
+<!-- FIFA-Themed Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;600;700&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;1,400&family=Teko:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS
+   Inspired by FIFA WC 2026 Brand Identity: High-tech control room
+═══════════════════════════════════════════════════════════ */
+:root {
+  --pitch-dark:   #061a0e;
+  --pitch-mid:    #0a2b18;
+  --pitch-light:  #144d27;
+  --pitch-bright: #1c6633;
+  --line:         rgba(255,255,255,0.22);
+  --surface-0:    #050806;
+  --surface-1:    #090f0c;
+  --surface-2:    #0f1914;
+  --surface-3:    #16251e;
+  --border-dim:   rgba(255,255,255,0.06);
+  --border-mid:   rgba(255,255,255,0.11);
+  --border-hi:    rgba(255,255,255,0.18);
+  --gold:         #F5C842;
+  --gold-dim:     #a38324;
+  --gold-glow:    rgba(245,200,66,0.22);
+  --red:          #E0453A;
+  --green-neon:   #39FF9A;
+  --blue-light:   #5ec4ff;
+  --text-hi:      #f5f2eb;
+  --text-mid:     #a2b8ab;
+  --text-lo:      #526c5e;
+  --UEFA:         #5ec4ff;
+  --CONMEBOL:     #6effc4;
+  --CAF:          #ffcc7f;
+  --CONCACAF:     #d97fe0;
+  --AFC:          #ff9f9f;
+  --OFC:          #a0b8b0;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  --ease: cubic-bezier(0.25, 1, 0.3, 1);
+  --transition: 0.35s var(--ease);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  background: var(--surface-0);
+  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--text-hi);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Stadium Floodlights & Ambient Glow */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 10% 10%, rgba(57, 255, 154, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(94, 196, 255, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(245, 200, 66, 0.05) 0%, transparent 50%);
+  animation: floodlightSweep 10s ease-in-out infinite alternate;
+}
+@keyframes floodlightSweep {
+  0% { opacity: 0.8; filter: hue-rotate(0deg); }
+  100% { opacity: 1.2; filter: hue-rotate(20deg); }
+}
+
+/* Noise overlay */
+body::after {
+  content:'';
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ═══════════════════════════════════════════════════════════
+   HERO — STADIUM PITCH
+═══════════════════════════════════════════════════════════ */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 79px,
+      rgba(255,255,255,0.015) 79px,
+      rgba(255,255,255,0.015) 80px
+    ),
+    linear-gradient(
+      180deg,
+      var(--pitch-dark)  0%,
+      var(--pitch-mid)   25%,
+      var(--pitch-light) 45%,
+      var(--pitch-bright)50%,
+      var(--pitch-light) 55%,
+      var(--pitch-mid)   75%,
+      var(--pitch-dark)  100%
+    );
+  border-bottom: 1px solid var(--border-mid);
+}
+
+/* Stadium background field lines */
+.pitch-centre-circle {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:320px; height:320px;
+  border:1.5px solid var(--line);
+  border-radius:50%;
+  pointer-events:none;
+}
+.pitch-centre-dot {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:12px; height:12px;
+  background:var(--line); border-radius:50%;
+}
+.pitch-halfway {
+  position:absolute; top:0; bottom:0; left:50%;
+  width:1.5px; background:var(--line);
+  transform:translateX(-50%);
+}
+.pitch-corner {
+  position:absolute;
+  width:60px; height:60px;
+  border:1.5px solid var(--line);
+  border-radius:50%;
+  pointer-events:none;
+}
+.pc-tl { top:-30px; left:-30px; }
+.pc-tr { top:-30px; right:-30px; }
+.pc-bl { bottom:-30px; left:-30px; }
+.pc-br { bottom:-30px; right:-30px; }
+
+.pitch-box {
+  position:absolute; top:50%; left:0;
+  transform:translateY(-50%);
+  width:130px; height:280px;
+  border:1.5px solid var(--line);
+  border-left:none;
+  pointer-events:none;
+}
+.pitch-box.right { left:auto; right:0; border-left:1.5px solid var(--line); border-right:none; }
+
+.hero-inner {
+  position:relative; z-index:2;
+  padding: 48px 60px 56px;
+  display:grid;
+  grid-template-columns: 1fr 400px;
+  align-items:center;
+  gap:50px;
+}
+
+@media (max-width: 1024px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 32px 24px;
+  }
+}
+
+/* Badge */
+.wc-badge {
+  display:inline-flex; align-items:center; gap:10px;
+  background:rgba(0,0,0,0.65);
+  border:1px solid rgba(245,200,66,0.6);
+  padding:6px 18px;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:0.8rem; letter-spacing:4px;
+  color:var(--gold); text-transform:uppercase;
+  margin-bottom:24px;
+  backdrop-filter:blur(10px);
+  border-radius: var(--radius-sm);
+}
+.live-pill {
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--red); padding:4px 10px;
+  font-size:0.7rem; letter-spacing:2px; font-weight:600;
+  border-radius:2px; margin-left:8px;
+}
+.blink-dot {
+  width:6px; height:6px; background:#fff;
+  border-radius:50%; animation:blink 1.2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+h1 {
+  font-family:'Teko',sans-serif; font-weight:700;
+  font-size:clamp(3.5rem,6vw,5.8rem);
+  letter-spacing:4px; text-transform:uppercase;
+  line-height:0.9;
+  text-shadow:0 8px 30px rgba(0,0,0,0.8);
+}
+h1 .accent { color:var(--gold); text-shadow: 0 0 20px var(--gold-glow); }
+
+.hero-sub {
+  margin-top:14px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight:600;
+  font-size:1.1rem; letter-spacing:3px;
+  color: var(--text-mid);
+  text-transform: uppercase;
+}
+
+/* Formation cards */
+.formation {
+  display:flex; justify-content:flex-start; gap:20px;
+  margin-top:40px; flex-wrap:wrap;
+}
+.player-card {
+  background: rgba(13, 20, 16, 0.55);
+  backdrop-filter:blur(16px);
+  border:1px solid var(--border-mid);
+  padding:20px 24px; text-align:center;
+  min-width:160px; flex: 1; max-width:180px;
+  position:relative; cursor:pointer;
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+  transition:transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+  will-change:transform;
+}
+.player-card:hover { 
+  transform:translateY(-10px); 
+  border-color:var(--gold); 
+  box-shadow: 0 10px 25px rgba(245,200,66,0.15);
+}
+.player-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2.5px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0; transition:opacity var(--transition);
+}
+.player-card:hover::before { opacity:1; }
+
+/* Trophy Shine / Shimmer Overlay */
+.player-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(245,200,66,0.15), transparent);
+  transform: rotate(45deg);
+  pointer-events: none;
+  transition: none;
+}
+.player-card:hover::after {
+  animation: shine 1.2s ease-in-out;
+}
+@keyframes shine {
+  0% { transform: translate(-30%, -30%) rotate(45deg); }
+  100% { transform: translate(30%, 30%) rotate(45deg); }
+}
+
+.player-card:nth-child(1) { border-color: rgba(245, 200, 66, 0.45); box-shadow: 0 0 15px rgba(245, 200, 66, 0.08); }
+.player-card:nth-child(2) { border-color: rgba(192, 192, 192, 0.45); box-shadow: 0 0 15px rgba(192, 192, 192, 0.08); }
+.player-card:nth-child(3) { border-color: rgba(205, 127, 50, 0.45); box-shadow: 0 0 15px rgba(205, 127, 50, 0.08); }
+
+.card-medal { font-size:1.8rem; margin-bottom:6px; display:block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+.card-pos {
+  font-family: 'Rajdhani', sans-serif;
+  font-size:0.65rem; letter-spacing:3px; color:var(--text-lo);
+  text-transform:uppercase; margin-bottom:5px;
+  font-weight: 700;
+}
+.card-name {
+  font-family:'Bebas Neue',sans-serif; font-weight:700;
+  font-size:1.3rem; letter-spacing:2px;
+}
+.card-conf {
+  font-family: 'Rajdhani', sans-serif;
+  font-size:0.7rem; letter-spacing:1.5px;
+  margin-top:3px; font-weight:700;
+}
+.card-prob {
+  font-family:'Bebas Neue',sans-serif; font-size:2.3rem; font-weight:700;
+  color:var(--gold); margin-top:10px; line-height:1;
+  text-shadow: 0 0 10px rgba(245,200,66,0.2);
+}
+.card-prob-label { font-size:0.6rem; color:var(--text-lo); letter-spacing:2px; margin-top:2px; font-weight:600; }
+.card-bar { height:4px; background:rgba(255,255,255,0.08); margin-top:12px; border-radius:2px; overflow:visible; position:relative; }
+.card-bar-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+  border-radius:2px; transition:width 1.2s var(--ease);
+  position:relative;
+}
+
+/* Spinning ball progress markers */
+.card-bar-fill::before, .ps-fill::before, .mc-fill::before {
+  content: '⚽';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  font-size: 0.75rem;
+  line-height: 1;
+  pointer-events: none;
+  animation: ballRotate 2.5s linear infinite;
+  display: inline-block;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+@keyframes ballRotate {
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TACTICAL LINEUP WIDGET (Hero right side)
+═══════════════════════════════════════════════════════════ */
+.tactical-pitch-widget {
+  width: 100%;
+  height: 290px;
+  background: radial-gradient(circle at 50% 10%, var(--pitch-light) 0%, var(--pitch-dark) 100%);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 50px rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px);
+  animation: pitchGlow 4s ease-in-out infinite alternate;
+}
+@keyframes pitchGlow {
+  0% { border-color: var(--border-mid); }
+  100% { border-color: rgba(57, 255, 154, 0.25); }
+}
+
+.tactical-pitch-widget::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 45px,
+    rgba(255,255,255,0.012) 45px,
+    rgba(255,255,255,0.012) 90px
+  );
+}
+
+.tp-line {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,0.14);
+  pointer-events: none;
+}
+.tp-goal {
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 16px;
+  border-top: none;
+  border-bottom: 2px dashed rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.02);
+}
+.tp-penalty-box {
+  top: 0; left: 50%; transform: translateX(-50%);
+  width: 180px; height: 75px;
+  border-top: none;
+}
+.tp-penalty-spot {
+  top: 55px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 50%;
+}
+.tp-penalty-arc {
+  top: 75px; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 30px;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-top: none;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.tp-center-line {
+  bottom: 0; left: 0; right: 0;
+  height: 0;
+  border-bottom-width: 1.5px;
+}
+.tp-center-circle {
+  bottom: -40px; left: 50%; transform: translateX(-50%);
+  width: 80px; height: 80px;
+  border-radius: 50%;
+}
+
+.tp-direction {
+  position: absolute;
+  bottom: 12px; left: 16px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  color: var(--text-lo);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.tp-team-badge {
+  position: absolute;
+  top: 12px; left: 16px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--border-mid);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+
+/* Attacking Players nodes */
+.pitch-player {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: var(--surface-3);
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.52rem;
+  font-weight: 700;
+  font-family: 'Rajdhani', sans-serif;
+  transform: translate(-50%, -50%);
+  transition: left 0.8s var(--ease), top 0.8s var(--ease), background-color 0.4s, border-color 0.4s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  cursor: pointer;
+  z-index: 5;
+}
+.pitch-player:hover {
+  transform: translate(-50%, -50%) scale(1.3);
+  box-shadow: 0 0 12px var(--gold);
+  background-color: var(--gold);
+  border-color: var(--surface-0);
+  color: #000;
+  z-index: 10;
+}
+.pitch-player::after {
+  content: attr(data-name);
+  position: absolute;
+  top: 26px; left: 50%; transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-mid);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 1px;
+}
+.pitch-player:hover::after {
+  opacity: 1;
+}
+
+.tp-kpi {
+  position: absolute;
+  background: rgba(5, 8, 6, 0.8);
+  border: 1px solid var(--border-dim);
+  backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  pointer-events: none;
+}
+.tp-kpi.tr { top: 12px; right: 12px; border-right: 2px solid var(--gold); }
+.tp-kpi.br { bottom: 12px; right: 12px; border-right: 2px solid var(--green-neon); }
+.tp-kpi-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  line-height: 1;
+}
+.tp-kpi-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.52rem;
+  letter-spacing: 1.5px;
+  color: var(--text-lo);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LAYOUT SHELL
+═══════════════════════════════════════════════════════════ */
+.shell {
+  position:relative; z-index:1;
+  display:grid;
+  grid-template-columns: 390px 1fr 310px;
+  min-height:calc(100vh - 480px);
+}
+@media (max-width: 1200px) {
+  .shell {
+    grid-template-columns: 340px 1fr;
+  }
+  .sidebar-r {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-top: 1px solid var(--border-dim);
+  }
+}
+@media (max-width: 768px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-l {
+    max-height: 400px;
+  }
+}
+
+/* Glassmorphism sidebar panels */
+.sidebar-l {
+  background: rgba(9, 15, 12, 0.7);
+  backdrop-filter: blur(12px);
+  border-right:1px solid var(--border-dim);
+  overflow-y:auto;
+  max-height:calc(100vh - 480px);
+  position:sticky; top:0;
+}
+.sidebar-l::-webkit-scrollbar { width:4px; }
+.sidebar-l::-webkit-scrollbar-track { background:transparent; }
+.sidebar-l::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+.panel-head {
+  padding:20px 24px;
+  border-bottom:1px solid var(--border-dim);
+  position:sticky; top:0; z-index:5;
+  background: rgba(9, 15, 12, 0.85);
+  backdrop-filter: blur(12px);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.panel-head-title {
+  font-family:'Bebas Neue',sans-serif; font-weight:400;
+  font-size:0.95rem; letter-spacing:3px;
+  text-transform:uppercase; color:var(--text-mid);
+}
+.panel-head-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size:0.75rem; letter-spacing:2px;
+  padding:4px 10px; border:1px solid var(--gold-dim);
+  color:var(--gold); text-transform:uppercase;
+  background: rgba(245,200,66,0.05);
+}
+
+/* Rank rows styling */
+.rank-row {
+  display:grid;
+  grid-template-columns: 44px 20px 1fr auto 70px;
+  align-items:center; gap:0;
+  border-bottom:1px solid var(--border-dim);
+  cursor:pointer;
+  transition:background var(--transition), border-left var(--transition);
+  position:relative; overflow:hidden;
+}
+.rank-row::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--gold); opacity:0; transform:scaleY(0);
+  transition:opacity var(--transition), transform var(--transition);
+  transform-origin:center;
+}
+.rank-row:hover { background:rgba(245,200,66,0.06); }
+.rank-row:hover::before { opacity:0.6; transform:scaleY(1); }
+
+/* Highlighting Active Rank Row */
+.rank-row.active {
+  background: rgba(245, 200, 66, 0.12);
+  border-left: 3px solid var(--gold);
+}
+.rank-row.active .rr-pos {
+  color: var(--gold);
+  font-weight: bold;
+}
+
+.rr-pos {
+  font-family:'Bebas Neue',sans-serif; font-size:1.3rem;
+  color:var(--text-lo); text-align:center;
+  padding:14px 0 14px 10px;
+  transition:color var(--transition);
+}
+.rank-row:hover .rr-pos { color:var(--gold); }
+.rr-pos.gold   { color:var(--gold); text-shadow: 0 0 8px rgba(245,200,66,0.3); }
+.rr-pos.silver { color:#c0c0c0; }
+.rr-pos.bronze { color:#cd7f32; }
+
+.rr-conf-bar {
+  width:3px; align-self:stretch;
+  border-radius:0;
+}
+.rr-body { padding:12px 14px; }
+.rr-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight:700; font-size:0.95rem;
+  color:var(--text-hi); display:block; margin-bottom:3px;
+  letter-spacing: 0.5px;
+}
+.rr-meta { font-family: 'Barlow Condensed', sans-serif; font-size:0.75rem; color:var(--text-lo); letter-spacing:1px; }
+
+.rr-spark {
+  padding:12px 8px; display:flex; flex-direction:column;
+  align-items:flex-end; gap:4px;
+}
+.rr-spark-bar { width:40px; height:3px; background:var(--border-dim); border-radius:2px; overflow:hidden; }
+.rr-spark-fill { height:100%; border-radius:2px; transition:width 1.4s var(--ease); }
+.rr-prob-val {
+  font-family:'Bebas Neue',sans-serif; font-size:1.15rem;
+  color:var(--gold); text-align:right; padding:12px 16px 12px 4px;
+  min-width:58px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MAIN PANEL — CHARTS & PLOTS
+═══════════════════════════════════════════════════════════ */
+.main-panel {
+  padding:28px 32px;
+  display:flex; flex-direction:column; gap:24px;
+  overflow-y:auto; max-height:calc(100vh - 480px);
+  background:var(--surface-0);
+}
+.main-panel::-webkit-scrollbar { width:4px; }
+.main-panel::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+.chart-card {
+  background: rgba(9, 15, 12, 0.4);
+  border:1px solid var(--border-dim);
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  transition:border-color var(--transition), box-shadow var(--transition);
+  backdrop-filter: blur(8px);
+}
+.chart-card:hover { border-color:var(--border-hi); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+.chart-card-head {
+  padding:16px 20px;
+  border-bottom:1px solid var(--border-dim);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.chart-card-title {
+  font-family:'Bebas Neue',sans-serif; font-weight:400;
+  font-size:0.95rem; letter-spacing:3px;
+  color:var(--text-mid); text-transform:uppercase;
+}
+.chart-card-sub { font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size:0.7rem; color:var(--text-lo); letter-spacing:1px; text-transform: uppercase; }
+.chart-card-body { padding:22px; }
+
+/* Probability Spectrum Bar Chart */
+.prob-spectrum { display:flex; flex-direction:column; gap:10px; }
+.ps-row { display:grid; grid-template-columns:120px 1fr 58px; align-items:center; gap:14px; }
+.ps-label { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size:0.88rem; color:var(--text-hi); }
+.ps-track {
+  height:12px; background:rgba(255,255,255,0.03);
+  border-radius:6px; overflow:visible; position:relative;
+}
+.ps-fill {
+  height:100%; border-radius:6px;
+  transition:width 1.3s var(--ease);
+  position:relative;
+}
+.ps-fill::after {
+  content:''; position:absolute; right:0; top:0; bottom:0;
+  width:4px; background:rgba(255,255,255,0.4);
+  border-radius:2px;
+}
+.ps-val {
+  font-family:'Bebas Neue',sans-serif; font-size:1.15rem;
+  color:var(--gold); text-align:right; font-weight:400;
+}
+.ps-conf-tag {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size:0.65rem; padding:2px 6px;
+  border:1px solid; border-radius:2px;
+  letter-spacing:1.5px; text-transform:uppercase;
+  white-space:nowrap;
+  display: inline-block;
+  line-height: 1;
+}
+
+/* Model Comparison rows */
+.model-chart { display:flex; flex-direction:column; gap:12px; }
+.mc-row { display:grid; grid-template-columns:130px 1fr 52px 52px; align-items:center; gap:14px; }
+.mc-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size:0.85rem; color:var(--text-mid); letter-spacing:0.5px; }
+.mc-track {
+  height:10px; background:rgba(255,255,255,0.03);
+  border-radius:5px; overflow:visible; position:relative;
+}
+.mc-fill { height:100%; border-radius:5px; transition:width 1.4s var(--ease); }
+.mc-auc {
+  font-family:'Bebas Neue',sans-serif; font-size:1.1rem;
+  color:var(--text-hi); text-align:right;
+}
+.mc-acc {
+  font-family:'Bebas Neue',sans-serif; font-size:0.95rem;
+  color:var(--text-lo); text-align:right;
+}
+
+/* SVG Line Animations for Cross-Validation Chart */
+#cvChart { width:100%; height:160px; display:block; }
+.cv-line {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: drawLine 2.5s cubic-bezier(0.25, 1, 0.3, 1) forwards;
+}
+.cv-area {
+  opacity: 0;
+  animation: fadeInArea 2s ease forwards 0.6s;
+}
+@keyframes drawLine { to { stroke-dashoffset: 0; } }
+@keyframes fadeInArea { to { opacity: 0.06; } }
+
+/* Scatter Plot Pop In Animations */
+#scatterChart { width:100%; height:220px; display:block; cursor:crosshair; }
+#scatterChart circle {
+  opacity: 0;
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: scatterPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes scatterPop {
+  to { opacity: 0.8; transform: scale(1); }
+}
+
+/* Histogram styling */
+.hist-bars { display:flex; align-items:flex-end; gap:4px; height:120px; padding-top:10px; }
+.hist-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.hist-bar {
+  width:100%; border-radius:3px 3px 0 0;
+  transition:height 1.2s var(--ease);
+  background:linear-gradient(180deg, var(--gold), rgba(245,200,66,0.15));
+  min-height:2px;
+  cursor:pointer;
+}
+.hist-bar:hover { filter:brightness(1.3); }
+.hist-label { font-family: 'Rajdhani', sans-serif; font-weight: 600; font-size:0.6rem; color:var(--text-lo); letter-spacing:0.5px; }
+.hist-count { font-family: 'Bebas Neue', sans-serif; font-size:0.7rem; color:var(--text-mid); }
+
+/* Feature Importance rows */
+.feat-list { display:flex; flex-direction:column; gap:8px; }
+.feat-row {
+  display:grid; grid-template-columns:20px 1fr 60px 40px;
+  align-items:center; gap:10px;
+  padding:6px 8px;
+  border-radius:4px;
+  transition:background var(--transition);
+  cursor:default;
+}
+.feat-row:hover { background:rgba(255,255,255,0.03); }
+.feat-num { font-family:'Bebas Neue',sans-serif; font-size:0.95rem; color:var(--text-lo); text-align:center; }
+.feat-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size:0.8rem; color:var(--text-mid); }
+.feat-track { height:5px; background:rgba(255,255,255,0.03); border-radius:2px; overflow:hidden; }
+.feat-fill { height:100%; border-radius:2px; transition:width 1.5s var(--ease); }
+.feat-pct { font-size:0.85rem; color:var(--text-lo); text-align:right; font-family:'Bebas Neue',sans-serif; }
+
+.chart-grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+@media (max-width: 900px) {
+  .chart-grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RIGHT SIDEBAR — INTEL SECTION
+═══════════════════════════════════════════════════════════ */
+.sidebar-r {
+  background: rgba(9, 15, 12, 0.7);
+  backdrop-filter: blur(12px);
+  border-left:1px solid var(--border-dim);
+  overflow-y:auto;
+  max-height:calc(100vh - 480px);
+  position:sticky; top:0;
+  display:flex; flex-direction:column;
+}
+.sidebar-r::-webkit-scrollbar { width:4px; }
+.sidebar-r::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+/* Donut */
+.donut-wrap {
+  padding:24px 22px;
+  border-bottom:1px solid var(--border-dim);
+}
+.donut-title {
+  font-family:'Bebas Neue',sans-serif; font-size:0.9rem;
+  letter-spacing:3px; color:var(--text-lo);
+  text-transform:uppercase; margin-bottom:16px;
+  text-align:center;
+}
+.donut-svg-wrap { position:relative; width:160px; margin:0 auto; }
+.donut-center-text {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.dc-num {
+  font-family:'Bebas Neue',sans-serif; font-size:2.2rem;
+  font-weight:600; color:var(--gold); line-height:1;
+  text-shadow: 0 0 10px rgba(245,200,66,0.25);
+}
+.dc-label { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size:0.6rem; letter-spacing:2px; color:var(--text-lo); margin-top:3px; text-transform: uppercase; text-align: center; }
+
+svg.donut-svg { width:160px; height:160px; transform:rotate(-90deg); overflow:visible; }
+.donut-ring-bg { fill:none; stroke:rgba(255,255,255,0.03); stroke-width:18; }
+.donut-seg { fill:none; stroke-width:18; stroke-linecap:butt; transition:stroke-dashoffset 1.4s var(--ease); }
+
+/* Legend */
+.legend { padding:0 22px 20px; display:flex; flex-direction:column; gap:8px; }
+.legend-item {
+  display:grid; grid-template-columns:10px 1fr auto auto;
+  align-items:center; gap:8px;
+  padding:6px 0;
+  border-bottom:1px solid var(--border-dim);
+  cursor:pointer;
+  transition:background var(--transition);
+}
+.legend-item:last-child { border-bottom:none; }
+.legend-item:hover { background:rgba(255,255,255,0.03); border-radius:4px; }
+.legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.legend-name { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size:0.85rem; color:var(--text-mid); }
+.legend-teams { font-family: 'Barlow Condensed', sans-serif; font-size:0.75rem; color:var(--text-lo); }
+.legend-prob { font-family:'Bebas Neue',sans-serif; font-size:1.15rem; color:var(--gold); }
+
+/* KPI tiles grid */
+.kpi-tiles {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:0; border-top:1px solid var(--border-dim);
+}
+.kpi-tile {
+  padding:18px 16px; text-align:center;
+  border-right:1px solid var(--border-dim);
+  border-bottom:1px solid var(--border-dim);
+  position:relative; overflow:hidden;
+  cursor:default;
+  transition:background var(--transition);
+}
+.kpi-tile:hover { background:rgba(255,255,255,0.03); }
+.kpi-tile:nth-child(even) { border-right:none; }
+.kpi-tile::after {
+  content:''; position:absolute; bottom:0; left:0; right:0;
+  height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);
+}
+.kt-num {
+  font-family:'Bebas Neue',sans-serif; font-size:1.9rem;
+  font-weight:600; color:var(--gold); display:block; line-height:1;
+}
+.kt-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size:0.6rem; letter-spacing:2px; color:var(--text-lo);
+  text-transform:uppercase; margin-top:5px; display:block;
+  font-weight: 700;
+}
+
+/* Radar chart */
+.radar-section {
+  padding:22px;
+  border-top:1px solid var(--border-dim);
+  flex:1;
+}
+.radar-title {
+  font-family:'Bebas Neue',sans-serif; font-size:0.9rem;
+  letter-spacing:3px; color:var(--text-lo);
+  text-transform:uppercase; margin-bottom:14px; text-align:center;
+}
+#radarChart { width:100%; height:180px; display:block; }
+
+/* Team selectors */
+.team-selector {
+  display:flex; gap:6px; flex-wrap:wrap;
+  margin-bottom:12px; justify-content:center;
+}
+.ts-btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size:0.7rem; padding:4px 10px;
+  border:1px solid var(--border-mid);
+  background:transparent; color:var(--text-lo);
+  cursor:pointer; letter-spacing:1px; text-transform:uppercase;
+  border-radius:2px; transition:all var(--transition);
+}
+.ts-btn:hover, .ts-btn.active { border-color:var(--gold); color:var(--gold); background:var(--gold-glow); }
+
+/* ═══════════════════════════════════════════════════════════
+   FOOTER TICKER BAR
+═══════════════════════════════════════════════════════════ */
+.ticker-bar {
+  position:fixed; bottom:0; left:0; right:0; z-index:50;
+  background:var(--surface-2);
+  border-top:1px solid var(--border-mid);
+  height:34px; display:flex; align-items:center; overflow:hidden;
+  backdrop-filter: blur(10px);
+}
+.ticker-label {
+  background:var(--gold); color:#000;
+  font-family:'Bebas Neue',sans-serif; font-size:0.95rem; font-weight:600;
+  letter-spacing:2px; padding:0 18px; height:100%;
+  display:flex; align-items:center; white-space:nowrap; flex-shrink:0;
+  box-shadow: 5px 0 15px rgba(0,0,0,0.4);
+  z-index: 2;
+}
+.ticker-scroll { overflow:hidden; flex:1; z-index: 1; }
+.ticker-text {
+  white-space:nowrap;
+  font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:2px;
+  color:var(--text-mid); animation:ticker 40s linear infinite;
+  display:inline-block;
+  line-height: 34px;
+}
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ═══════════════════════════════════════════════════════════
+   TOOLTIP
+═══════════════════════════════════════════════════════════ */
+.tooltip {
+  position:fixed; z-index:200;
+  background:rgba(15, 25, 20, 0.9); border:1px solid var(--border-hi);
+  padding:10px 14px; border-radius:var(--radius-sm);
+  font-size:0.8rem; color:var(--text-hi);
+  pointer-events:none; opacity:0; transition:opacity 0.2s;
+  max-width:180px; line-height:1.5;
+  backdrop-filter:blur(16px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 500;
+}
+.tooltip.visible { opacity:1; }
+.tt-team { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; color:var(--gold); display:block; margin-bottom:4px; letter-spacing:1px; }
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE LOADING AND VIEW TRANSITION ANIMATIONS
+═══════════════════════════════════════════════════════════ */
+.fade-up {
+  opacity:0; transform:translateY(20px);
+  animation:fadeUp 0.8s var(--ease) forwards;
+}
+@keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+.d1{animation-delay:0.05s} .d2{animation-delay:0.1s} .d3{animation-delay:0.15s}
+.d4{animation-delay:0.2s}  .d5{animation-delay:0.25s} .d6{animation-delay:0.3s}
+.d7{animation-delay:0.35s} .d8{animation-delay:0.4s}
+
+.section-label {
+  display:flex; align-items:center; gap:10px; margin-bottom:14px;
+}
+.sl-line { flex:1; height:1px; background:var(--border-dim); }
+.sl-text {
+  font-family:'Bebas Neue',sans-serif; font-weight:300;
+  font-size:0.85rem; letter-spacing:4px; color:var(--text-lo);
+  text-transform:uppercase; white-space:nowrap;
+}
+
+/* Next.js style View Transitions Morph Customization */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: var(--ease);
+}
+</style>
+</head>
+<body>
+
+<div class="tooltip" id="tooltip"></div>
+
+<!-- ═══ HERO SECTION ═══ -->
+<section class="hero fade-up d1">
+  <div class="pitch-halfway"></div>
+  <div class="pitch-centre-circle"></div>
+  <div class="pitch-centre-dot"></div>
+  <div class="pitch-corner pc-tl"></div>
+  <div class="pitch-corner pc-tr"></div>
+  <div class="pitch-corner pc-bl"></div>
+  <div class="pitch-corner pc-br"></div>
+  <div class="pitch-box"></div>
+  <div class="pitch-box right"></div>
+
+  <div class="hero-inner">
+    <!-- Hero Left: Branding & Favorites -->
+    <div>
+      <div>
+        <div class="wc-badge">
+          ⚽ Machine Learning Oracle
+          <span class="live-pill"><span class="blink-dot"></span>LIVE</span>
+        </div>
+      </div>
+      <h1>FIFA World Cup<br><span class="accent">2026</span></h1>
+      <p class="hero-sub">Predictive Analytics · USA · Canada · Mexico</p>
+
+      <div class="formation" id="topCards"></div>
+    </div>
+
+    <!-- Hero Right: Attacking Tactical Pitch Visualizer -->
+    <div class="fade-up d3">
+      <div class="tactical-pitch-widget" id="tacticalPitch">
+        <div class="tp-team-badge" id="tpTeamBadge">SPAIN</div>
+        
+        <!-- Lines -->
+        <div class="tp-line tp-goal"></div>
+        <div class="tp-line tp-penalty-box"></div>
+        <div class="tp-line tp-penalty-spot"></div>
+        <div class="tp-line tp-penalty-arc"></div>
+        <div class="tp-line tp-center-line"></div>
+        <div class="tp-line tp-center-circle"></div>
+        <div class="tp-direction">◀ attacking half</div>
+        
+        <!-- Sleek overlays -->
+        <div class="tp-kpi tr">
+          <span class="tp-kpi-num" id="tpKpiProb">82.2%</span>
+          <span class="tp-kpi-label">Win Prob</span>
+        </div>
+        <div class="tp-kpi br">
+          <span class="tp-kpi-num" id="tpKpiRank">#1</span>
+          <span class="tp-kpi-label">Rank</span>
+        </div>
+        
+        <!-- Player dots container -->
+        <div id="tpPlayers"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MAIN LAYOUT SHELL ═══ -->
+<div class="shell">
+
+  <!-- LEFT COLUMN: Rankings Sidebar -->
+  <aside class="sidebar-l fade-up d4">
+    <div class="panel-head">
+      <span class="panel-head-title">World Rankings</span>
+      <span class="panel-head-badge">Ensemble Model</span>
+    </div>
+    <div id="rankList"></div>
+  </aside>
+
+  <!-- CENTER COLUMN: Interactive Analytics Charts -->
+  <main class="main-panel fade-up d5">
+
+    <!-- Win Probability Spectrum -->
+    <div class="chart-card">
+      <div class="chart-card-head">
+        <span class="chart-card-title">Win Probability Spectrum</span>
+        <span class="chart-card-sub">Top 12 Nations · Ensemble Model</span>
+      </div>
+      <div class="chart-card-body">
+        <div class="prob-spectrum" id="probSpectrum"></div>
+      </div>
+    </div>
+
+    <!-- Dual Column Grid -->
+    <div class="chart-grid-2">
+
+      <!-- Model Performance Comparer -->
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <span class="chart-card-title">Model Performance</span>
+          <span class="chart-card-sub">AUC-ROC & Accuracy Leaderboard</span>
+        </div>
+        <div class="chart-card-body">
+          <div class="model-chart" id="modelChart"></div>
+        </div>
+      </div>
+
+      <!-- Probability Distribution histogram -->
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <span class="chart-card-title">Probability Distribution</span>
+          <span class="chart-card-sub">Distribution of 250 Test Nations</span>
+        </div>
+        <div class="chart-card-body">
+          <div class="hist-bars" id="histBars"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 5-Fold Cross Validation folds -->
+    <div class="chart-card">
+      <div class="chart-card-head">
+        <span class="chart-card-title">5-Fold Cross-Validation</span>
+        <span class="chart-card-sub">AUC scores per fold — XGBoost · LightGBM · Random Forest</span>
+      </div>
+      <div class="chart-card-body">
+        <svg id="cvChart"></svg>
+        <div style="display:flex;gap:24px;margin-top:14px;justify-content:center">
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--text-lo)">
+            <svg width="24" height="4"><line x1="0" y1="2" x2="24" y2="2" stroke="#F5C842" stroke-width="2" stroke-dasharray="4 2"/></svg>XGBoost
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--text-lo)">
+            <svg width="24" height="4"><line x1="0" y1="2" x2="24" y2="2" stroke="#5ec4ff" stroke-width="2" stroke-dasharray="4 2"/></svg>LightGBM
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--text-lo)">
+            <svg width="24" height="4"><line x1="0" y1="2" x2="24" y2="2" stroke="#6effc4" stroke-width="2" stroke-dasharray="4 2"/></svg>Random Forest
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dual Column Grid Bottom: Scatter & Features -->
+    <div class="chart-grid-2">
+
+      <!-- Scatter: FIFA pts vs Win Prob -->
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <span class="chart-card-title">FIFA Points vs Win Prob</span>
+          <span class="chart-card-sub">Bubble size = Market Value</span>
+        </div>
+        <div class="chart-card-body" style="padding:12px 16px">
+          <svg id="scatterChart"></svg>
+        </div>
+      </div>
+
+      <!-- Feature Importance -->
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <span class="chart-card-title">Feature Importance</span>
+          <span class="chart-card-sub">Top 10 Predictor Values</span>
+        </div>
+        <div class="chart-card-body">
+          <div class="feat-list" id="featList"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- RIGHT COLUMN: Intelligence Side panel -->
+  <aside class="sidebar-r fade-up d6">
+
+    <!-- Confederation share donut -->
+    <div class="donut-wrap">
+      <div class="donut-title">Confederation Share</div>
+      <div class="donut-svg-wrap">
+        <svg class="donut-svg" viewBox="0 0 160 160">
+          <circle class="donut-ring-bg" cx="80" cy="80" r="58"/>
+          <circle id="donut-UEFA"     class="donut-seg" cx="80" cy="80" r="58" stroke="#5ec4ff"/>
+          <circle id="donut-CONMEBOL" class="donut-seg" cx="80" cy="80" r="58" stroke="#6effc4"/>
+          <circle id="donut-CAF"      class="donut-seg" cx="80" cy="80" r="58" stroke="#ffcc7f"/>
+          <circle id="donut-AFC"      class="donut-seg" cx="80" cy="80" r="58" stroke="#ff9f9f"/>
+          <circle id="donut-CONCACAF" class="donut-seg" cx="80" cy="80" r="58" stroke="#d97fe0"/>
+          <circle id="donut-OFC"      class="donut-seg" cx="80" cy="80" r="58" stroke="#a0b8b0"/>
+        </svg>
+        <div class="donut-center-text">
+          <span class="dc-num">47</span>
+          <span class="dc-label">UNIQUE<br>TEAMS</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confederation Legend -->
+    <div class="legend" id="confLegend"></div>
+
+    <!-- Quick stats grid -->
+    <div class="kpi-tiles">
+      <div class="kpi-tile">
+        <span class="kt-num">0.675</span>
+        <span class="kt-label">Ensemble AUC</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kt-num">63%</span>
+        <span class="kt-label">Best Accuracy</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kt-num">1,000</span>
+        <span class="kt-label">Train Rows</span>
+      </div>
+      <div class="kpi-tile">
+        <span class="kt-num">5-Fold</span>
+        <span class="kt-label">Cross-Val</span>
+      </div>
+    </div>
+
+    <!-- Team Radar Profiler -->
+    <div class="radar-section">
+      <div class="radar-title">Team Profile Radar</div>
+      <div class="team-selector" id="teamSelector"></div>
+      <svg id="radarChart"></svg>
+    </div>
+
+  </aside>
+
+</div>
+
+<!-- Footer ticker bar -->
+<div class="ticker-bar">
+  <div class="ticker-label">⚽ WC 2026 ORACLE</div>
+  <div class="ticker-scroll">
+    <span class="ticker-text">
+      🏆 SPAIN 82.2% · FRANCE 82.1% · BRAZIL 79.6% · ENGLAND 77.4% · ARGENTINA 76.1% · MEXICO 66.9% · USA 64.8% · ECUADOR 61.6% · CROATIA 60.6% · MOROCCO 58.7% · NETHERLANDS 58.2% · ITALY 57.8% · URUGUAY 57.2% · GERMANY 56.8% · JAPAN 54.1% · Model AUC 0.675 · Training Samples 1,000 · Features 35 ·&nbsp;&nbsp;&nbsp;&nbsp;
+      🏆 SPAIN 82.2% · FRANCE 82.1% · BRAZIL 79.6% · ENGLAND 77.4% · ARGENTINA 76.1% · MEXICO 66.9% · USA 64.8% · ECUADOR 61.6% · CROATIA 60.6% · MOROCCO 58.7% · NETHERLANDS 58.2% · ITALY 57.8% · URUGUAY 57.2% · GERMANY 56.8% · JAPAN 54.1% · Model AUC 0.675 · Training Samples 1,000 · Features 35 ·
+    </span>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   DATA (real from model outputs)
+───────────────────────────────────────────── */
+const TEAMS = [
+  {name:'Spain',      conf:'UEFA',     prob:0.8220, pts:1862.4, rating:86.95, mv:917,  wr:0.763, form:8.76},
+  {name:'France',     conf:'UEFA',     prob:0.8205, pts:1898.1, rating:85.66, mv:883,  wr:0.749, form:8.75},
+  {name:'Brazil',     conf:'CONMEBOL', prob:0.7956, pts:1883.3, rating:86.35, mv:811,  wr:0.766, form:8.93},
+  {name:'England',    conf:'UEFA',     prob:0.7741, pts:1891.5, rating:85.84, mv:967,  wr:0.775, form:8.48},
+  {name:'Argentina',  conf:'CONMEBOL', prob:0.7607, pts:1872.8, rating:86.22, mv:982,  wr:0.758, form:8.35},
+  {name:'Mexico',     conf:'CONCACAF', prob:0.6688, pts:1566.3, rating:76.30, mv:403,  wr:0.528, form:5.27},
+  {name:'USA',        conf:'CONCACAF', prob:0.6476, pts:1610.4, rating:77.30, mv:412,  wr:0.501, form:5.53},
+  {name:'Ecuador',    conf:'CONMEBOL', prob:0.6162, pts:1665.2, rating:78.58, mv:421,  wr:0.498, form:5.88},
+  {name:'Croatia',    conf:'UEFA',     prob:0.6064, pts:1722.7, rating:83.41, mv:645,  wr:0.626, form:6.49},
+  {name:'Morocco',    conf:'CAF',      prob:0.5873, pts:1671.6, rating:78.57, mv:488,  wr:0.522, form:6.03},
+  {name:'Netherlands',conf:'UEFA',     prob:0.5821, pts:1729.8, rating:81.78, mv:616,  wr:0.653, form:7.10},
+  {name:'Italy',      conf:'UEFA',     prob:0.5785, pts:1710.6, rating:81.74, mv:590,  wr:0.635, form:7.30},
+  {name:'Uruguay',    conf:'CONMEBOL', prob:0.5715, pts:1790.7, rating:82.30, mv:675,  wr:0.655, form:7.88},
+  {name:'Germany',    conf:'UEFA',     prob:0.5683, pts:1757.0, rating:81.56, mv:653,  wr:0.634, form:6.79},
+  {name:'Japan',      conf:'AFC',      prob:0.5405, pts:1603.9, rating:78.02, mv:342,  wr:0.476, form:5.17},
+  {name:'Portugal',   conf:'UEFA',     prob:0.5047, pts:1751.9, rating:82.08, mv:688,  wr:0.659, form:7.23},
+  {name:'Senegal',    conf:'CAF',      prob:0.4966, pts:1661.4, rating:76.91, mv:453,  wr:0.509, form:5.30},
+  {name:'Denmark',    conf:'UEFA',     prob:0.5157, pts:1603.4, rating:77.80, mv:407,  wr:0.540, form:5.53},
+];
+
+const CONF_DATA = [
+  {n:'UEFA',    teams:18, avgProb:50.6, maxProb:82.2, col:'#5ec4ff'},
+  {n:'CONMEBOL',teams:7,  avgProb:51.9, maxProb:79.6, col:'#6effc4'},
+  {n:'CONCACAF',teams:6,  avgProb:42.4, maxProb:66.9, col:'#d97fe0'},
+  {n:'AFC',     teams:7,  avgProb:27.6, maxProb:54.1, col:'#ff9f9f'},
+  {n:'CAF',     teams:8,  avgProb:28.5, maxProb:58.7, col:'#ffcc7f'},
+  {n:'OFC',     teams:1,  avgProb:12.8, maxProb:12.8, col:'#a0b8b0'},
+];
+
+const MODELS = [
+  {n:'Random Forest', auc:0.6711, acc:0.635, col:'#6effc4', w:95},
+  {n:'Ensemble',      auc:0.6748, acc:0.630, col:'#F5C842', w:97},
+  {n:'LightGBM',      auc:0.6539, acc:0.640, col:'#5ec4ff', w:88},
+  {n:'XGBoost',       auc:0.6534, acc:0.595, col:'#ff9f40', w:87},
+  {n:'Grad. Boost',   auc:0.6376, acc:0.610, col:'#d97fe0', w:82},
+];
+
+const CV_DATA = {
+  XGBoost:  [0.6087, 0.6225, 0.6743, 0.6884, 0.6947],
+  LightGBM: [0.6036, 0.6143, 0.6575, 0.6725, 0.6847],
+  RF:       [0.6422, 0.6376, 0.6837, 0.7385, 0.7580],
+};
+
+const HIST = [13,29,35,15,29,29,29,27,36,8];
+const HIST_LABELS = ['0–10','10–20','20–30','30–40','40–50','50–60','60–70','70–80','80–90','90+'];
+
+const FEATURES = [
+  {n:'Strength Index',       pct:100},
+  {n:'Squad Quality',        pct:92},
+  {n:'Market Value',         pct:85},
+  {n:'Avg Player Rating',    pct:80},
+  {n:'FIFA Points',          pct:76},
+  {n:'Attack Potency',       pct:70},
+  {n:'Form Consistency',     pct:64},
+  {n:'Win Rate (Last Yr)',   pct:59},
+  {n:'Recent Form Score',    pct:53},
+  {n:'Star Power',           pct:47},
+];
+
+/* ─────────────────────────────────────────────
+   LINEUPS DATABASE (Real/simulated for interactive pitch)
+───────────────────────────────────────────── */
+const LINEUPS = {
+  'Spain': {
+    formation: '4-3-3',
+    players: [
+      {pos: 'GK', name: 'David Raya', x: 50, y: 88},
+      {pos: 'RB', name: 'Carvajal', x: 84, y: 70},
+      {pos: 'RCB', name: 'Le Normand', x: 62, y: 73},
+      {pos: 'LCB', name: 'Laporte', x: 38, y: 73},
+      {pos: 'LB', name: 'Grimaldo', x: 16, y: 70},
+      {pos: 'RCM', name: 'Pedri', x: 68, y: 50},
+      {pos: 'DM', name: 'Rodri', x: 50, y: 56},
+      {pos: 'LCM', name: 'Fabián Ruiz', x: 32, y: 50},
+      {pos: 'RW', name: 'Lamine Yamal', x: 78, y: 26},
+      {pos: 'ST', name: 'Álvaro Morata', x: 50, y: 18},
+      {pos: 'LW', name: 'Nico Williams', x: 22, y: 26}
+    ]
+  },
+  'France': {
+    formation: '4-2-3-1',
+    players: [
+      {pos: 'GK', name: 'Maignan', x: 50, y: 88},
+      {pos: 'RB', name: 'Koundé', x: 84, y: 70},
+      {pos: 'RCB', name: 'Upamecano', x: 62, y: 73},
+      {pos: 'LCB', name: 'Saliba', x: 38, y: 73},
+      {pos: 'LB', name: 'Hernández', x: 16, y: 70},
+      {pos: 'RDM', name: 'Tchouaméni', x: 64, y: 58},
+      {pos: 'LDM', name: 'N\'Golo Kanté', x: 36, y: 58},
+      {pos: 'RAM', name: 'O. Dembélé', x: 76, y: 40},
+      {pos: 'AM', name: 'Griezmann', x: 50, y: 42},
+      {pos: 'LAM', name: 'B. Barcola', x: 24, y: 40},
+      {pos: 'ST', name: 'K. Mbappé', x: 50, y: 18}
+    ]
+  },
+  'Brazil': {
+    formation: '4-2-3-1',
+    players: [
+      {pos: 'GK', name: 'Alisson Becker', x: 50, y: 88},
+      {pos: 'RB', name: 'Danilo', x: 84, y: 70},
+      {pos: 'RCB', name: 'Marquinhos', x: 62, y: 73},
+      {pos: 'LCB', name: 'Gabriel Magalhães', x: 38, y: 73},
+      {pos: 'LB', name: 'Guilherme Arana', x: 16, y: 70},
+      {pos: 'RDM', name: 'Bruno Guimarães', x: 64, y: 58},
+      {pos: 'LDM', name: 'João Gomes', x: 36, y: 58},
+      {pos: 'RAM', name: 'Raphinha', x: 76, y: 40},
+      {pos: 'AM', name: 'Lucas Paquetá', x: 50, y: 42},
+      {pos: 'LAM', name: 'Vinícius Júnior', x: 24, y: 40},
+      {pos: 'ST', name: 'Rodrygo Silva', x: 50, y: 18}
+    ]
+  },
+  'England': {
+    formation: '4-3-3',
+    players: [
+      {pos: 'GK', name: 'Jordan Pickford', x: 50, y: 88},
+      {pos: 'RB', name: 'Kyle Walker', x: 84, y: 70},
+      {pos: 'RCB', name: 'John Stones', x: 62, y: 73},
+      {pos: 'LCB', name: 'Marc Guéhi', x: 38, y: 73},
+      {pos: 'LB', name: 'Luke Shaw', x: 16, y: 70},
+      {pos: 'RCM', name: 'Jude Bellingham', x: 68, y: 50},
+      {pos: 'DM', name: 'Declan Rice', x: 50, y: 56},
+      {pos: 'LCM', name: 'Kobbie Mainoo', x: 32, y: 50},
+      {pos: 'RW', name: 'Bukayo Saka', x: 78, y: 26},
+      {pos: 'ST', name: 'Harry Kane', x: 50, y: 18},
+      {pos: 'LW', name: 'Phil Foden', x: 22, y: 26}
+    ]
+  },
+  'Argentina': {
+    formation: '4-4-2',
+    players: [
+      {pos: 'GK', name: 'Emi Martínez', x: 50, y: 88},
+      {pos: 'RB', name: 'Nahuel Molina', x: 84, y: 70},
+      {pos: 'RCB', name: 'Cuti Romero', x: 62, y: 73},
+      {pos: 'LCB', name: 'N. Otamendi', x: 38, y: 73},
+      {pos: 'LB', name: 'N. Tagliafico', x: 16, y: 70},
+      {pos: 'RM', name: 'Rodrigo De Paul', x: 80, y: 50},
+      {pos: 'RCM', name: 'Enzo Fernández', x: 60, y: 52},
+      {pos: 'LCM', name: 'Alexis Mac Allister', x: 40, y: 52},
+      {pos: 'LM', name: 'Nico González', x: 20, y: 50},
+      {pos: 'RS', name: 'Lionel Messi', x: 62, y: 22},
+      {pos: 'LS', name: 'Lautaro Martínez', x: 38, y: 22}
+    ]
+  },
+  'Germany': {
+    formation: '4-2-3-1',
+    players: [
+      {pos: 'GK', name: 'M. ter Stegen', x: 50, y: 88},
+      {pos: 'RB', name: 'Joshua Kimmich', x: 84, y: 70},
+      {pos: 'RCB', name: 'Jonathan Tah', x: 62, y: 73},
+      {pos: 'LCB', name: 'A. Rüdiger', x: 38, y: 73},
+      {pos: 'LB', name: 'David Raum', x: 16, y: 70},
+      {pos: 'RDM', name: 'Robert Andrich', x: 64, y: 58},
+      {pos: 'LDM', name: 'Pascal Groß', x: 36, y: 58},
+      {pos: 'RAM', name: 'Leroy Sané', x: 76, y: 40},
+      {pos: 'AM', name: 'Ilkay Gündogan', x: 50, y: 42},
+      {pos: 'LAM', name: 'Florian Wirtz', x: 24, y: 40},
+      {pos: 'ST', name: 'Kai Havertz', x: 50, y: 18}
+    ]
+  }
+};
+
+// Generic Lineup Generator for other teams
+function getLineup(teamName) {
+  if (LINEUPS[teamName]) {
+    return LINEUPS[teamName];
+  }
+  // Alternate formations based on string length hash
+  const forms = ['4-3-3', '4-2-3-1', '4-4-2', '3-5-2'];
+  const index = Math.abs(teamName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)) % forms.length;
+  const formation = forms[index];
+
+  let players = [];
+  if (formation === '4-3-3') {
+    players = [
+      {pos: 'GK', name: 'Goal Keeper', x: 50, y: 88},
+      {pos: 'RB', name: 'Right Back', x: 84, y: 70},
+      {pos: 'RCB', name: 'Right Center Back', x: 62, y: 73},
+      {pos: 'LCB', name: 'Left Center Back', x: 38, y: 73},
+      {pos: 'LB', name: 'Left Back', x: 16, y: 70},
+      {pos: 'RCM', name: 'Right Center Mid', x: 68, y: 50},
+      {pos: 'DM', name: 'Defensive Midfielder', x: 50, y: 56},
+      {pos: 'LCM', name: 'Left Center Mid', x: 32, y: 50},
+      {pos: 'RW', name: 'Right Winger', x: 78, y: 26},
+      {pos: 'ST', name: 'Striker', x: 50, y: 18},
+      {pos: 'LW', name: 'Left Winger', x: 22, y: 26}
+    ];
+  } else if (formation === '4-2-3-1') {
+    players = [
+      {pos: 'GK', name: 'Goal Keeper', x: 50, y: 88},
+      {pos: 'RB', name: 'Right Back', x: 84, y: 70},
+      {pos: 'RCB', name: 'Right Center Back', x: 62, y: 73},
+      {pos: 'LCB', name: 'Left Center Back', x: 38, y: 73},
+      {pos: 'LB', name: 'Left Back', x: 16, y: 70},
+      {pos: 'RDM', name: 'Right Defensive Mid', x: 64, y: 58},
+      {pos: 'LDM', name: 'Left Defensive Mid', x: 36, y: 58},
+      {pos: 'RAM', name: 'Right Attacking Mid', x: 76, y: 40},
+      {pos: 'AM', name: 'Attacking Midfielder', x: 50, y: 42},
+      {pos: 'LAM', name: 'Left Attacking Mid', x: 24, y: 40},
+      {pos: 'ST', name: 'Striker', x: 50, y: 18}
+    ];
+  } else if (formation === '4-4-2') {
+    players = [
+      {pos: 'GK', name: 'Goal Keeper', x: 50, y: 88},
+      {pos: 'RB', name: 'Right Back', x: 84, y: 70},
+      {pos: 'RCB', name: 'Right Center Back', x: 62, y: 73},
+      {pos: 'LCB', name: 'Left Center Back', x: 38, y: 73},
+      {pos: 'LB', name: 'Left Back', x: 16, y: 70},
+      {pos: 'RM', name: 'Right Midfielder', x: 80, y: 50},
+      {pos: 'RCM', name: 'Right Center Mid', x: 60, y: 52},
+      {pos: 'LCM', name: 'Left Center Mid', x: 40, y: 52},
+      {pos: 'LM', name: 'Left Midfielder', x: 20, y: 50},
+      {pos: 'RS', name: 'Right Striker', x: 62, y: 22},
+      {pos: 'LS', name: 'Left Striker', x: 38, y: 22}
+    ];
+  } else { // 3-5-2
+    players = [
+      {pos: 'GK', name: 'Goal Keeper', x: 50, y: 88},
+      {pos: 'RCB', name: 'Right Center Back', x: 70, y: 72},
+      {pos: 'CB', name: 'Center Back', x: 50, y: 74},
+      {pos: 'LCB', name: 'Left Center Back', x: 30, y: 72},
+      {pos: 'RWB', name: 'Right Wing Back', x: 85, y: 50},
+      {pos: 'RCM', name: 'Right Center Mid', x: 65, y: 54},
+      {pos: 'DM', name: 'Defensive Midfielder', x: 50, y: 58},
+      {pos: 'LCM', name: 'Left Center Mid', x: 35, y: 54},
+      {pos: 'LWB', name: 'Left Wing Back', x: 15, y: 50},
+      {pos: 'RS', name: 'Right Striker', x: 62, y: 22},
+      {pos: 'LS', name: 'Left Striker', x: 38, y: 22}
+    ];
+  }
+
+  return { formation, players };
+}
+
+/* ─────────────────────────────────────────────
+   TOOLTIP UTILITIES
+───────────────────────────────────────────── */
+const tt = document.getElementById('tooltip');
+function showTT(e, html) {
+  tt.innerHTML = html;
+  tt.classList.add('visible');
+  moveTT(e);
+}
+function moveTT(e) {
+  const x = e.clientX + 14, y = e.clientY - 10;
+  tt.style.left = Math.min(x, window.innerWidth - 200) + 'px';
+  tt.style.top  = Math.min(y, window.innerHeight - 80)  + 'px';
+}
+function hideTT() { tt.classList.remove('visible'); }
+
+/* ─────────────────────────────────────────────
+   ACTIVE TEAM INTERFACE UPDATER
+───────────────────────────────────────────── */
+let activeRadarTeam = 0;
+
+function updateActiveTeamUI(teamName) {
+  const teamObj = TEAMS.find(t => t.name === teamName) || TEAMS[0];
+  const teamIndex = TEAMS.indexOf(teamObj);
+  const teamRank = teamIndex + 1;
+
+  // Highlight selected row in sidebar
+  document.querySelectorAll('.rank-row').forEach((row, idx) => {
+    row.classList.toggle('active', idx === teamIndex);
+  });
+
+  // Update Radar selector if in top 5
+  const sel = document.getElementById('teamSelector');
+  const buttons = sel.querySelectorAll('.ts-btn');
+  buttons.forEach((b, j) => {
+    b.classList.toggle('active', b.textContent.toLowerCase() === teamName.toLowerCase());
+  });
+
+  // Re-draw radar and tactical pitch
+  drawRadar(teamObj);
+  drawTacticalPitch(teamName);
+}
+
+/* ─────────────────────────────────────────────
+   INTERACTIVE TACTICAL PITCH BUILDER
+   Smoothly slides players into position
+───────────────────────────────────────────── */
+function drawTacticalPitch(teamName) {
+  const teamObj = TEAMS.find(t => t.name === teamName) || TEAMS[0];
+  const teamRank = TEAMS.indexOf(teamObj) + 1;
+  const lineup = getLineup(teamName);
+
+  // Update KPI displays inside the pitch widget
+  document.getElementById('tpTeamBadge').textContent = teamName.toUpperCase() + ` (${lineup.formation})`;
+  document.getElementById('tpKpiProb').textContent = (teamObj.prob * 100).toFixed(1) + '%';
+  document.getElementById('tpKpiRank').textContent = '#' + teamRank;
+
+  const container = document.getElementById('tpPlayers');
+  const existingNodes = container.querySelectorAll('.pitch-player');
+
+  // If there are exactly 11 player nodes already, reuse them to trigger CSS slide transitions
+  if (existingNodes.length === 11) {
+    lineup.players.forEach((p, idx) => {
+      const node = existingNodes[idx];
+      node.style.left = p.x + '%';
+      node.style.top = p.y + '%';
+      node.textContent = p.pos;
+      node.setAttribute('data-name', p.name);
+      
+      // Update color based on team confederation
+      node.style.borderColor = `var(--${teamObj.conf})`;
+    });
+  } else {
+    // Re-create the nodes on initial drawing
+    container.innerHTML = '';
+    lineup.players.forEach((p, idx) => {
+      const node = document.createElement('div');
+      node.className = 'pitch-player';
+      node.style.left = p.x + '%';
+      node.style.top = p.y + '%';
+      node.textContent = p.pos;
+      node.setAttribute('data-name', p.name);
+      node.style.borderColor = `var(--${teamObj.conf})`;
+
+      node.addEventListener('mouseenter', e => showTT(e,
+        `<span class="tt-team">${p.name}</span><span style="color:var(--text-lo)">Position:</span> ${p.pos}`));
+      node.addEventListener('mousemove', moveTT);
+      node.addEventListener('mouseleave', hideTT);
+
+      container.appendChild(node);
+    });
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FORMATION CARDS (top 3)
+───────────────────────────────────────────── */
+const medals = ['🥇','🥈','🥉'];
+const positions = ['1st Favorite','2nd Favorite','3rd Favorite'];
+const topCards = document.getElementById('topCards');
+TEAMS.slice(0,3).forEach((t, i) => {
+  const div = document.createElement('div');
+  div.className = 'player-card';
+  div.style.setProperty('animation-delay', (0.4 + i*0.1)+'s');
+  div.classList.add('fade-up');
+  div.innerHTML = `
+    <span class="card-medal">${medals[i]}</span>
+    <div class="card-pos">${positions[i]}</div>
+    <div class="card-name">${t.name.toUpperCase()}</div>
+    <div class="card-conf" style="color:var(--${t.conf})">${t.conf}</div>
+    <div class="card-prob">${(t.prob*100).toFixed(1)}%</div>
+    <div class="card-prob-label">WIN PROBABILITY</div>
+    <div class="card-bar"><div class="card-bar-fill" data-w="${t.prob*100}"></div></div>`;
+  
+  div.addEventListener('click', () => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => updateActiveTeamUI(t.name));
+    } else {
+      updateActiveTeamUI(t.name);
+    }
+  });
+
+  div.addEventListener('mouseenter', e => showTT(e,
+    `<span class="tt-team">${t.name}</span>FIFA Pts: ${t.pts.toFixed(0)}<br>Rating: ${t.rating.toFixed(1)}<br>Market: €${t.mv}M<br>Form: ${t.form.toFixed(1)}/10`));
+  div.addEventListener('mousemove', moveTT);
+  div.addEventListener('mouseleave', hideTT);
+  topCards.appendChild(div);
+});
+
+/* ─────────────────────────────────────────────
+   RANK LIST SIDEBAR
+───────────────────────────────────────────── */
+const rankList = document.getElementById('rankList');
+const posClass = ['gold','silver','bronze'];
+TEAMS.forEach((t, i) => {
+  const row = document.createElement('div');
+  row.className = 'rank-row';
+  if (i === 0) row.classList.add('active'); // Spain active by default
+  row.innerHTML = `
+    <div class="rr-pos ${posClass[i]||''}">${i+1}</div>
+    <div class="rr-conf-bar" style="background:var(--${t.conf});opacity:0.65"></div>
+    <div class="rr-body">
+      <span class="rr-name">${t.name}</span>
+      <span class="rr-meta">${t.conf} · ${t.pts.toFixed(0)} pts</span>
+    </div>
+    <div class="rr-spark">
+      <div class="rr-spark-bar">
+        <div class="rr-spark-fill" data-w="${(t.prob/TEAMS[0].prob)*100}"
+             style="background:var(--${t.conf})"></div>
+      </div>
+    </div>
+    <div class="rr-prob-val">${(t.prob*100).toFixed(1)}%</div>`;
+  
+  // Interactive click triggers view transitions
+  row.addEventListener('click', () => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => updateActiveTeamUI(t.name));
+    } else {
+      updateActiveTeamUI(t.name);
+    }
+  });
+
+  row.addEventListener('mouseenter', e => showTT(e,
+    `<span class="tt-team">${t.name}</span>Rating: ${t.rating.toFixed(1)}<br>Market: €${t.mv}M<br>Win Rate: ${(t.wr*100).toFixed(1)}%<br>Form: ${t.form.toFixed(1)}/10`));
+  row.addEventListener('mousemove', moveTT);
+  row.addEventListener('mouseleave', hideTT);
+  rankList.appendChild(row);
+});
+
+/* ─────────────────────────────────────────────
+   PROBABILITY SPECTRUM CHART
+───────────────────────────────────────────── */
+const spectrum = document.getElementById('probSpectrum');
+const specColors = [
+  'linear-gradient(90deg,#8a6e1a,#F5C842)',
+  'linear-gradient(90deg,#6a8e1a,#aaF542)',
+  'linear-gradient(90deg,#1a7a5a,#3effc4)',
+  'linear-gradient(90deg,#1a5a8a,#5ec4ff)',
+  'linear-gradient(90deg,#5a1a8a,#b57fe0)',
+  'linear-gradient(90deg,#1a5c2a,#4effa0)',
+  'linear-gradient(90deg,#3a3a8a,#7a7fe0)',
+  'linear-gradient(90deg,#8a3a1a,#ffa07a)',
+  'linear-gradient(90deg,#6a1a6a,#d97fe0)',
+  'linear-gradient(90deg,#1a6a3a,#5effc4)',
+  'linear-gradient(90deg,#1a4a8a,#4eaaff)',
+  'linear-gradient(90deg,#5a5a1a,#cccc4e)',
+];
+TEAMS.slice(0,12).forEach((t, i) => {
+  const row = document.createElement('div');
+  row.className = 'ps-row';
+  row.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px">
+      <span class="ps-conf-tag" style="color:var(--${t.conf});border-color:var(--${t.conf})">${t.conf.substring(0,3)}</span>
+      <span class="ps-label">${t.name}</span>
+    </div>
+    <div class="ps-track">
+      <div class="ps-fill" data-w="${t.prob*100}" style="background:${specColors[i]};width:0%"></div>
+    </div>
+    <span class="ps-val">${(t.prob*100).toFixed(1)}%</span>`;
+  
+  row.addEventListener('click', () => {
+    if (document.startViewTransition) {
+      document.startViewTransition(() => updateActiveTeamUI(t.name));
+    } else {
+      updateActiveTeamUI(t.name);
+    }
+  });
+
+  row.addEventListener('mouseenter', e => showTT(e,
+    `<span class="tt-team">${t.name}</span>Form: ${t.form.toFixed(1)}/10<br>Rating: ${t.rating.toFixed(1)}<br>Win Rate: ${(t.wr*100).toFixed(1)}%`));
+  row.addEventListener('mousemove', moveTT);
+  row.addEventListener('mouseleave', hideTT);
+  spectrum.appendChild(row);
+});
+
+/* ─────────────────────────────────────────────
+   MODEL COMPARER
+───────────────────────────────────────────── */
+const modelChart = document.getElementById('modelChart');
+MODELS.forEach(m => {
+  const row = document.createElement('div');
+  row.className = 'mc-row';
+  row.innerHTML = `
+    <span class="mc-name">${m.n}</span>
+    <div class="mc-track"><div class="mc-fill" data-w="${m.w}" style="background:${m.col};width:0%"></div></div>
+    <span class="mc-auc" style="color:${m.col}">${m.auc}</span>
+    <span class="mc-acc">${(m.acc*100).toFixed(0)}%</span>`;
+  modelChart.appendChild(row);
+});
+
+/* ─────────────────────────────────────────────
+   HISTOGRAM
+───────────────────────────────────────────── */
+const histMax = Math.max(...HIST);
+const histEl = document.getElementById('histBars');
+HIST.forEach((count, i) => {
+  const h = Math.round((count / histMax) * 100);
+  const col = `hsl(${140 + i*5}, ${55+i*2}%, ${40+i*2}%)`;
+  const wrap = document.createElement('div');
+  wrap.className = 'hist-bar-wrap';
+  wrap.innerHTML = `
+    <span class="hist-count" style="font-size:0.6rem;color:var(--text-lo)">${count}</span>
+    <div class="hist-bar" data-h="${h}" style="height:0px;background:linear-gradient(180deg,${col},rgba(57,255,154,0.15))" title="${HIST_LABELS[i]}: ${count} teams"></div>
+    <span class="hist-label">${HIST_LABELS[i]}</span>`;
+  wrap.addEventListener('mouseenter', e => showTT(e,
+    `<span class="tt-team">${HIST_LABELS[i]}%</span>${count} teams in range`));
+  wrap.addEventListener('mousemove', moveTT);
+  wrap.addEventListener('mouseleave', hideTT);
+  histEl.appendChild(wrap);
+});
+
+/* ─────────────────────────────────────────────
+   CV LINE CHART BUILDER (With Race Animations)
+───────────────────────────────────────────── */
+function buildCVChart() {
+  const svg = document.getElementById('cvChart');
+  const W = svg.parentElement.offsetWidth || 500;
+  const H = 160;
+  svg.innerHTML = ''; // Reset SVG
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+
+  const pad = {t:16, b:32, l:36, r:16};
+  const chartW = W - pad.l - pad.r;
+  const chartH = H - pad.t - pad.b;
+  const folds = [1,2,3,4,5];
+  const allVals = Object.values(CV_DATA).flat();
+  const vMin = Math.min(...allVals) - 0.01;
+  const vMax = Math.max(...allVals) + 0.01;
+
+  const xPos = i => pad.l + (i / (folds.length-1)) * chartW;
+  const yPos = v => pad.t + (1 - (v - vMin)/(vMax - vMin)) * chartH;
+
+  // Grid lines DDL
+  [0.62,0.65,0.68,0.71,0.74,0.77].forEach(v => {
+    if(v < vMin || v > vMax) return;
+    const y = yPos(v);
+    svg.innerHTML += `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}"
+      stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <text x="${pad.l-4}" y="${y+3}" text-anchor="end"
+        fill="rgba(255,255,255,0.25)" font-size="9" font-family="Rajdhani">${v.toFixed(2)}</text>`;
+  });
+
+  // X axis folds
+  folds.forEach((f, i) => {
+    svg.innerHTML += `<text x="${xPos(i)}" y="${H-4}" text-anchor="middle"
+      fill="rgba(255,255,255,0.25)" font-size="9" font-family="Rajdhani">Fold ${f}</text>`;
+  });
+
+  // Draw lines & area
+  const series = [
+    {key:'XGBoost',  col:'#F5C842'},
+    {key:'LightGBM', col:'#5ec4ff'},
+    {key:'RF',       col:'#6effc4'},
+  ];
+  series.forEach(({key, col}) => {
+    const vals = CV_DATA[key];
+    const pts = vals.map((v,i) => `${xPos(i)},${yPos(v)}`).join(' ');
+    // Area fill
+    const areaPath = `M${xPos(0)},${yPos(vals[0])} ` +
+      vals.map((v,i) => `L${xPos(i)},${yPos(v)}`).join(' ') +
+      ` L${xPos(vals.length-1)},${pad.t+chartH} L${xPos(0)},${pad.t+chartH} Z`;
+    
+    // Animate Area & Path
+    svg.innerHTML += `<path class="cv-area" d="${areaPath}" fill="${col}" opacity="0.04"/>`;
+    svg.innerHTML += `<polyline class="cv-line" points="${pts}" fill="none" stroke="${col}"
+      stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 3"/>`;
+    
+    // Interactive nodes
+    vals.forEach((v, i) => {
+      svg.innerHTML += `<circle cx="${xPos(i)}" cy="${yPos(v)}" r="4.5"
+        fill="${col}" stroke="var(--surface-0)" stroke-width="1.5"
+        style="cursor:pointer"
+        onmouseenter="showTT(event,'<span class=tt-team>${key}</span>Fold ${i+1}: ${v.toFixed(4)}')"
+        onmousemove="moveTT(event)" onmouseleave="hideTT()"/>`;
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
+   SCATTER PLOT BUILDER (Pop In Animations)
+───────────────────────────────────────────── */
+function buildScatterChart() {
+  const svg = document.getElementById('scatterChart');
+  const W = svg.parentElement.offsetWidth || 380;
+  const H = 220;
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+
+  const pad = {t:12, b:28, l:32, r:12};
+  const chartW = W - pad.l - pad.r;
+  const chartH = H - pad.t - pad.b;
+
+  const ptsAll = TEAMS.map(t=>t.pts);
+  const probAll = TEAMS.map(t=>t.prob);
+  const mvAll   = TEAMS.map(t=>t.mv);
+  const ptMin = Math.min(...ptsAll)-30, ptMax = Math.max(...ptsAll)+30;
+  const prMin = Math.min(...probAll)-0.02, prMax = Math.max(...probAll)+0.02;
+
+  const xPos = p => pad.l + (p - ptMin)/(ptMax - ptMin) * chartW;
+  const yPos = p => pad.t + (1-(p - prMin)/(prMax - prMin)) * chartH;
+
+  // Grid lines
+  [1600,1700,1800,1900].forEach(v => {
+    const x = xPos(v);
+    svg.innerHTML += `<line x1="${x}" y1="${pad.t}" x2="${x}" y2="${H-pad.b}"
+      stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <text x="${x}" y="${H-4}" text-anchor="middle" fill="rgba(255,255,255,0.2)"
+        font-size="8" font-family="Rajdhani">${v}</text>`;
+  });
+  [0.55,0.65,0.75].forEach(v => {
+    const y = yPos(v);
+    svg.innerHTML += `<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}"
+      stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+      <text x="${pad.l-3}" y="${y+3}" text-anchor="end" fill="rgba(255,255,255,0.2)"
+        font-size="8" font-family="Rajdhani">${(v*100).toFixed(0)}%</text>`;
+  });
+
+  // Trend line DDL
+  const n = TEAMS.length;
+  let sumX=0,sumY=0,sumXY=0,sumX2=0;
+  TEAMS.forEach(t=>{sumX+=t.pts;sumY+=t.prob;sumXY+=t.pts*t.prob;sumX2+=t.pts*t.pts;});
+  const slope=(n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
+  const intercept=(sumY-slope*sumX)/n;
+  const tX1=ptMin+30, tX2=ptMax-30;
+  const tY1=slope*tX1+intercept, tY2=slope*tX2+intercept;
+  svg.innerHTML += `<line x1="${xPos(tX1)}" y1="${yPos(tY1)}" x2="${xPos(tX2)}" y2="${yPos(tY2)}"
+    stroke="rgba(245,200,66,0.18)" stroke-width="1.2" stroke-dasharray="4 3"/>`;
+
+  // Draw nodes
+  const mvMin = Math.min(...mvAll), mvMax = Math.max(...mvAll);
+  TEAMS.forEach((t, index) => {
+    const r = 4 + (t.mv - mvMin)/(mvMax - mvMin) * 8;
+    const col = `var(--${t.conf})`;
+    // Animation delay dynamically calculated
+    svg.innerHTML += `<circle cx="${xPos(t.pts)}" cy="${yPos(t.prob)}" r="${r}"
+      fill="${col}" opacity="0.8" stroke="var(--surface-0)" stroke-width="1"
+      style="cursor:pointer;animation-delay:${index * 0.03}s"
+      onmouseenter="showTT(event,'<span class=tt-team>${t.name}</span>FIFA Points: ${t.pts.toFixed(0)}<br>Win Prob: ${(t.prob*100).toFixed(1)}%<br>Squad Value: €${t.mv}M<br>Confederation: ${t.conf}')"
+      onmousemove="moveTT(event)" onmouseleave="hideTT()"/>`;
+    if(t.prob > 0.72) {
+      svg.innerHTML += `<text x="${xPos(t.pts)}" y="${yPos(t.prob)-r-4}" text-anchor="middle"
+        fill="rgba(255,255,255,0.4)" font-size="8" font-family="Rajdhani" font-weight="700">${t.name}</text>`;
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────
+   FEATURE IMPORTANCE LIST
+───────────────────────────────────────────── */
+const featGrad = [
+  'linear-gradient(90deg,#8a6e1a,#F5C842)',
+  'linear-gradient(90deg,#6a8e1a,#aaF542)',
+  'linear-gradient(90deg,#1a7a5a,#3effc4)',
+  'linear-gradient(90deg,#1a5a8a,#5ec4ff)',
+  'linear-gradient(90deg,#5a1a8a,#b57fe0)',
+  'linear-gradient(90deg,#6a4a1a,#ffaa3a)',
+  'linear-gradient(90deg,#1a6a5a,#4eeec4)',
+  'linear-gradient(90deg,#4a1a6a,#c07fe0)',
+  'linear-gradient(90deg,#6a1a6a,#d97fe0)',
+  'linear-gradient(90deg,#1a4a6a,#4eaaff)',
+];
+const featList = document.getElementById('featList');
+FEATURES.forEach((f, i) => {
+  const row = document.createElement('div');
+  row.className = 'feat-row';
+  row.innerHTML = `
+    <span class="feat-num">${i+1}</span>
+    <span class="feat-name">${f.n}</span>
+    <div class="feat-track"><div class="feat-fill" data-w="${f.pct}" style="background:${featGrad[i]};width:0%"></div></div>
+    <span class="feat-pct">${f.pct}%</span>`;
+  featList.appendChild(row);
+});
+
+/* ─────────────────────────────────────────────
+   CONFEDERATION SHARE DONUT
+───────────────────────────────────────────── */
+function buildDonut() {
+  const R = 58;
+  const circ = 2 * Math.PI * R;
+  const total = CONF_DATA.reduce((s,c)=>s+c.teams,0);
+  let cumOffset = 0;
+  CONF_DATA.forEach(({n, teams, col}) => {
+    const pct = teams / total;
+    const dash = pct * circ;
+    const gap  = circ - dash;
+    const el = document.getElementById(`donut-${n}`);
+    if(!el) return;
+    const offset = circ/4 - cumOffset;
+    el.setAttribute('stroke-dasharray', `${dash} ${gap}`);
+    el.setAttribute('stroke-dashoffset', offset);
+    cumOffset += dash;
+  });
+}
+buildDonut();
+
+/* Legend builder */
+const legend = document.getElementById('confLegend');
+CONF_DATA.forEach(({n, teams, avgProb, col}) => {
+  const item = document.createElement('div');
+  item.className = 'legend-item';
+  item.innerHTML = `
+    <div class="legend-dot" style="background:${col}"></div>
+    <span class="legend-name">${n}</span>
+    <span class="legend-teams" style="font-size:0.6rem;color:var(--text-lo)">${teams} teams</span>
+    <span class="legend-prob">${avgProb}%</span>`;
+  item.addEventListener('mouseenter', e => showTT(e,
+    `<span class="tt-team">${n}</span>${teams} teams<br>Avg win rate: ${avgProb}%`));
+  item.addEventListener('mousemove', moveTT);
+  item.addEventListener('mouseleave', hideTT);
+  legend.appendChild(item);
+});
+
+/* ─────────────────────────────────────────────
+   RADAR PROFILER (Draws radar for ANY active team)
+───────────────────────────────────────────── */
+const RADAR_TEAMS = TEAMS.slice(0,5);
+const radarDims = [
+  {k:'prob',  label:'Win Prob',  max:0.85},
+  {k:'rating',label:'Rating',    max:90},
+  {k:'wr',    label:'Win Rate',  max:0.80},
+  {k:'form',  label:'Form',      max:9.5},
+  {k:'pts',   label:'FIFA Pts',  max:1950},
+  {k:'mv',    label:'Market €M', max:1000},
+];
+
+// Team selector button drawer
+const sel = document.getElementById('teamSelector');
+RADAR_TEAMS.forEach((t, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'ts-btn' + (i===0?' active':'');
+  btn.textContent = t.name;
+  btn.onclick = () => {
+    activeRadarTeam = i;
+    if (document.startViewTransition) {
+      document.startViewTransition(() => updateActiveTeamUI(t.name));
+    } else {
+      updateActiveTeamUI(t.name);
+    }
+  };
+  sel.appendChild(btn);
+});
+
+function drawRadar(teamObj) {
+  const svg = document.getElementById('radarChart');
+  const W = svg.parentElement.offsetWidth || 250;
+  const H = 180;
+  svg.innerHTML = '';
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+
+  const cx = W/2, cy = H/2 - 4;
+  const r  = Math.min(cx, cy) - 22;
+  const n  = radarDims.length;
+  const angle = i => (Math.PI*2*i/n) - Math.PI/2;
+
+  let html = '';
+
+  // Background rings
+  [0.25,0.5,0.75,1].forEach(frac => {
+    const pts = radarDims.map((_,i) => {
+      const a = angle(i);
+      return `${cx + r*frac*Math.cos(a)},${cy + r*frac*Math.sin(a)}`;
+    }).join(' ');
+    html += `<polygon points="${pts}" fill="none"
+      stroke="rgba(255,255,255,0.05)" stroke-width="1"/>`;
+  });
+
+  // Spokes
+  radarDims.forEach((_,i) => {
+    const a = angle(i);
+    html += `<line x1="${cx}" y1="${cy}"
+      x2="${cx+r*Math.cos(a)}" y2="${cy+r*Math.sin(a)}"
+      stroke="rgba(255,255,255,0.06)" stroke-width="1"/>`;
+  });
+
+  // Dim labels
+  radarDims.forEach((d,i) => {
+    const a = angle(i);
+    const lx = cx + (r+14)*Math.cos(a);
+    const ly = cy + (r+14)*Math.sin(a);
+    html += `<text x="${lx}" y="${ly+3}" text-anchor="middle"
+      fill="rgba(255,255,255,0.35)" font-size="8.5" font-family="Rajdhani" font-weight="700">${d.label}</text>`;
+  });
+
+  // Polygon calculations
+  const col = `var(--${teamObj.conf})`;
+  const vals = radarDims.map(d => {
+    const raw = teamObj[d.k];
+    return Math.min(raw / d.max, 1);
+  });
+  const polyPts = vals.map((v,i) => {
+    const a = angle(i);
+    return `${cx+r*v*Math.cos(a)},${cy+r*v*Math.sin(a)}`;
+  }).join(' ');
+
+  html += `<polygon points="${polyPts}" fill="${col}" fill-opacity="0.15"
+    stroke="${col}" stroke-width="1.8" stroke-linejoin="round" style="transition: all 0.5s var(--ease)"/>`;
+
+  // Nodes drawing
+  vals.forEach((v,i) => {
+    const a = angle(i);
+    html += `<circle cx="${cx+r*v*Math.cos(a)}" cy="${cy+r*v*Math.sin(a)}" r="3.5"
+      fill="${col}" stroke="var(--surface-1)" stroke-width="1"/>`;
+  });
+
+  // Center display tag
+  html += `<text x="${cx}" y="${cy+4}" text-anchor="middle"
+    fill="rgba(255,255,255,0.85)" font-size="10" font-weight="700" font-family="Bebas Neue">${teamObj.name.toUpperCase()}</text>`;
+
+  svg.innerHTML = html;
+}
+
+/* ─────────────────────────────────────────────
+   INITIALIZATION
+───────────────────────────────────────────── */
+function initCharts() {
+  buildCVChart();
+  buildScatterChart();
+  updateActiveTeamUI('Spain'); // Initial active team is Spain
+}
+
+function animateBars() {
+  document.querySelectorAll('[data-w]').forEach(el => {
+    el.style.width = el.dataset.w + '%';
+  });
+  document.querySelectorAll('[data-h]').forEach(el => {
+    el.style.height = el.dataset.h + 'px';
+  });
+}
+
+// Staggered trigger
+requestAnimationFrame(() => {
+  initCharts();
+  setTimeout(animateBars, 300);
+});
+
+// Responsive resize recalculator
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    buildCVChart();
+    buildScatterChart();
+    const activeBtn = sel.querySelector('.ts-btn.active');
+    const activeTeamName = activeBtn ? activeBtn.textContent : 'Spain';
+    const activeTeamObj = TEAMS.find(t => t.name.toLowerCase() === activeTeamName.toLowerCase()) || TEAMS[0];
+    drawRadar(activeTeamObj);
+    drawTacticalPitch(activeTeamName);
+  }, 200);
+});
+</script>
+</body>
+</html>
