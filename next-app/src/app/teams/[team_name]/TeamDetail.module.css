@@ -1,0 +1,107 @@
+.container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.backBtn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--blue-light);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+  color: white;
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 24px;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 5rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.conf {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  color: var(--text-mid);
+  letter-spacing: 4px;
+  margin-top: 8px;
+}
+
+.probBadge {
+  background: rgba(255, 201, 0, 0.1);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  text-align: center;
+}
+
+.probVal {
+  font-size: 2.5rem;
+  font-weight: 900;
+  display: block;
+}
+
+.probLabel {
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.statBox {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 24px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.statBoxLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-lo);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.statBoxVal {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+}
+
+.notfound {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  color: white;
+  text-align: center;
+  margin-top: 100px;
+}

@@ -1,0 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ═══════════════════════════════════════════════════════════
+   DESIGN TOKENS – FIFA WC 2026 Brand: Vibrant & Bold
+══════════════════════════════════════════════════════════════ */
+:root {
+  /* Pitch Colors */
+  --pitch-dark:   #0e4522;
+  --pitch-mid:    #156531;
+  --pitch-light:  #1d8c44;
+  --pitch-bright: #29b65b;
+  --line:         rgba(255, 255, 255, 0.8);
+
+  /* Surfaces */
+  --surface-0:    #030305; /* Deep obsidian background */
+  --surface-1:    rgba(255, 255, 255, 0.02); /* Glass panels */
+  --surface-2:    rgba(255, 255, 255, 0.1);
+  --surface-3:    rgba(255, 255, 255, 0.15);
+
+  /* Borders */
+  --border-dim:   rgba(255, 255, 255, 0.1);
+  --border-mid:   rgba(255, 255, 255, 0.2);
+  --border-hi:    rgba(255, 255, 255, 0.4);
+
+  /* Accents */
+  --gold:         #FFC900;
+  --gold-dim:     #cc9f00;
+  --gold-glow:    rgba(255, 201, 0, 0.4);
+
+  --red:          #ff3b3b;
+  --green-neon:   #00ff88;
+  --blue-light:   #00e1ff;
+  --magenta:      #ff007f;
+
+  /* Text */
+  --text-hi:      #ffffff;
+  --text-mid:     rgba(255, 255, 255, 0.7);
+  --text-lo:      rgba(255, 255, 255, 0.4);
+
+  /* Confederation Colors (Vibrant variants) */
+  --UEFA:         #00e1ff; /* Bright Cyan */
+  --CONMEBOL:     #00ff88; /* Bright Green */
+  --CAF:          #FFC900; /* Gold */
+  --CONCACAF:     #ff007f; /* Magenta */
+  --AFC:          #ff5e00; /* Orange */
+  --OFC:          #b8a0ff; /* Light Violet */
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  --ease: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition: 0.4s var(--ease);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--surface-0);
+  background-image: 
+    radial-gradient(circle at 15% 30%, rgba(0, 225, 255, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 70%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 10%, rgba(0, 255, 136, 0.05) 0%, transparent 40%);
+  font-family: 'Inter', sans-serif;
+  color: var(--text-hi);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3D Cyber-Grid Background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -150%;
+  top: 30%; /* Start lower to create a horizon */
+  z-index: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(rgba(0, 225, 255, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 225, 255, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(1000px) rotateX(75deg) translateY(0);
+  animation: gridFlow 15s linear infinite;
+  mask-image: radial-gradient(ellipse at center 0%, black 10%, transparent 50%);
+  -webkit-mask-image: radial-gradient(ellipse at center 0%, black 10%, transparent 50%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    800px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
+    rgba(0, 225, 255, 0.05),
+    transparent 40%
+  );
+  transition: opacity 0.3s ease;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: perspective(1000px) rotateX(75deg) translateY(0);
+  }
+  100% {
+    transform: perspective(1000px) rotateX(75deg) translateY(60px);
+  }
+}
+
+/* Subtle Noise Texture overlay for premium feel */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar         { width: 6px; height: 6px; }
+::-webkit-scrollbar-track   { background: transparent; }
+::-webkit-scrollbar-thumb   { background: var(--border-hi); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* Utility: ensure content appears above pseudo-elements */
+#__next, main { position: relative; z-index: 2; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

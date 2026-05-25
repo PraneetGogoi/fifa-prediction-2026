@@ -1,0 +1,154 @@
+.widget {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 24px;
+  min-height: 400px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-hi);
+  text-transform: uppercase;
+}
+
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--blue-light);
+  margin-top: 4px;
+}
+
+.chatContainer {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 300px; /* Fixed height for scroll */
+}
+
+/* Custom scrollbar for messages */
+.messages::-webkit-scrollbar {
+  width: 6px;
+}
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+.messages::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.messageRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.msgHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.author {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--blue-light);
+}
+
+.time {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: var(--text-lo);
+}
+
+.content {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-mid);
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-bottom-left-radius: 2px;
+  width: fit-content;
+  max-width: 90%;
+}
+
+.inputForm {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.5);
+  gap: 8px;
+}
+
+.inputField {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.inputField:focus {
+  border-color: var(--blue-light);
+}
+
+.sendBtn {
+  background: var(--blue-light);
+  color: black;
+  border: none;
+  border-radius: 8px;
+  padding: 0 20px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sendBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 225, 255, 0.4);
+}
+
+.sendBtn:active {
+  transform: translateY(0);
+}
+
+.sendBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}

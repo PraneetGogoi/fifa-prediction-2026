@@ -1,0 +1,72 @@
+.widget {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
+  padding: 24px;
+}
+
+.header {
+  margin-bottom: 16px;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-hi);
+  text-transform: uppercase;
+}
+
+.teamSelect {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--blue-light);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.teamSelect:focus {
+  border-color: var(--blue-light);
+}
+
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-lo);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.radarContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 200px;
+}
+
+.svgRadar {
+  width: 100%;
+  max-height: 250px;
+  overflow: visible;
+}

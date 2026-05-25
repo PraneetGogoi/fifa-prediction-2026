@@ -1,0 +1,135 @@
+.widget {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 24px;
+  min-height: 400px;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-hi);
+  text-transform: uppercase;
+}
+
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--blue-light);
+  margin-top: 4px;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.voteForm {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.voteLabel {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-mid);
+}
+
+.teamSelect {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.voteBtn {
+  background: var(--gold);
+  color: black;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.voteBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 201, 0, 0.4);
+}
+
+.voteBtn:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.resultRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rowHeader {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.teamName {
+  color: var(--text-hi);
+}
+
+.voteCount {
+  color: var(--blue-light);
+}
+
+.barTrack {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue-dark), var(--blue-light));
+  border-radius: 4px;
+}

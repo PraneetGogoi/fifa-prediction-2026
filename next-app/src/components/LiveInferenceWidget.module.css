@@ -1,0 +1,262 @@
+.widget {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 32px;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
+}
+
+.glowTop {
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 300px;
+  height: 300px;
+  background: var(--blue-light);
+  filter: blur(120px);
+  opacity: 0.15;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.glowBottom {
+  position: absolute;
+  bottom: -100px;
+  left: -100px;
+  width: 300px;
+  height: 300px;
+  background: var(--magenta);
+  filter: blur(120px);
+  opacity: 0.1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: var(--text-hi);
+}
+
+.sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+.statusBlinker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 0, 127, 0.1);
+  border: 1px solid rgba(255, 0, 127, 0.3);
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--magenta);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--magenta);
+  box-shadow: 0 0 10px var(--magenta);
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+.coreVisual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 250px;
+  margin: 20px 0;
+  perspective: 1000px;
+  z-index: 2;
+}
+
+.orbitalContainer {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  transform-style: preserve-3d;
+  transform: rotateX(60deg) rotateZ(-30deg);
+  animation: breathe 4s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  0% { transform: rotateX(60deg) rotateZ(-30deg) scale(1); }
+  100% { transform: rotateX(60deg) rotateZ(-30deg) scale(1.05); }
+}
+
+.orbit1, .orbit2, .orbit3 {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+
+.orbit1 {
+  border-top-color: var(--blue-light);
+  border-bottom-color: rgba(0, 225, 255, 0.2);
+  animation: spin3D 8s linear infinite;
+  box-shadow: 0 0 20px rgba(0, 225, 255, 0.2), inset 0 0 20px rgba(0, 225, 255, 0.2);
+}
+
+.orbit2 {
+  inset: 20px;
+  border-left-color: var(--magenta);
+  border-right-color: rgba(255, 0, 127, 0.2);
+  animation: spin3D 12s linear infinite reverse;
+}
+
+.orbit3 {
+  inset: 40px;
+  border-top-color: var(--gold);
+  border-bottom-color: rgba(255, 201, 0, 0.2);
+  animation: spin3D 16s linear infinite;
+  border-style: dashed;
+}
+
+@keyframes spin3D {
+  0% { transform: rotateZ(0deg); }
+  100% { transform: rotateZ(360deg); }
+}
+
+.coreCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotateX(-60deg) rotateZ(30deg); /* Counter rotate to face camera */
+  pointer-events: none;
+}
+
+.coreValue {
+  font-family: 'Outfit', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: var(--text-hi);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(255,255,255,0.5);
+}
+
+.corePct {
+  font-size: 2rem;
+  color: var(--text-mid);
+}
+
+.coreLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--blue-light);
+  margin-top: -5px;
+}
+
+.dataStreamContainer {
+  height: 90px;
+  position: relative;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow: hidden;
+  z-index: 2;
+  margin-bottom: 24px;
+  background: rgba(0,0,0,0.3);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.streamRow {
+  display: flex;
+  justify-content: space-between;
+  transition: opacity 0.2s;
+}
+
+.streamAction {
+  color: var(--magenta);
+  font-weight: 700;
+}
+
+.streamHex {
+  color: var(--text-mid);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  z-index: 2;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.02);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.metricLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--text-lo);
+  letter-spacing: 1.5px;
+}
+
+.metricVal {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-hi);
+  margin-top: 4px;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.metric:hover .metricVal {
+  color: var(--blue-light);
+  text-shadow: 0 0 10px rgba(0, 225, 255, 0.6);
+}
+
+.metricUnit {
+  font-size: 0.7rem;
+  color: var(--text-mid);
+  margin-left: 2px;
+}

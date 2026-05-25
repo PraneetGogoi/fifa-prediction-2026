@@ -1,0 +1,49 @@
+.tickerBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  background: rgba(5, 8, 6, 0.9);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-dim);
+  overflow: hidden;
+}
+
+.tickerLabel {
+  flex-shrink: 0;
+  padding: 0 16px;
+  font-family: 'Anton', 'Bebas Neue', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  color: var(--gold);
+  border-right: 1px solid var(--border-dim);
+  white-space: nowrap;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background: rgba(255,201,0,0.1);
+  box-shadow: 0 0 10px rgba(255,201,0,0.2);
+}
+
+.tickerScroll {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.tickerText {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: var(--text-hi);
+  will-change: transform;
+}

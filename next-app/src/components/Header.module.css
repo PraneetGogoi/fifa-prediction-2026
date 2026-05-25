@@ -1,0 +1,150 @@
+.headerWrapper {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  pointer-events: none; /* Let clicks pass through padding */
+}
+
+.header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(10, 10, 15, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  pointer-events: auto; /* Re-enable clicks for the header itself */
+  gap: 32px;
+}
+
+/* Left Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandBall {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--blue-light);
+}
+
+.brandTitle {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--text-hi);
+}
+
+.brandSub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--blue-light);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Center Scores */
+.center {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.scoreBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scoreBadge:hover {
+  transform: translateY(-8px) scale(1.1);
+}
+
+.scoreBadge:hover .scoreLabel {
+  color: var(--text-hi);
+}
+
+.scoreNum {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-hi);
+  line-height: 1;
+}
+
+.scoreBadgeGold .scoreNum {
+  color: var(--blue-light);
+  text-shadow: 0 0 10px rgba(0, 225, 255, 0.4);
+}
+
+.scoreLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-lo);
+  margin-top: 4px;
+}
+
+/* Right Status */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.liveIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--magenta);
+}
+
+.liveDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--magenta);
+  box-shadow: 0 0 10px var(--magenta);
+}
+
+.rightMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--text-mid);
+  gap: 2px;
+}
+
+@media (max-width: 768px) {
+  .center { display: none; }
+  .rightMeta { display: none; }
+}

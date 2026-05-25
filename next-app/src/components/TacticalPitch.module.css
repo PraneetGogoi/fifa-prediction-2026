@@ -1,0 +1,392 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ─── Top 3 Cards ─── */
+.topCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--surface-1);
+  padding: 12px;
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-dim);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.02);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px) scale(1.02);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.cardActive {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--gold);
+  box-shadow: 0 4px 20px rgba(255, 201, 0, 0.15);
+}
+
+.cardMedal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.cardPos {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-lo);
+  text-transform: uppercase;
+}
+
+.cardName {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: 0px;
+  color: var(--text-hi);
+  margin-top: 4px;
+  line-height: 1;
+}
+
+.cardConf {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-mid);
+  margin-top: 4px;
+}
+
+.cardProb {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 2.2rem;
+  color: var(--blue-light);
+  line-height: 1;
+  margin-top: 12px;
+  text-shadow: 0 2px 10px rgba(0,225,255,0.4);
+}
+
+.cardProbLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-lo);
+  text-transform: uppercase;
+}
+
+.cardBar {
+  height: 4px;
+  background: rgba(0,0,0,0.5);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.cardBarFill {
+  height: 100%;
+  border-radius: 2px;
+  box-shadow: 0 0 10px currentColor;
+}
+
+/* ─── Pitch Section ─── */
+.pitch {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  min-height: 600px;
+}
+
+.pitchHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-dim);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(10px);
+}
+
+.pitchBadge {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(4px);
+}
+
+.pitchKpis {
+  display: flex;
+  gap: 20px;
+}
+
+.pitchKpi {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.pitchKpiVal {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--text-hi);
+  letter-spacing: 0px;
+}
+
+.pitchKpiLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-lo);
+}
+
+/* ─── Pitch Field ─── */
+.pitchField {
+  flex: 1;
+  position: relative;
+  padding: 60px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  perspective: 1000px; /* Enable 3D space */
+  overflow: hidden;
+}
+
+.syncOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 225, 255, 0.1);
+  backdrop-filter: blur(4px);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.syncScanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 225, 255, 0.8), transparent);
+  animation: scan 0.8s linear infinite;
+}
+
+.syncText {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--blue-light);
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(0, 225, 255, 0.8);
+  animation: glitch 0.2s infinite;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 2px) }
+  40% { transform: translate(-2px, -2px) }
+  60% { transform: translate(2px, 2px) }
+  80% { transform: translate(2px, -2px) }
+  100% { transform: translate(0) }
+}
+
+.pitchSvg {
+  width: 100%;
+  height: 100%;
+  max-height: 500px;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+  transform: rotateX(45deg) rotateZ(0deg) scale(0.9);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+}
+
+.pitchField:hover .pitchSvg {
+  transform: rotateX(30deg) rotateZ(0deg) scale(0.95);
+}
+
+.players {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.player {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  /* Reverse the 3D rotation so players stand straight up */
+  transform: translate(-50%, -50%) rotateX(-45deg);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+}
+
+.pitchField:hover .player {
+  transform: translate(-50%, -50%) rotateX(-30deg);
+}
+
+.player:hover {
+  transform: translate(-50%, -50%) rotateX(-30deg) scale(1.2) !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+}
+
+.playerPos {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 0.65rem;
+  color: var(--text-hi);
+  line-height: 1;
+}
+
+.playerName {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateY(4px) translateX(-50%);
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-hi);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+}
+
+/* ─── Player Modal Overlay ─── */
+.playerModal {
+  position: absolute;
+  bottom: 40px;
+  right: 40px;
+  width: 280px;
+  background: rgba(10, 10, 15, 0.85);
+  border: 1px solid rgba(0, 225, 255, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(0, 225, 255, 0.1);
+  z-index: 100;
+  color: var(--text-hi);
+  font-family: 'Inter', sans-serif;
+}
+
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-mid);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modalClose:hover {
+  color: var(--text-hi);
+}
+
+.modalHeader {
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 12px;
+}
+
+.modalPos {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--blue-light);
+}
+
+.modalName {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-top: -2px;
+}
+
+.modalStats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.modalStat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-mid);
+}
+
+.modalStat strong {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-hi);
+}
+
+.modalBottom {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-lo);
+  letter-spacing: 1px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 12px;
+}
