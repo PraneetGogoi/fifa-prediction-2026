@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC2026 — Stadium Nerve Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#00FF87;--green2:#00c864;--green3:#008040;
+  --dark:#060d0a;--panel:#0a1510;--panel2:#0e1f16;
+  --accent:#FF3366;--text:#c8f0d8;--dim:#4a7a5a;
+}
+body{background:var(--dark);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden;color:var(--text)}
+
+/* Scanline overlay */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,135,0.015) 2px,rgba(0,255,135,0.015) 4px);
+  pointer-events:none;z-index:0;
+}
+
+/* Grid background */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,255,135,0.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,135,0.04) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+.layout{position:relative;z-index:1;display:grid;grid-template-columns:260px 1fr 220px;grid-template-rows:auto;min-height:100vh;gap:0}
+
+/* Left sidebar */
+.sidebar{background:var(--panel);border-right:1px solid rgba(0,255,135,0.15);padding:20px;display:flex;flex-direction:column;gap:20px}
+.logo{text-align:center;padding:20px 0;border-bottom:1px solid rgba(0,255,135,0.1)}
+.logo-ball{font-size:3rem;display:block;animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.logo-title{font-family:'Bebas Neue',cursive;font-size:2rem;color:var(--green);letter-spacing:4px;display:block}
+.logo-sub{font-size:0.65rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase}
+
+.sidebar-section{border:1px solid rgba(0,255,135,0.12);padding:14px;background:rgba(0,255,135,0.02)}
+.section-label{font-size:0.6rem;letter-spacing:3px;color:var(--green3);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.section-label::before{content:'';width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+.team-mini{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,255,135,0.06);cursor:pointer;transition:all 0.2s}
+.team-mini:hover{padding-left:6px}
+.team-mini-name{font-size:0.9rem;font-weight:600;color:var(--text)}
+.team-mini-prob{font-size:0.9rem;color:var(--green);font-weight:700}
+
+.mini-stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,255,135,0.06)}
+.mini-stat-k{font-size:0.75rem;color:var(--dim)}
+.mini-stat-v{font-size:0.85rem;color:var(--green);font-weight:700}
+
+/* Main content */
+.main{padding:20px;display:flex;flex-direction:column;gap:16px;overflow:hidden}
+
+/* Header bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--panel);border:1px solid rgba(0,255,135,0.12)}
+.topbar-title{font-family:'Bebas Neue',cursive;font-size:1.8rem;color:var(--green);letter-spacing:4px}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:0.65rem;letter-spacing:2px;color:var(--accent);text-transform:uppercase}
+.live-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:blink 1s infinite}
+.topbar-time{font-size:0.8rem;color:var(--dim);letter-spacing:2px}
+
+/* Metrics row */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.metric-card{
+  background:var(--panel);border:1px solid rgba(0,255,135,0.12);
+  padding:18px;position:relative;overflow:hidden;
+  transition:border-color 0.3s;cursor:pointer;
+}
+.metric-card:hover{border-color:var(--green)}
+.metric-card::after{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;
+  background:linear-gradient(90deg,var(--green),transparent);
+}
+.metric-label{font-size:0.6rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:6px}
+.metric-val{font-family:'Bebas Neue',cursive;font-size:2.5rem;color:var(--green);line-height:1}
+.metric-sub{font-size:0.7rem;color:var(--dim);margin-top:4px}
+.metric-change{position:absolute;top:14px;right:14px;font-size:0.75rem;color:#00e676;font-weight:700}
+
+/* Main chart area */
+.chart-area{background:var(--panel);border:1px solid rgba(0,255,135,0.12);padding:20px;flex:1}
+.chart-title{font-family:'Bebas Neue',cursive;font-size:1.3rem;color:var(--green);letter-spacing:3px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.chart-canvas{height:200px;display:flex;align-items:flex-end;gap:8px;padding-top:10px}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.chart-bar{
+  width:100%;border-radius:2px 2px 0 0;
+  transition:all 0.8s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative;cursor:pointer;
+  background:linear-gradient(180deg,var(--green),var(--green3));
+}
+.chart-bar:hover{filter:brightness(1.3)}
+.chart-bar::after{
+  content:attr(data-prob);
+  position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  font-size:0.65rem;color:var(--green);white-space:nowrap;
+}
+.chart-label{font-size:0.6rem;color:var(--dim);text-align:center;letter-spacing:1px}
+
+/* Heatmap */
+.heatmap-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}
+.hm-cell{
+  aspect-ratio:1;border-radius:2px;display:flex;align-items:center;justify-content:center;
+  font-size:0.55rem;font-weight:700;cursor:pointer;
+  transition:transform 0.2s;position:relative;
+}
+.hm-cell:hover{transform:scale(1.2);z-index:10}
+.hm-tooltip{
+  position:absolute;bottom:110%;left:50%;transform:translateX(-50%);
+  background:var(--panel);border:1px solid var(--green);
+  padding:4px 8px;font-size:0.6rem;white-space:nowrap;
+  color:var(--green);pointer-events:none;opacity:0;transition:opacity 0.2s;
+  border-radius:2px;
+}
+.hm-cell:hover .hm-tooltip{opacity:1}
+
+/* Right panel */
+.right-panel{background:var(--panel);border-left:1px solid rgba(0,255,135,0.15);padding:20px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.rp-section{border:1px solid rgba(0,255,135,0.1);padding:14px}
+.rp-title{font-family:'Bebas Neue',cursive;font-size:1.1rem;color:var(--green);letter-spacing:3px;margin-bottom:12px}
+
+.radar-wrap{position:relative;width:100%;aspect-ratio:1}
+canvas#radarCanvas{width:100%;height:100%}
+
+.model-bar{margin-bottom:10px}
+.model-bar-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.model-bar-name{font-size:0.7rem;color:var(--dim);letter-spacing:1px}
+.model-bar-val{font-size:0.75rem;color:var(--green);font-weight:700}
+.model-bar-bg{height:4px;background:rgba(0,255,135,0.1);border-radius:2px;overflow:hidden}
+.model-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green3),var(--green));transition:width 1.5s ease}
+
+.event-feed{display:flex;flex-direction:column;gap:6px}
+.event{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,255,135,0.06)}
+.event-time{font-size:0.65rem;color:var(--dim);min-width:40px}
+.event-text{font-size:0.7rem;color:var(--text);line-height:1.3}
+.event-dot{width:6px;height:6px;border-radius:50%;margin-top:3px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="layout">
+
+<!-- LEFT SIDEBAR -->
+<div class="sidebar">
+  <div class="logo">
+    <span class="logo-ball">⚽</span>
+    <span class="logo-title">WC 2026</span>
+    <span class="logo-sub">Prediction Console</span>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="section-label">Top Contenders</div>
+    <div id="topList"></div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="section-label">System Stats</div>
+    <div class="mini-stat"><span class="mini-stat-k">Training Data</span><span class="mini-stat-v">1,000</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">Test Teams</span><span class="mini-stat-v">250</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">Features</span><span class="mini-stat-v">25+13</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">CV Folds</span><span class="mini-stat-v">5</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">Best AUC</span><span class="mini-stat-v">0.878</span></div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="section-label">Confederation Avg</div>
+    <div class="mini-stat"><span class="mini-stat-k">CONMEBOL</span><span class="mini-stat-v">65.8%</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">UEFA</span><span class="mini-stat-v">56.5%</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">CONCACAF</span><span class="mini-stat-v">46.6%</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">AFC</span><span class="mini-stat-v">32.3%</span></div>
+    <div class="mini-stat"><span class="mini-stat-k">CAF</span><span class="mini-stat-v">29.4%</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">⚽ Stadium Nerve Centre · WC2026 Prediction</div>
+    <div class="live-badge"><div class="live-dot"></div>LIVE ANALYSIS</div>
+    <div class="topbar-time" id="clock"></div>
+  </div>
+
+  <div class="metrics">
+    <div class="metric-card">
+      <div class="metric-label">Top Win Probability</div>
+      <div class="metric-val">93.9%</div>
+      <div class="metric-sub">Brazil / England</div>
+      <div class="metric-change">↑ ELITE</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Ensemble AUC</div>
+      <div class="metric-val">0.878</div>
+      <div class="metric-sub">4-model blend</div>
+      <div class="metric-change">↑ HIGH</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Teams Analyzed</div>
+      <div class="metric-val">250</div>
+      <div class="metric-sub">6 confederations</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Features Used</div>
+      <div class="metric-val">38</div>
+      <div class="metric-sub">25 raw + 13 engineered</div>
+    </div>
+  </div>
+
+  <div class="chart-area">
+    <div class="chart-title">
+      WIN PROBABILITY — TOP 12 NATIONS
+      <span style="font-size:0.65rem;color:var(--dim);font-family:'Rajdhani',sans-serif;letter-spacing:2px">ENSEMBLE MODEL</span>
+    </div>
+    <div class="chart-canvas" id="barChart"></div>
+  </div>
+
+  <div class="chart-area">
+    <div class="chart-title">FEATURE INTENSITY HEATMAP <span style="font-size:0.65rem;color:var(--dim);font-family:'Rajdhani',sans-serif;letter-spacing:2px">TOP 6 TEAMS × KEY METRICS</span></div>
+    <div style="display:grid;grid-template-columns:80px 1fr">
+      <div style="display:flex;flex-direction:column;gap:4px;padding-top:24px">
+        <div id="hmTeams"></div>
+      </div>
+      <div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;margin-bottom:4px" id="hmHeaders"></div>
+        <div id="hmGrid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="rp-section">
+    <div class="rp-title">MODEL SCORES</div>
+    <div id="modelBars"></div>
+  </div>
+
+  <div class="rp-section">
+    <div class="rp-title">ANALYSIS FEED</div>
+    <div class="event-feed" id="feed"></div>
+  </div>
+
+  <div class="rp-section">
+    <div class="rp-title">FEATURE RANKS</div>
+    <div id="featureList"></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Clock
+function updateClock(){
+  document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false});
+}
+setInterval(updateClock,1000);updateClock();
+
+// Top teams list
+const teams=[
+  {t:'Brazil',c:'CONMEBOL',p:93.95},{t:'England',c:'UEFA',p:93.89},
+  {t:'Spain',c:'UEFA',p:92.68},{t:'Argentina',c:'CONMEBOL',p:89.87},
+  {t:'France',c:'UEFA',p:89.74},{t:'Netherlands',c:'UEFA',p:86.83},
+  {t:'Portugal',c:'UEFA',p:84.21},{t:'Germany',c:'UEFA',p:81.24},
+  {t:'Colombia',c:'CONMEBOL',p:74.36},{t:'USA',c:'CONCACAF',p:72.18},
+  {t:'Morocco',c:'CAF',p:64.79},{t:'Turkey',c:'UEFA',p:59.83},
+];
+
+const topList=document.getElementById('topList');
+teams.slice(0,8).forEach(({t,p},i)=>{
+  topList.innerHTML+=`<div class="team-mini">
+    <span class="team-mini-name">${i+1}. ${t}</span>
+    <span class="team-mini-prob">${p}%</span>
+  </div>`;
+});
+
+// Bar chart
+const barChart=document.getElementById('barChart');
+const maxP=teams[0].p;
+teams.forEach(({t,p})=>{
+  const h=Math.round((p/maxP)*170);
+  barChart.innerHTML+=`<div class="chart-bar-wrap">
+    <div class="chart-bar" data-prob="${p}%" style="height:0px;max-height:${h}px" data-h="${h}"></div>
+    <div class="chart-label">${t.length>7?t.substring(0,6)+'…':t}</div>
+  </div>`;
+});
+setTimeout(()=>{
+  document.querySelectorAll('.chart-bar').forEach(el=>{
+    el.style.height=el.dataset.h+'px';
+  });
+},400);
+
+// Heatmap
+const hmTeams=document.getElementById('hmTeams');
+const hmHeaders=document.getElementById('hmHeaders');
+const hmGrid=document.getElementById('hmGrid');
+const hmData=[
+  [93.2,87.5,89.1,92.1,78.3,85.6],
+  [91.8,89.7,91.3,88.4,82.1,88.2],
+  [88.5,83.8,87.2,85.6,91.2,83.4],
+  [86.2,87.1,85.4,91.3,88.6,79.8],
+  [87.9,88.2,90.1,82.3,79.4,92.1],
+  [84.3,83.6,82.8,79.1,76.5,78.9],
+];
+const hmTeamNames=['Brazil','England','Spain','Argentina','France','Netherlands'];
+const hmFeatNames=['FIFA Pts','Rating','Win Rate','Goals','Market','Form'];
+const t6=teams.slice(0,6);
+
+hmTeamNames.forEach(tn=>{
+  hmTeams.innerHTML+=`<div style="height:40px;display:flex;align-items:center;font-size:0.65rem;color:var(--dim);padding-right:6px;text-align:right;line-height:1.2">${tn}</div>`;
+});
+hmFeatNames.forEach(fn=>{
+  hmHeaders.innerHTML+=`<div style="text-align:center;font-size:0.55rem;color:var(--dim);letter-spacing:1px;padding-bottom:4px">${fn}</div>`;
+});
+hmData.forEach(row=>{
+  row.forEach(val=>{
+    const intensity=Math.round((val-70)/25*255);
+    const r=Math.max(0,60-intensity*0.5);
+    const g=Math.min(255,intensity*1.5);
+    const b=Math.max(0,100-intensity);
+    hmGrid.innerHTML+=`<div style="height:36px;background:rgba(${r},${g},${b},0.6);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:rgba(255,255,255,0.8);font-weight:700;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">${val.toFixed(0)}</div>`;
+  });
+});
+
+// Model bars
+const models=[
+  {n:'Ensemble',v:0.878},{n:'XGBoost',v:0.873},{n:'LightGBM',v:0.871},{n:'Random Forest',v:0.845},{n:'Grad Boost',v:0.839}
+];
+const mbDiv=document.getElementById('modelBars');
+models.forEach(({n,v})=>{
+  mbDiv.innerHTML+=`<div class="model-bar">
+    <div class="model-bar-top"><span class="model-bar-name">${n}</span><span class="model-bar-val">${v}</span></div>
+    <div class="model-bar-bg"><div class="model-bar-fill" data-w="${(v-0.8)*500}" style="width:0%"></div></div>
+  </div>`;
+});
+setTimeout(()=>{
+  document.querySelectorAll('.model-bar-fill').forEach(el=>{
+    el.style.width=el.dataset.w+'%';
+  });
+},600);
+
+// Feed
+const events=[
+  {t:'NOW',c:'#00ff87',txt:'Brazil edges England for top spot at 93.95%'},
+  {t:'—',c:'#5eb8ff',txt:'UEFA leads confederation count with 122 teams'},
+  {t:'—',c:'#ff9800',txt:'Ensemble model achieves AUC 0.878 on holdout'},
+  {t:'—',c:'#ff4444',txt:'OFC lowest avg probability at 12.8%'},
+  {t:'—',c:'#00ff87',txt:'Argentina 4th with 89.9% win probability'},
+  {t:'—',c:'#ce93d8',txt:'CONCACAF surprised with 46.6% average prob'},
+];
+const feedDiv=document.getElementById('feed');
+events.forEach(({t,c,txt})=>{
+  feedDiv.innerHTML+=`<div class="event">
+    <div class="event-dot" style="background:${c}"></div>
+    <span class="event-time">${t}</span>
+    <span class="event-text">${txt}</span>
+  </div>`;
+});
+
+// Feature list
+const features=[
+  'FIFA Points','Avg Player Rating','Recent Form Score',
+  'Win Rate (Last Year)','Market Value (€M)','Attack Potency',
+  'Squad Quality','Strength Index','Goals Scored Avg',
+];
+const flDiv=document.getElementById('featureList');
+features.forEach((f,i)=>{
+  const w=100-i*8;
+  flDiv.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(0,255,135,0.06)">
+    <span style="font-size:0.68rem;color:var(--dim)">${i+1}. ${f}</span>
+    <div style="width:40px;height:3px;background:rgba(0,255,135,0.1);border-radius:2px;overflow:hidden">
+      <div style="width:${w}%;height:100%;background:var(--green);border-radius:2px"></div>
+    </div>
+  </div>`;
+});
+</script>
+</body>
+</html>

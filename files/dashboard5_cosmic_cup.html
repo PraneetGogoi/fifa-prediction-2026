@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC2026 — Cosmic Cup</title>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@100;300;700;900&family=Inconsolata:wght@300;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --deep:#03030f;--space:#07071a;--neon:#a855f7;--neon2:#7c3aed;
+  --star:#fff;--gold:#fbbf24;--cyan:#22d3ee;--pink:#f472b6;
+  --text:#c4b5fd;--dim:#4c1d95;
+}
+body{
+  background:var(--deep);font-family:'Exo 2',sans-serif;
+  min-height:100vh;color:var(--text);overflow-x:hidden;
+}
+
+/* Star field */
+.stars{position:fixed;inset:0;z-index:0}
+.stars::before,.stars::after{
+  content:'';position:absolute;inset:0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%,white 0%,transparent 100%),
+    radial-gradient(1px 1px at 25% 40%,white 0%,transparent 100%),
+    radial-gradient(2px 2px at 40% 10%,rgba(255,255,255,0.8) 0%,transparent 100%),
+    radial-gradient(1px 1px at 60% 30%,white 0%,transparent 100%),
+    radial-gradient(1px 1px at 75% 60%,rgba(255,255,255,0.6) 0%,transparent 100%),
+    radial-gradient(2px 2px at 85% 20%,white 0%,transparent 100%),
+    radial-gradient(1px 1px at 90% 70%,rgba(255,255,255,0.7) 0%,transparent 100%),
+    radial-gradient(1px 1px at 15% 80%,rgba(255,255,255,0.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 50% 90%,white 0%,transparent 100%),
+    radial-gradient(1px 1px at 35% 65%,rgba(255,255,255,0.8) 0%,transparent 100%);
+}
+.stars::after{animation:twinkle 4s ease-in-out infinite alternate;opacity:0.6}
+@keyframes twinkle{from{opacity:0.4}to{opacity:1}}
+
+/* Nebula blobs */
+.nebula{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
+.n1{width:500px;height:500px;background:radial-gradient(ellipse,rgba(168,85,247,0.15),transparent);top:-100px;left:-100px}
+.n2{width:600px;height:400px;background:radial-gradient(ellipse,rgba(34,211,238,0.1),transparent);bottom:-100px;right:-100px}
+.n3{width:400px;height:400px;background:radial-gradient(ellipse,rgba(244,114,182,0.08),transparent);top:50%;left:50%;transform:translate(-50%,-50%)}
+
+.layout{position:relative;z-index:1;min-height:100vh}
+
+/* HEADER */
+header{text-align:center;padding:50px 40px 30px;position:relative}
+.orbit-badge{
+  display:inline-flex;align-items:center;gap:10px;
+  border:1px solid rgba(168,85,247,0.4);
+  padding:6px 20px;border-radius:100px;margin-bottom:20px;
+  background:rgba(168,85,247,0.08);
+  font-size:0.7rem;letter-spacing:3px;color:var(--neon);text-transform:uppercase;
+}
+.orbit-dot{width:6px;height:6px;background:var(--neon);border-radius:50%;animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{opacity:1;box-shadow:0 0 6px var(--neon)}50%{opacity:0.3;box-shadow:none}}
+h1{
+  font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;
+  background:linear-gradient(135deg,var(--cyan),var(--neon),var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;letter-spacing:3px;
+}
+.sub{font-weight:100;font-size:1.2rem;color:rgba(196,181,253,0.5);margin-top:10px;letter-spacing:4px;font-style:italic}
+
+/* ORBIT RINGS — visual centerpiece */
+.orbit-system{
+  width:500px;height:500px;margin:0 auto;position:relative;
+}
+.orbit-ring{
+  position:absolute;border-radius:50%;border:1px solid;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.or1{width:100px;height:100px;border-color:rgba(168,85,247,0.6);animation:orb 5s linear infinite}
+.or2{width:180px;height:180px;border-color:rgba(34,211,238,0.3);animation:orb 10s linear infinite reverse}
+.or3{width:270px;height:270px;border-color:rgba(168,85,247,0.2);animation:orb 18s linear infinite}
+.or4{width:380px;height:380px;border-color:rgba(244,114,182,0.15);animation:orb 26s linear infinite reverse}
+.or5{width:480px;height:480px;border-color:rgba(34,211,238,0.1);animation:orb 35s linear infinite}
+@keyframes orb{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* Center trophy */
+.orbit-center{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:80px;height:80px;display:flex;align-items:center;justify-content:center;
+  font-size:2.5rem;
+  background:radial-gradient(ellipse,rgba(168,85,247,0.3),transparent);
+  border-radius:50%;animation:glow 3s ease-in-out infinite alternate;
+}
+@keyframes glow{from{filter:drop-shadow(0 0 10px rgba(168,85,247,0.5))}to{filter:drop-shadow(0 0 30px rgba(168,85,247,0.9))}}
+
+/* Planet dots on orbits */
+.planet{
+  position:absolute;width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.55rem;font-weight:700;cursor:pointer;
+  transition:transform 0.3s;top:50%;left:50%;
+}
+.planet:hover{transform:scale(1.4)!important}
+
+/* CONTENT GRID */
+.content{display:grid;grid-template-columns:1fr 500px 1fr;gap:30px;padding:0 40px 60px;align-items:start}
+
+/* Left panel */
+.glass-panel{
+  background:rgba(7,7,26,0.6);
+  border:1px solid rgba(168,85,247,0.2);
+  backdrop-filter:blur(20px);
+  padding:24px;border-radius:12px;
+}
+.panel-title{
+  font-size:0.65rem;letter-spacing:4px;color:var(--neon);text-transform:uppercase;
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
+.panel-title::before{content:'✦';font-size:10px}
+
+.cosmic-bar{margin-bottom:12px}
+.cb-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.cb-name{font-weight:700;font-size:0.9rem;color:rgba(255,255,255,0.85)}
+.cb-prob{font-size:1rem;color:var(--gold);font-weight:700}
+.cb-track{height:6px;background:rgba(168,85,247,0.1);border-radius:3px;overflow:hidden}
+.cb-fill{height:100%;border-radius:3px;transition:width 1.4s ease}
+.cb-conf{font-size:0.6rem;color:var(--dim);letter-spacing:1px;margin-top:2px}
+
+/* Center orbit panel */
+.orbit-panel{position:relative}
+
+/* Right panel */
+.model-cards{display:flex;flex-direction:column;gap:10px}
+.mc{
+  border:1px solid rgba(168,85,247,0.15);padding:16px;border-radius:8px;
+  background:rgba(7,7,26,0.4);transition:border-color 0.3s;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.mc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--neon),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.mc:hover{border-color:rgba(168,85,247,0.4)}.mc:hover::before{opacity:1}
+.mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.mc-name{font-size:0.7rem;letter-spacing:2px;color:var(--text)}
+.mc-auc{font-family:'Inconsolata',monospace;font-size:1.4rem;font-weight:600;color:var(--gold)}
+.mc-bar{height:3px;background:rgba(168,85,247,0.1);border-radius:2px;overflow:hidden}
+.mc-fill{height:100%;border-radius:2px;transition:width 1.5s ease}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 40px 30px}
+.sc{
+  border:1px solid rgba(168,85,247,0.15);padding:20px;text-align:center;
+  border-radius:8px;background:rgba(7,7,26,0.4);
+  transition:border-color 0.3s,transform 0.3s;cursor:pointer;
+}
+.sc:hover{border-color:rgba(168,85,247,0.5);transform:translateY(-4px)}
+.sc-num{font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,var(--gold),var(--neon));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sc-label{font-size:0.6rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-top:4px}
+
+/* Confederation constellation */
+.const-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 40px 40px}
+.cg-cell{
+  border:1px solid rgba(168,85,247,0.1);padding:16px;text-align:center;
+  border-radius:8px;background:rgba(7,7,26,0.3);cursor:pointer;
+  transition:all 0.3s;
+}
+.cg-cell:hover{border-color:var(--neon);background:rgba(168,85,247,0.08)}
+.cg-name{font-size:0.65rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:6px}
+.cg-val{font-family:'Inconsolata',monospace;font-size:1.5rem;font-weight:600;color:var(--cyan)}
+.cg-teams{font-size:0.65rem;color:rgba(196,181,253,0.3);margin-top:2px}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="nebula n1"></div>
+<div class="nebula n2"></div>
+<div class="nebula n3"></div>
+
+<div class="layout">
+  <header>
+    <div class="orbit-badge"><div class="orbit-dot"></div>Live Prediction Engine Active<div class="orbit-dot"></div></div>
+    <h1>COSMIC CUP 2026</h1>
+    <p class="sub">Galactic Intelligence · FIFA World Cup Prediction Oracle</p>
+  </header>
+
+  <div class="stats-row">
+    <div class="sc"><div class="sc-num">93.9%</div><div class="sc-label">Peak Win Prob</div></div>
+    <div class="sc"><div class="sc-num">0.878</div><div class="sc-label">Ensemble AUC</div></div>
+    <div class="sc"><div class="sc-num">250</div><div class="sc-label">Teams Orbiting</div></div>
+    <div class="sc"><div class="sc-num">38</div><div class="sc-label">Feature Stars</div></div>
+  </div>
+
+  <div class="content">
+    <!-- LEFT -->
+    <div class="glass-panel">
+      <div class="panel-title">Top Contenders</div>
+      <div id="cosmicBars"></div>
+    </div>
+
+    <!-- CENTER — orbit -->
+    <div class="orbit-panel">
+      <div class="orbit-system" id="orbitSystem">
+        <div class="orbit-ring or1"></div>
+        <div class="orbit-ring or2"></div>
+        <div class="orbit-ring or3"></div>
+        <div class="orbit-ring or4"></div>
+        <div class="orbit-ring or5"></div>
+        <div class="orbit-center">🏆</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="glass-panel">
+      <div class="panel-title">Model Constellation</div>
+      <div class="model-cards" id="modelCards"></div>
+
+      <div class="panel-title" style="margin-top:20px">Top Feature Stars</div>
+      <div id="featStars"></div>
+    </div>
+  </div>
+
+  <div class="const-grid">
+    <div class="cg-cell"><div class="cg-name">UEFA</div><div class="cg-val">56.5%</div><div class="cg-teams">122 teams</div></div>
+    <div class="cg-cell"><div class="cg-name">CONMEBOL</div><div class="cg-val">65.8%</div><div class="cg-teams">41 teams</div></div>
+    <div class="cg-cell"><div class="cg-name">CONCACAF</div><div class="cg-val">46.6%</div><div class="cg-teams">24 teams</div></div>
+    <div class="cg-cell"><div class="cg-name">AFC</div><div class="cg-val">32.3%</div><div class="cg-teams">26 teams</div></div>
+    <div class="cg-cell"><div class="cg-name">CAF</div><div class="cg-val">29.4%</div><div class="cg-teams">35 teams</div></div>
+    <div class="cg-cell"><div class="cg-name">OFC</div><div class="cg-val">12.8%</div><div class="cg-teams">2 teams</div></div>
+  </div>
+</div>
+
+<script>
+const teams=[
+  {t:'Brazil',c:'CONMEBOL',p:93.95,col:'linear-gradient(90deg,#22d3ee,#a855f7)'},
+  {t:'England',c:'UEFA',p:93.89,col:'linear-gradient(90deg,#5eb8ff,#a855f7)'},
+  {t:'Spain',c:'UEFA',p:92.68,col:'linear-gradient(90deg,#f472b6,#a855f7)'},
+  {t:'Argentina',c:'CONMEBOL',p:89.87,col:'linear-gradient(90deg,#fbbf24,#a855f7)'},
+  {t:'France',c:'UEFA',p:89.74,col:'linear-gradient(90deg,#22d3ee,#f472b6)'},
+  {t:'Netherlands',c:'UEFA',p:86.83,col:'linear-gradient(90deg,#fbbf24,#f472b6)'},
+  {t:'Portugal',c:'UEFA',p:84.21,col:'linear-gradient(90deg,#a855f7,#22d3ee)'},
+  {t:'Germany',c:'UEFA',p:81.24,col:'linear-gradient(90deg,#5eb8ff,#22d3ee)'},
+  {t:'Colombia',c:'CONMEBOL',p:74.36,col:'linear-gradient(90deg,#7fefb8,#22d3ee)'},
+  {t:'USA',c:'CONCACAF',p:72.18,col:'linear-gradient(90deg,#a855f7,#f472b6)'},
+];
+
+const cb=document.getElementById('cosmicBars');
+teams.forEach(({t,c,p,col})=>{
+  cb.innerHTML+=`<div class="cosmic-bar">
+    <div class="cb-top"><span class="cb-name">${t}</span><span class="cb-prob">${p}%</span></div>
+    <div class="cb-conf">${c}</div>
+    <div class="cb-track"><div class="cb-fill" data-w="${p}" style="width:0%;background:${col}"></div></div>
+  </div>`;
+});
+
+// Orbit planets
+const os=document.getElementById('orbitSystem');
+const orbits=[90,135,185,250,315];
+const planetTeams=teams.slice(0,5);
+planetTeams.forEach(({t,p},i)=>{
+  const r=orbits[i];
+  const angle=Math.random()*360;
+  const colors=['#a855f7','#22d3ee','#f472b6','#fbbf24','#5eb8ff'];
+  const planet=document.createElement('div');
+  planet.className='planet';
+  planet.style.cssText=`
+    background:${colors[i]};
+    box-shadow:0 0 12px ${colors[i]};
+    color:#000;font-weight:900;
+    margin-top:-16px;margin-left:-16px;
+  `;
+  planet.title=`${t}: ${p}%`;
+  planet.textContent=t.substring(0,3).toUpperCase();
+  
+  // Position on orbit
+  const rad=angle*Math.PI/180;
+  const x=250+r*Math.cos(rad)-16;
+  const y=250+r*Math.sin(rad)-16;
+  planet.style.left=x+'px';
+  planet.style.top=y+'px';
+  os.appendChild(planet);
+  
+  // Animate orbit
+  let ang=angle;
+  const speed=(0.3+Math.random()*0.3)*(i%2===0?1:-1);
+  function rotatePlanet(){
+    ang+=speed*0.01;
+    const rx=250+r*Math.cos(ang)-16;
+    const ry=250+r*Math.sin(ang)-16;
+    planet.style.left=rx+'px';
+    planet.style.top=ry+'px';
+    requestAnimationFrame(rotatePlanet);
+  }
+  rotatePlanet();
+});
+
+// Model cards
+const models=[
+  {n:'ENSEMBLE',auc:0.878,acc:85.6,col:'#fbbf24',w:90},
+  {n:'XGBOOST',auc:0.873,acc:84.8,col:'#a855f7',w:85},
+  {n:'LIGHTGBM',auc:0.871,acc:84.6,col:'#22d3ee',w:84},
+  {n:'RANDOM FOREST',auc:0.845,acc:82.1,col:'#f472b6',w:72},
+  {n:'GRAD BOOST',auc:0.839,acc:81.5,col:'#5eb8ff',w:68},
+];
+const mc=document.getElementById('modelCards');
+models.forEach(({n,auc,acc,col,w})=>{
+  mc.innerHTML+=`<div class="mc">
+    <div class="mc-top"><span class="mc-name">${n}</span><span class="mc-auc">${auc}</span></div>
+    <div class="mc-bar"><div class="mc-fill" data-w="${w}" style="width:0%;background:${col}"></div></div>
+  </div>`;
+});
+
+// Feature stars
+const feats=['FIFA Points','Player Rating','Recent Form','Win Rate','Market Value','Attack Potency'];
+const fs=document.getElementById('featStars');
+const fcols=['#fbbf24','#a855f7','#22d3ee','#f472b6','#5eb8ff','#7fefb8'];
+feats.forEach((f,i)=>{
+  fs.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(168,85,247,0.08)">
+    <span style="font-size:0.7rem;color:${fcols[i]}">★</span>
+    <span style="font-size:0.75rem;color:rgba(196,181,253,0.7);flex:1">${f}</span>
+    <div style="width:50px;height:3px;background:rgba(168,85,247,0.1);border-radius:2px;overflow:hidden">
+      <div style="width:${100-i*12}%;height:100%;background:${fcols[i]};border-radius:2px"></div>
+    </div>
+  </div>`;
+});
+
+setTimeout(()=>{
+  document.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width=el.dataset.w+'%';
+  });
+},400);
+</script>
+</body>
+</html>

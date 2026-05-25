@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC2026 — Pitch View Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&family=Source+Sans+3:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --pitch:#1a5c2a;--pitch2:#1e6b31;--line:rgba(255,255,255,0.25);
+  --bg:#0f0f0f;--card:#141414;--border:rgba(255,255,255,0.08);
+  --gold:#FFD700;--red:#E63946;--white:#f0f0f0;--gray:#8a8a8a;
+}
+body{background:var(--bg);font-family:'Source Sans 3',sans-serif;min-height:100vh;color:var(--white);overflow-x:hidden}
+
+/* Pitch pattern background */
+.hero{
+  background:
+    repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,0.015) 60px,rgba(255,255,255,0.015) 61px),
+    linear-gradient(180deg,#0d3d18 0%,#1a5c2a 30%,#1e6b31 50%,#1a5c2a 70%,#0d3d18 100%);
+  padding:50px 60px 60px;
+  position:relative;
+  overflow:hidden;
+  border-bottom:3px solid rgba(255,255,255,0.1);
+}
+.hero::before{
+  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:300px;height:300px;border:2px solid var(--line);border-radius:50%;
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;top:50%;left:0;right:0;height:2px;
+  background:var(--line);transform:translateY(-50%);pointer-events:none;
+}
+/* Corner arcs */
+.corner-arc{position:absolute;width:60px;height:60px;border:2px solid var(--line);border-radius:50%;pointer-events:none}
+.ca-tl{top:-30px;left:-30px}.ca-tr{top:-30px;right:-30px}.ca-bl{bottom:-30px;left:-30px}.ca-br{bottom:-30px;right:-30px}
+
+.hero-content{position:relative;z-index:1;text-align:center}
+.wc-badge{
+  display:inline-block;background:rgba(0,0,0,0.5);
+  border:2px solid var(--gold);padding:6px 24px;
+  font-family:'Oswald',sans-serif;font-weight:200;font-size:0.75rem;
+  letter-spacing:6px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;
+}
+h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(3rem,6vw,5rem);
+   letter-spacing:6px;text-transform:uppercase;line-height:1;
+   text-shadow:0 4px 30px rgba(0,0,0,0.8)}
+h1 span{color:var(--gold)}
+.hero-sub{font-weight:300;font-style:italic;font-size:1.2rem;color:rgba(255,255,255,0.6);margin-top:12px;letter-spacing:2px}
+
+/* Formation display — hero cards */
+.formation{display:flex;justify-content:center;gap:20px;margin-top:40px;flex-wrap:wrap}
+.player-card{
+  background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.15);
+  padding:18px 22px;text-align:center;min-width:130px;
+  position:relative;cursor:pointer;
+  transition:transform 0.3s,border-color 0.3s;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+}
+.player-card:hover{transform:translateY(-8px);border-color:var(--gold)}
+.player-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity 0.3s;
+}
+.player-card:hover::before{opacity:1}
+.card-jersey{font-size:1.8rem;margin-bottom:6px}
+.card-pos{font-size:0.55rem;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:4px}
+.card-name{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:2px;color:var(--white)}
+.card-conf{font-size:0.65rem;color:var(--gold);letter-spacing:1px;margin-top:2px}
+.card-prob{
+  font-family:'Oswald',sans-serif;font-size:1.8rem;font-weight:700;
+  color:var(--gold);margin-top:8px;
+}
+.card-bar{height:3px;background:rgba(255,255,255,0.1);margin-top:8px;border-radius:2px;overflow:hidden}
+.card-bar-fill{height:100%;background:linear-gradient(90deg,#FFD700,#FFA500);border-radius:2px;transition:width 1s ease}
+
+/* Main layout */
+.content{display:grid;grid-template-columns:1fr 340px;gap:0;padding:0}
+
+/* Left: analysis */
+.analysis{padding:40px 50px;display:flex;flex-direction:column;gap:30px}
+.section-header{
+  font-family:'Oswald',sans-serif;font-weight:400;font-size:1.6rem;
+  letter-spacing:4px;text-transform:uppercase;color:var(--white);
+  border-left:3px solid var(--gold);padding-left:16px;margin-bottom:16px;
+}
+
+/* Horizontal ranking bars */
+.rank-table{display:flex;flex-direction:column;gap:0}
+.rank-row{
+  display:grid;grid-template-columns:36px 130px 70px 1fr 70px;
+  align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  transition:background 0.2s;cursor:pointer;
+}
+.rank-row:hover{background:rgba(255,215,0,0.04);padding-left:6px}
+.rr-num{font-family:'Oswald',sans-serif;font-size:1.3rem;color:var(--gray);text-align:center}
+.rr-name{font-weight:600;font-size:0.95rem;color:var(--white)}
+.rr-conf{font-size:0.65rem;padding:2px 6px;border:1px solid currentColor;border-radius:1px;letter-spacing:1px;text-transform:uppercase;text-align:center}
+.UEFA{color:#5eb8ff}.CONMEBOL{color:#7fefb8}.CAF{color:#ffcc7f}.CONCACAF{color:#e07fe0}.AFC{color:#ff9f9f}
+.rr-bar-bg{height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.rr-bar{height:100%;background:linear-gradient(90deg,var(--gold),#ff8c00);border-radius:3px;transition:width 1.2s ease}
+.rr-prob{font-family:'Oswald',sans-serif;font-size:1.1rem;color:var(--gold);text-align:right}
+
+/* Model grid */
+.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.model-tile{
+  border:1px solid var(--border);padding:20px;
+  background:var(--card);position:relative;
+  transition:border-color 0.3s;cursor:pointer;
+}
+.model-tile:hover{border-color:rgba(255,215,0,0.3)}
+.model-tile-name{font-family:'Oswald',sans-serif;letter-spacing:3px;font-size:0.85rem;color:var(--gray);margin-bottom:8px}
+.model-tile-val{font-family:'Oswald',sans-serif;font-size:2.2rem;font-weight:700;color:var(--gold)}
+.model-tile-label{font-size:0.7rem;color:var(--gray);margin-top:2px}
+.model-tile-bar{position:absolute;bottom:0;left:0;height:2px;background:var(--gold);opacity:0.5;transition:width 1.5s ease}
+
+/* Feature importance */
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.feat-item{display:flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--border)}
+.feat-rank{font-family:'Oswald',sans-serif;font-size:1.2rem;color:rgba(255,215,0,0.4);width:24px}
+.feat-info{flex:1}
+.feat-name{font-size:0.75rem;color:rgba(255,255,255,0.7);margin-bottom:3px}
+.feat-bar-bg{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.feat-bar-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 1.4s ease}
+
+/* Right sidebar */
+.sidebar-r{background:var(--card);border-left:1px solid var(--border);padding:30px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
+.conf-ring{text-align:center}
+.ring-label{font-family:'Oswald',sans-serif;letter-spacing:3px;font-size:0.85rem;color:var(--gray);margin-bottom:14px}
+
+svg.donut{width:160px;height:160px;margin:0 auto;display:block}
+.donut-hole{fill:var(--card)}
+
+.legend-item{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legend-text{font-size:0.8rem;color:rgba(255,255,255,0.7);flex:1}
+.legend-val{font-size:0.8rem;color:var(--gold);font-weight:600}
+
+.stat-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-tile{border:1px solid var(--border);padding:14px;text-align:center;background:rgba(255,255,255,0.02)}
+.st-num{font-family:'Oswald',sans-serif;font-size:1.8rem;color:var(--gold)}
+.st-label{font-size:0.6rem;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="corner-arc ca-tl"></div>
+  <div class="corner-arc ca-tr"></div>
+  <div class="corner-arc ca-bl"></div>
+  <div class="corner-arc ca-br"></div>
+  <div class="hero-content">
+    <div class="wc-badge">⚽ Machine Learning Oracle ⚽</div>
+    <h1>FIFA World Cup <span>2026</span></h1>
+    <p class="hero-sub">Predictive Analytics · USA · Canada · Mexico</p>
+
+    <div class="formation" id="topCards"></div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="analysis">
+
+    <div>
+      <div class="section-header">Full Rankings</div>
+      <div class="rank-table" id="rankTable"></div>
+    </div>
+
+    <div>
+      <div class="section-header">Model Performance</div>
+      <div class="model-grid" id="modelGrid"></div>
+    </div>
+
+    <div>
+      <div class="section-header">Feature Intelligence</div>
+      <div class="feat-grid" id="featGrid"></div>
+    </div>
+
+  </div>
+
+  <div class="sidebar-r">
+    <div class="conf-ring">
+      <div class="ring-label">CONFEDERATION SHARE</div>
+      <svg class="donut" viewBox="0 0 100 100">
+        <circle class="donut-hole" cx="50" cy="50" r="40"/>
+        <circle id="d1" cx="50" cy="50" r="30" fill="none" stroke-width="20"/>
+        <circle id="d2" cx="50" cy="50" r="30" fill="none" stroke-width="20"/>
+        <circle id="d3" cx="50" cy="50" r="30" fill="none" stroke-width="20"/>
+        <circle id="d4" cx="50" cy="50" r="30" fill="none" stroke-width="20"/>
+        <circle id="d5" cx="50" cy="50" r="30" fill="none" stroke-width="20"/>
+        <circle id="d6" cx="50" cy="50" r="30" fill="none" stroke-width="20"/>
+        <text x="50" y="46" text-anchor="middle" fill="#FFD700" font-family="Oswald" font-size="9" font-weight="700">250</text>
+        <text x="50" y="56" text-anchor="middle" fill="#8a8a8a" font-family="sans-serif" font-size="5" letter-spacing="1">TEAMS</text>
+      </svg>
+      <div id="legend" style="margin-top:14px"></div>
+    </div>
+
+    <div class="stat-tiles">
+      <div class="stat-tile"><div class="st-num">93.9%</div><div class="st-label">Top Prob</div></div>
+      <div class="stat-tile"><div class="st-num">0.878</div><div class="st-label">Best AUC</div></div>
+      <div class="stat-tile"><div class="st-num">1,000</div><div class="st-label">Train Set</div></div>
+      <div class="stat-tile"><div class="st-num">38</div><div class="st-label">Features</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const teams=[
+  {t:'Brazil',c:'CONMEBOL',pts:1921.8,p:93.95},{t:'England',c:'UEFA',pts:1872.6,p:93.89},
+  {t:'Spain',c:'UEFA',pts:1851.7,p:92.68},{t:'Argentina',c:'CONMEBOL',pts:1784.8,p:89.87},
+  {t:'France',c:'UEFA',pts:1789.1,p:89.74},{t:'Netherlands',c:'UEFA',pts:1809.6,p:86.83},
+  {t:'Portugal',c:'UEFA',pts:1821.3,p:84.21},{t:'Germany',c:'UEFA',pts:1779.4,p:81.24},
+  {t:'Colombia',c:'CONMEBOL',pts:1698.2,p:74.36},{t:'USA',c:'CONCACAF',pts:1681.5,p:72.18},
+  {t:'Morocco',c:'CAF',pts:1714.0,p:64.79},{t:'Turkey',c:'UEFA',pts:1641.2,p:59.83},
+];
+const jerseys=['🇧🇷','🇬🇧','🇪🇸','🇦🇷','🇫🇷','🏳️'];
+const medals=['🥇','🥈','🥉'];
+
+// Formation cards (top 3)
+const topCards=document.getElementById('topCards');
+teams.slice(0,3).forEach(({t,c,pts,p},i)=>{
+  topCards.innerHTML+=`<div class="player-card">
+    <div class="card-jersey">${jerseys[i]||'⚽'}</div>
+    <div class="card-pos">${medals[i]} Favourite</div>
+    <div class="card-name">${t.toUpperCase()}</div>
+    <div class="card-conf">${c}</div>
+    <div class="card-prob">${p}%</div>
+    <div class="card-bar"><div class="card-bar-fill" data-w="${p}" style="width:0%"></div></div>
+  </div>`;
+});
+
+// Rank table
+const rt=document.getElementById('rankTable');
+teams.forEach(({t,c,pts,p},i)=>{
+  rt.innerHTML+=`<div class="rank-row">
+    <div class="rr-num">${i+1}</div>
+    <div class="rr-name">${t}</div>
+    <span class="rr-conf ${c}">${c}</span>
+    <div class="rr-bar-bg"><div class="rr-bar" data-w="${(p/teams[0].p)*100}" style="width:0%"></div></div>
+    <div class="rr-prob">${p}%</div>
+  </div>`;
+});
+
+// Model tiles
+const models=[
+  {n:'Ensemble',v:'0.878',l:'AUC-ROC',w:90},
+  {n:'XGBoost',v:'0.873',l:'AUC-ROC',w:87},
+  {n:'LightGBM',v:'0.871',l:'AUC-ROC',w:86},
+  {n:'RandomForest',v:'0.845',l:'AUC-ROC',w:78},
+];
+const mg=document.getElementById('modelGrid');
+models.forEach(({n,v,l,w})=>{
+  mg.innerHTML+=`<div class="model-tile">
+    <div class="model-tile-name">${n.toUpperCase()}</div>
+    <div class="model-tile-val">${v}</div>
+    <div class="model-tile-label">${l}</div>
+    <div class="model-tile-bar" data-w="${w}%" style="width:0%"></div>
+  </div>`;
+});
+
+// Features
+const feats=['FIFA Points','Player Rating','Form Score','Win Rate','Market Value','Attack Potency','Squad Quality','Goals Avg','Possession','Strength Idx'];
+const fg=document.getElementById('featGrid');
+feats.forEach((f,i)=>{
+  const w=100-i*8;
+  fg.innerHTML+=`<div class="feat-item">
+    <div class="feat-rank">${i+1}</div>
+    <div class="feat-info">
+      <div class="feat-name">${f}</div>
+      <div class="feat-bar-bg"><div class="feat-bar-fill" data-w="${w}" style="width:0%"></div></div>
+    </div>
+  </div>`;
+});
+
+// Donut chart
+const confData=[
+  {n:'UEFA',pct:48.8,teams:122,col:'#5eb8ff'},{n:'CONMEBOL',pct:16.4,teams:41,col:'#7fefb8'},
+  {n:'CAF',pct:14.0,teams:35,col:'#ffcc7f'},{n:'CONCACAF',pct:9.6,teams:24,col:'#e07fe0'},
+  {n:'AFC',pct:10.4,teams:26,col:'#ff9f9f'},{n:'OFC',pct:0.8,teams:2,col:'#90a4ae'},
+];
+const circ=2*Math.PI*30;
+let cumOff=0;
+const ids=['d1','d2','d3','d4','d5','d6'];
+confData.forEach(({n,pct,teams,col},i)=>{
+  const seg=(pct/100)*circ;
+  const el=document.getElementById(ids[i]);
+  el.setAttribute('stroke',col);
+  el.setAttribute('stroke-dasharray',`${seg} ${circ-seg}`);
+  el.setAttribute('stroke-dashoffset',circ/4-cumOff);
+  el.setAttribute('transform',`rotate(-90 50 50)`);
+  cumOff+=seg;
+  document.getElementById('legend').innerHTML+=`<div class="legend-item">
+    <div class="legend-dot" style="background:${col}"></div>
+    <span class="legend-text">${n}</span>
+    <span class="legend-val">${teams}</span>
+  </div>`;
+});
+
+// Animate
+setTimeout(()=>{
+  document.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width=(el.dataset.w.includes('%')?el.dataset.w:el.dataset.w+'%');
+  });
+},400);
+</script>
+</body>
+</html>

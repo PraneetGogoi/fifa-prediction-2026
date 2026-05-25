@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC2026 — Broadcast Overlay</title>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --tv-bg:#0f1923;--panel:#131f2e;--accent:#00a8e8;--accent2:#0077ff;
+  --red:#ff4444;--gold:#ffd700;--white:#ffffff;--dim:#4a6080;
+  --border:rgba(0,168,232,0.15);
+}
+body{background:var(--tv-bg);font-family:'DM Sans',sans-serif;min-height:100vh;color:var(--white);overflow-x:hidden}
+
+/* Broadcast lower-third style header */
+header{
+  background:linear-gradient(135deg,#0a1520,#131f2e);
+  position:relative;overflow:hidden;padding:0;
+}
+.header-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(0,168,232,0.1),transparent 60%);
+}
+.broadcast-bar{
+  background:var(--accent2);height:4px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent));
+  background-size:200% 100%;animation:shimmer 3s linear infinite;
+}
+@keyframes shimmer{to{background-position:-200% 0}}
+.header-inner{position:relative;z-index:1;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:40px;padding:30px 50px}
+.brand{display:flex;align-items:center;gap:16px}
+.brand-icon{
+  width:64px;height:64px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+}
+.brand-text{font-family:'Teko',sans-serif;font-weight:600;font-size:2rem;letter-spacing:3px;color:var(--white);line-height:1}
+.brand-sub{font-size:0.65rem;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-top:2px}
+
+/* Score / headline ticker */
+.ticker-wrap{overflow:hidden;flex:1;border-left:2px solid rgba(0,168,232,0.2);border-right:2px solid rgba(0,168,232,0.2);padding:0 24px}
+.ticker{font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:2px;color:rgba(255,255,255,0.6);white-space:nowrap;animation:tick 25s linear infinite}
+@keyframes tick{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+
+.header-right{text-align:right}
+.live-pill{
+  display:inline-flex;align-items:center;gap:6px;background:var(--red);
+  padding:6px 14px;border-radius:2px;font-size:0.7rem;letter-spacing:3px;font-weight:700;margin-bottom:6px;
+}
+.live-blink{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hd-time{font-family:'Teko',sans-serif;font-size:1.5rem;color:var(--accent)}
+
+/* MAIN GRID */
+.main{display:grid;grid-template-columns:340px 1fr 280px;gap:0;height:calc(100vh - 130px)}
+
+/* LEFT SIDEBAR */
+.ls{background:var(--panel);border-right:1px solid var(--border);overflow-y:auto}
+.ls-header{
+  padding:16px 20px;background:rgba(0,168,232,0.08);
+  border-bottom:1px solid var(--border);
+  font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--accent);
+}
+.ls-header span{font-size:0.6rem;color:var(--dim);display:block;letter-spacing:2px;font-family:'DM Sans',sans-serif;margin-top:2px}
+
+/* Team row — TV scoreboard style */
+.tv-team{
+  display:grid;grid-template-columns:36px 16px 1fr auto;
+  align-items:center;gap:0;
+  border-bottom:1px solid rgba(0,168,232,0.06);
+  padding:0;overflow:hidden;cursor:pointer;
+  transition:background 0.2s;
+}
+.tv-team:hover{background:rgba(0,168,232,0.06)}
+.tv-rank{
+  background:rgba(0,0,0,0.3);height:50px;display:flex;align-items:center;
+  justify-content:center;font-family:'Teko',sans-serif;font-size:1.1rem;color:var(--dim);
+}
+.tv-rank.r1{background:var(--gold);color:#000}
+.tv-rank.r2{background:#c0c0c0;color:#000}
+.tv-rank.r3{background:#cd7f32;color:#fff}
+.tv-accent-bar{width:3px;height:50px}
+.tv-content{padding:8px 12px}
+.tv-name{font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:1px;line-height:1}
+.tv-meta{font-size:0.6rem;color:var(--dim);letter-spacing:1px}
+.tv-prob-block{
+  padding:0 14px;height:50px;display:flex;flex-direction:column;
+  align-items:flex-end;justify-content:center;
+  background:rgba(0,0,0,0.15);min-width:80px;
+}
+.tv-prob{font-family:'Teko',sans-serif;font-size:1.3rem;color:var(--gold)}
+.tv-trend{font-size:0.6rem;color:#00e676}
+
+/* MAIN CONTENT */
+.mc{padding:24px;display:flex;flex-direction:column;gap:20px;overflow:hidden}
+
+/* Hero stat cards */
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.hero-card{
+  background:var(--panel);border:1px solid var(--border);
+  padding:20px;border-radius:4px;position:relative;overflow:hidden;
+}
+.hero-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.hc-label{font-size:0.6rem;letter-spacing:3px;color:var(--dim);text-transform:uppercase;margin-bottom:8px}
+.hc-val{font-family:'Teko',sans-serif;font-size:2.8rem;line-height:1;color:var(--white)}
+.hc-val.gold{color:var(--gold)}
+.hc-sub{font-size:0.7rem;color:var(--dim);margin-top:4px}
+.hc-badge{
+  position:absolute;top:12px;right:12px;
+  font-size:0.6rem;padding:3px 8px;border-radius:2px;
+  font-weight:500;letter-spacing:1px;
+}
+
+/* Broadcast-style probability bars */
+.broadcast-bars{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.bb-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.bb-title{font-family:'Teko',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--accent)}
+.bb-sub{font-size:0.65rem;color:var(--dim);letter-spacing:2px}
+.bb-body{padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.bb-row{display:grid;grid-template-columns:100px 1fr 60px;align-items:center;gap:12px}
+.bb-name{font-size:0.85rem;font-weight:500;color:rgba(255,255,255,0.8)}
+.bb-track{height:8px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;position:relative}
+.bb-fill{height:100%;border-radius:4px;transition:width 1.3s cubic-bezier(0.34,1.56,0.64,1);position:relative}
+.bb-fill::after{
+  content:'';position:absolute;right:0;top:0;bottom:0;width:3px;
+  background:rgba(255,255,255,0.8);border-radius:2px;
+}
+.bb-val{font-family:'Teko',sans-serif;font-size:1.2rem;color:var(--gold);text-align:right}
+
+/* Split view: model vs confederation */
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.split-panel{background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:18px}
+.sp-title{font-family:'Teko',sans-serif;font-size:0.85rem;letter-spacing:3px;color:var(--accent);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.sp-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(0,168,232,0.06)}
+.sp-row:last-child{border-bottom:none}
+.sp-name{font-size:0.78rem;color:rgba(255,255,255,0.6)}
+.sp-val{font-family:'Teko',sans-serif;font-size:1.1rem;color:var(--white)}
+
+/* RIGHT SIDEBAR */
+.rs{background:var(--panel);border-left:1px solid var(--border);padding:0;overflow-y:auto}
+.rs-section{border-bottom:1px solid var(--border)}
+.rs-head{padding:12px 16px;font-family:'Teko',sans-serif;font-size:0.85rem;letter-spacing:3px;color:var(--accent);background:rgba(0,168,232,0.05)}
+.rs-body{padding:12px 16px}
+
+/* Feature importance as broadcast graphic */
+.fi-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(0,168,232,0.06)}
+.fi-num{font-family:'Teko',sans-serif;color:var(--dim);width:20px;text-align:center;font-size:0.9rem}
+.fi-name{flex:1;font-size:0.72rem;color:rgba(255,255,255,0.6)}
+.fi-bar{width:60px;height:4px;background:rgba(0,168,232,0.1);border-radius:2px;overflow:hidden}
+.fi-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width 1.5s ease}
+
+.conf-hexes{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.hex-item{border:1px solid rgba(0,168,232,0.1);padding:10px;text-align:center;border-radius:2px;cursor:pointer;transition:background 0.2s}
+.hex-item:hover{background:rgba(0,168,232,0.08)}
+.hi-conf{font-size:0.55rem;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:4px}
+.hi-val{font-family:'Teko',sans-serif;font-size:1.2rem;color:var(--accent)}
+.hi-teams{font-size:0.6rem;color:var(--dim)}
+
+/* Bottom ticker */
+.bottom-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--accent2);height:32px;z-index:50;
+  display:flex;align-items:center;overflow:hidden;
+}
+.bb-label{
+  background:#000;padding:0 16px;height:100%;display:flex;align-items:center;
+  font-family:'Teko',sans-serif;font-size:0.85rem;letter-spacing:2px;color:var(--accent);white-space:nowrap;
+}
+.bb-scroll{flex:1;overflow:hidden}
+.bb-text{white-space:nowrap;font-family:'Teko',sans-serif;font-size:0.85rem;color:#fff;animation:tick2 35s linear infinite;letter-spacing:2px}
+@keyframes tick2{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+</style>
+</head>
+<body>
+
+<div class="broadcast-bar"></div>
+<header>
+  <div class="header-bg"></div>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">⚽</div>
+      <div>
+        <div class="brand-text">WC 2026</div>
+        <div class="brand-sub">AI Prediction Network</div>
+      </div>
+    </div>
+    <div class="ticker-wrap">
+      <div class="ticker">
+        🏆 BRAZIL LEADS AT 93.95% · ENGLAND CLOSE AT 93.89% · SPAIN THIRD AT 92.68% · ARGENTINA 89.87% · FRANCE 89.74% · NETHERLANDS 86.83% · MODEL AUC 0.878 · 250 TEAMS ANALYZED ·
+        🏆 BRAZIL LEADS AT 93.95% · ENGLAND CLOSE AT 93.89% · SPAIN THIRD AT 92.68% · ARGENTINA 89.87% · FRANCE 89.74% · NETHERLANDS 86.83% · MODEL AUC 0.878 · 250 TEAMS ANALYZED ·
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="live-pill"><div class="live-blink"></div>LIVE</div>
+      <div class="hd-time" id="clock"></div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- LEFT -->
+  <div class="ls">
+    <div class="ls-header">PREDICTION TABLE <span>ENSEMBLE MODEL · WC2026</span></div>
+    <div id="tvTeams"></div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="mc">
+    <div class="hero-stats">
+      <div class="hero-card">
+        <div class="hc-label">Top Win Probability</div>
+        <div class="hc-val gold">93.9%</div>
+        <div class="hc-sub">Brazil (CONMEBOL)</div>
+        <div class="hc-badge" style="background:rgba(255,215,0,0.15);color:#ffd700">FAVOURITE</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Ensemble AUC Score</div>
+        <div class="hc-val">0.878</div>
+        <div class="hc-sub">4-model weighted blend</div>
+        <div class="hc-badge" style="background:rgba(0,168,232,0.15);color:var(--accent)">OPTIMAL</div>
+      </div>
+      <div class="hero-card">
+        <div class="hc-label">Teams in Analysis</div>
+        <div class="hc-val">250</div>
+        <div class="hc-sub">6 Confederations</div>
+        <div class="hc-badge" style="background:rgba(0,230,118,0.15);color:#00e676">COMPLETE</div>
+      </div>
+    </div>
+
+    <div class="broadcast-bars">
+      <div class="bb-header">
+        <div class="bb-title">WIN PROBABILITY SPECTRUM</div>
+        <div class="bb-sub">TOP 10 NATIONS · ENSEMBLE MODEL</div>
+      </div>
+      <div class="bb-body" id="bbBars"></div>
+    </div>
+
+    <div class="split-grid">
+      <div class="split-panel">
+        <div class="sp-title">MODEL PERFORMANCE</div>
+        <div class="sp-row"><span class="sp-name">Ensemble AUC</span><span class="sp-val" style="color:var(--gold)">0.878</span></div>
+        <div class="sp-row"><span class="sp-name">XGBoost AUC</span><span class="sp-val">0.873</span></div>
+        <div class="sp-row"><span class="sp-name">LightGBM AUC</span><span class="sp-val">0.871</span></div>
+        <div class="sp-row"><span class="sp-name">Random Forest AUC</span><span class="sp-val">0.845</span></div>
+        <div class="sp-row"><span class="sp-name">Grad Boost AUC</span><span class="sp-val">0.839</span></div>
+        <div class="sp-row"><span class="sp-name">CV Folds</span><span class="sp-val">5-Fold</span></div>
+      </div>
+      <div class="split-panel">
+        <div class="sp-title">CONFEDERATION AVG PROB</div>
+        <div class="sp-row"><span class="sp-name">CONMEBOL (41)</span><span class="sp-val" style="color:#7fefb8">65.8%</span></div>
+        <div class="sp-row"><span class="sp-name">UEFA (122)</span><span class="sp-val" style="color:#5eb8ff">56.5%</span></div>
+        <div class="sp-row"><span class="sp-name">CONCACAF (24)</span><span class="sp-val" style="color:#e07fe0">46.6%</span></div>
+        <div class="sp-row"><span class="sp-name">AFC (26)</span><span class="sp-val" style="color:#ff9f9f">32.3%</span></div>
+        <div class="sp-row"><span class="sp-name">CAF (35)</span><span class="sp-val" style="color:#ffcc7f">29.4%</span></div>
+        <div class="sp-row"><span class="sp-name">OFC (2)</span><span class="sp-val" style="color:#90a4ae">12.8%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="rs">
+    <div class="rs-section">
+      <div class="rs-head">FEATURE IMPORTANCE</div>
+      <div class="rs-body" id="fiList"></div>
+    </div>
+    <div class="rs-section">
+      <div class="rs-head">DATA SUMMARY</div>
+      <div class="rs-body">
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">Training Samples</span><span class="sp-val">1,000</span></div>
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">Test Samples</span><span class="sp-val">250</span></div>
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">Raw Features</span><span class="sp-val">25</span></div>
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">Engineered Feats</span><span class="sp-val">13</span></div>
+        <div class="sp-row"><span class="sp-name">Models Blended</span><span class="sp-val">4</span></div>
+      </div>
+    </div>
+    <div class="rs-section">
+      <div class="rs-head">DARK HORSES</div>
+      <div class="rs-body">
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">USA</span><span class="sp-val" style="color:var(--gold)">72.2%</span></div>
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">Morocco</span><span class="sp-val" style="color:var(--gold)">64.8%</span></div>
+        <div class="sp-row" style="border-bottom:1px solid rgba(0,168,232,0.06)"><span class="sp-name">Turkey</span><span class="sp-val" style="color:var(--gold)">59.8%</span></div>
+        <div class="sp-row"><span class="sp-name">Senegal</span><span class="sp-val" style="color:var(--gold)">52.1%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-bar">
+  <div class="bb-label">⚽ WC2026 PREDICTIONS</div>
+  <div class="bb-scroll">
+    <div class="bb-text">
+      🏆 BRAZIL 93.95% · ENGLAND 93.89% · SPAIN 92.68% · ARGENTINA 89.87% · FRANCE 89.74% · NETHERLANDS 86.83% · PORTUGAL 84.21% · GERMANY 81.24% · COLOMBIA 74.36% · USA 72.18% · MOROCCO 64.79% · TURKEY 59.83% ·
+      🏆 BRAZIL 93.95% · ENGLAND 93.89% · SPAIN 92.68% · ARGENTINA 89.87% · FRANCE 89.74% · NETHERLANDS 86.83% · PORTUGAL 84.21% · GERMANY 81.24% · COLOMBIA 74.36% · USA 72.18% · MOROCCO 64.79% · TURKEY 59.83% ·
+    </div>
+  </div>
+</div>
+
+<script>
+// Clock
+function tick(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('en-US',{hour12:false})}
+setInterval(tick,1000);tick();
+
+const teams=[
+  {t:'Brazil',c:'CONMEBOL',p:93.95,col:'#ffd700'},{t:'England',c:'UEFA',p:93.89,col:'#5eb8ff'},
+  {t:'Spain',c:'UEFA',p:92.68,col:'#ff6b6b'},{t:'Argentina',c:'CONMEBOL',p:89.87,col:'#7fefb8'},
+  {t:'France',c:'UEFA',p:89.74,col:'#a855f7'},{t:'Netherlands',c:'UEFA',p:86.83,col:'#ff9f40'},
+  {t:'Portugal',c:'UEFA',p:84.21,col:'#ff6b6b'},{t:'Germany',c:'UEFA',p:81.24,col:'#c0c0c0'},
+  {t:'Colombia',c:'CONMEBOL',p:74.36,col:'#ffec8b'},{t:'USA',c:'CONCACAF',p:72.18,col:'#87ceeb'},
+  {t:'Morocco',c:'CAF',p:64.79,col:'#ffa500'},{t:'Turkey',c:'UEFA',p:59.83,col:'#ff6347'},
+  {t:'Senegal',c:'CAF',p:52.14,col:'#90ee90'},{t:'Croatia',c:'UEFA',p:49.87,col:'#cd5c5c'},
+  {t:'Ecuador',c:'CONMEBOL',p:47.21,col:'#ffd700'},
+];
+const rankClass={0:'r1',1:'r2',2:'r3'};
+const tv=document.getElementById('tvTeams');
+teams.forEach(({t,c,p,col},i)=>{
+  tv.innerHTML+=`<div class="tv-team">
+    <div class="tv-rank ${rankClass[i]||''}">${i+1}</div>
+    <div class="tv-accent-bar" style="background:${col};opacity:0.7"></div>
+    <div class="tv-content">
+      <div class="tv-name">${t.toUpperCase()}</div>
+      <div class="tv-meta">${c}</div>
+    </div>
+    <div class="tv-prob-block">
+      <div class="tv-prob">${p}%</div>
+      <div class="tv-trend">${i<3?'▲ TOP PICK':i<6?'▲ STRONG':''}</div>
+    </div>
+  </div>`;
+});
+
+// Broadcast bars
+const bb=document.getElementById('bbBars');
+const gradients=['linear-gradient(90deg,#ffd700,#ff8c00)','linear-gradient(90deg,#5eb8ff,#0077ff)','linear-gradient(90deg,#ff6b6b,#cc0000)','linear-gradient(90deg,#7fefb8,#00c864)','linear-gradient(90deg,#a855f7,#7c3aed)','linear-gradient(90deg,#ff9f40,#e67e22)','linear-gradient(90deg,#ff6b6b,#cc0000)','linear-gradient(90deg,#c0c0c0,#808080)','linear-gradient(90deg,#ffec8b,#ffd700)','linear-gradient(90deg,#87ceeb,#1e90ff)'];
+teams.slice(0,10).forEach(({t,c,p},i)=>{
+  bb.innerHTML+=`<div class="bb-row">
+    <span class="bb-name">${t}</span>
+    <div class="bb-track"><div class="bb-fill" data-w="${(p/teams[0].p)*100}" style="width:0%;background:${gradients[i%gradients.length]}"></div></div>
+    <span class="bb-val">${p}%</span>
+  </div>`;
+});
+
+// Features
+const feats=['FIFA Points','Player Rating','Recent Form','Win Rate','Market Value','Attack Potency','Squad Quality','Goals Avg','Possession','Strength Idx','Pass Accuracy','Clean Sheets'];
+const fi=document.getElementById('fiList');
+feats.forEach((f,i)=>{
+  fi.innerHTML+=`<div class="fi-row">
+    <div class="fi-num">${i+1}</div>
+    <div class="fi-name">${f}</div>
+    <div class="fi-bar"><div class="fi-fill" data-w="${100-i*7}" style="width:0%"></div></div>
+  </div>`;
+});
+
+setTimeout(()=>{
+  document.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width=el.dataset.w+'%';
+  });
+},400);
+</script>
+</body>
+</html>

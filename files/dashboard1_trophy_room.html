@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WC2026 — Trophy Room</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#C9A84C;--gold2:#F0D080;--gold3:#8B6914;
+  --cream:#F5EDD6;--ink:#1A1209;--maroon:#4A0E0E;
+  --parch:#EDE0C4;--shadow:rgba(26,18,9,0.4);
+}
+body{
+  background:#1A1209;
+  font-family:'Cormorant Garamond',serif;
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--cream);
+}
+
+/* Ornate border pattern */
+body::before{
+  content:'';
+  position:fixed;inset:12px;
+  border:1px solid var(--gold3);
+  pointer-events:none;z-index:100;
+  box-shadow:inset 0 0 0 3px rgba(201,168,76,0.15);
+}
+body::after{
+  content:'';
+  position:fixed;inset:20px;
+  border:1px solid rgba(201,168,76,0.3);
+  pointer-events:none;z-index:100;
+}
+
+/* Corner ornaments */
+.corner{position:fixed;width:60px;height:60px;z-index:101;font-size:28px;line-height:1;color:var(--gold3);}
+.corner-tl{top:4px;left:4px}
+.corner-tr{top:4px;right:4px;transform:scaleX(-1)}
+.corner-bl{bottom:4px;left:4px;transform:scaleY(-1)}
+.corner-br{bottom:4px;right:4px;transform:scale(-1)}
+
+header{
+  text-align:center;
+  padding:60px 40px 40px;
+  position:relative;
+}
+.header-ornament{
+  font-size:13px;letter-spacing:8px;text-transform:uppercase;
+  color:var(--gold3);margin-bottom:12px;
+}
+h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:900;
+  background:linear-gradient(135deg,var(--gold3) 0%,var(--gold2) 40%,var(--gold) 60%,var(--gold3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-shadow:none;
+  line-height:1.1;
+  letter-spacing:2px;
+}
+.subtitle{
+  font-style:italic;font-weight:300;font-size:1.3rem;
+  color:rgba(245,237,214,0.6);margin-top:10px;letter-spacing:3px;
+}
+.divider{
+  display:flex;align-items:center;gap:20px;
+  margin:20px auto;max-width:500px;
+}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.divider-icon{color:var(--gold);font-size:20px}
+
+/* Podium section */
+.podium-section{
+  padding:20px 60px;
+  display:flex;justify-content:center;gap:20px;
+  align-items:flex-end;
+}
+.podium-card{
+  background:linear-gradient(160deg,rgba(201,168,76,0.12),rgba(139,105,20,0.08));
+  border:1px solid;
+  border-radius:4px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform 0.4s ease,box-shadow 0.4s ease;
+}
+.podium-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.podium-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px rgba(201,168,76,0.25)}
+.podium-card:nth-child(1){width:180px;padding:30px 20px;border-color:rgba(201,168,76,0.5);order:2}
+.podium-card:nth-child(2){width:160px;padding:25px 18px;border-color:rgba(192,192,192,0.4);order:1}
+.podium-card:nth-child(3){width:150px;padding:22px 16px;border-color:rgba(205,127,50,0.4);order:3}
+
+.medal{font-size:2.5rem;display:block;margin-bottom:8px}
+.podium-team{
+  font-family:'Playfair Display',serif;
+  font-weight:700;font-size:1.3rem;
+  color:var(--cream);margin-bottom:4px;
+}
+.podium-conf{font-size:0.75rem;letter-spacing:3px;color:rgba(245,237,214,0.4);margin-bottom:12px;text-transform:uppercase}
+.podium-prob{
+  font-size:2rem;font-weight:600;
+  background:linear-gradient(135deg,var(--gold3),var(--gold2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.podium-prob-label{font-size:0.65rem;letter-spacing:2px;color:rgba(245,237,214,0.35);text-transform:uppercase;margin-top:2px}
+
+/* Stats grid */
+.stats-section{padding:30px 60px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1200px;margin:0 auto}
+.stat-box{
+  border:1px solid rgba(201,168,76,0.2);
+  padding:24px;text-align:center;
+  background:rgba(201,168,76,0.04);
+  border-radius:2px;
+  position:relative;
+}
+.stat-box::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:40%;height:1px;background:linear-gradient(90deg,transparent,var(--gold3),transparent);
+}
+.stat-num{
+  font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;
+  color:var(--gold);display:block;
+}
+.stat-label{font-size:0.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(245,237,214,0.4);margin-top:6px;display:block}
+
+/* Teams table */
+.table-section{padding:20px 60px 40px;max-width:1200px;margin:0 auto}
+.table-title{
+  font-family:'Playfair Display',serif;font-size:1.8rem;
+  color:var(--gold);margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+}
+.table-title::after{flex:1;content:'';height:1px;background:linear-gradient(90deg,var(--gold3),transparent)}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--gold3)}
+thead th{
+  font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold3);padding:10px 16px;text-align:left;font-weight:600;
+}
+tbody tr{
+  border-bottom:1px solid rgba(201,168,76,0.08);
+  transition:background 0.3s;cursor:pointer;
+}
+tbody tr:hover{background:rgba(201,168,76,0.06)}
+td{padding:14px 16px;font-size:0.95rem;color:rgba(245,237,214,0.85)}
+.rank-cell{font-family:'Playfair Display',serif;font-weight:700;color:var(--gold);font-size:1.1rem}
+.team-name{font-weight:600;color:var(--cream);font-size:1.05rem}
+.prob-bar-wrap{display:flex;align-items:center;gap:12px}
+.prob-bar-bg{flex:1;height:4px;background:rgba(201,168,76,0.1);border-radius:2px;overflow:hidden}
+.prob-bar{height:100%;background:linear-gradient(90deg,var(--gold3),var(--gold2));border-radius:2px;transition:width 1s ease}
+.prob-val{font-weight:600;color:var(--gold2);font-size:0.95rem;min-width:45px}
+.conf-badge{
+  font-size:0.65rem;letter-spacing:2px;padding:3px 8px;border:1px solid;
+  border-radius:1px;text-transform:uppercase;font-weight:600;
+}
+.UEFA{border-color:rgba(30,144,255,0.5);color:#7eb5ff}
+.CONMEBOL{border-color:rgba(0,200,100,0.5);color:#7fefb8}
+.CAF{border-color:rgba(255,150,0,0.5);color:#ffcc7f}
+.CONCACAF{border-color:rgba(200,50,200,0.5);color:#e07fe0}
+.AFC{border-color:rgba(255,80,80,0.5);color:#ff9f9f}
+
+/* Confederation bars */
+.conf-section{padding:20px 60px 40px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.conf-chart{border:1px solid rgba(201,168,76,0.15);padding:30px;border-radius:2px}
+.conf-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold);margin-bottom:20px}
+.conf-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.conf-name{width:90px;font-size:0.75rem;letter-spacing:2px;color:rgba(245,237,214,0.5);text-transform:uppercase}
+.conf-bar-bg{flex:1;height:8px;background:rgba(201,168,76,0.08);border-radius:4px;overflow:hidden}
+.conf-bar-fill{height:100%;border-radius:4px;transition:width 1.2s ease}
+.conf-prob-text{font-size:0.85rem;color:var(--gold);min-width:40px;text-align:right}
+.model-perf{border:1px solid rgba(201,168,76,0.15);padding:30px;border-radius:2px}
+.perf-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(201,168,76,0.08)}
+.perf-row:last-child{border-bottom:none}
+.perf-name{font-size:0.8rem;letter-spacing:1px;color:rgba(245,237,214,0.6)}
+.perf-val{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold)}
+
+footer{text-align:center;padding:30px;font-size:0.7rem;letter-spacing:3px;color:rgba(245,237,214,0.2);text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="corner corner-tl">❧</div>
+<div class="corner corner-tr">❧</div>
+<div class="corner corner-bl">❧</div>
+<div class="corner corner-br">❧</div>
+
+<header>
+  <div class="header-ornament">⚽ · FIFA World Cup · 2026 · USA · Canada · Mexico · ⚽</div>
+  <h1>THE TROPHY ROOM</h1>
+  <p class="subtitle">Predictive Intelligence · Machine Learning Oracle</p>
+  <div class="divider"><div class="divider-line"></div><div class="divider-icon">✦</div><div class="divider-line"></div></div>
+</header>
+
+<!-- Podium -->
+<div class="podium-section">
+  <div class="podium-card" onclick="void(0)">
+    <span class="medal">🥈</span>
+    <div class="podium-team">England</div>
+    <div class="podium-conf">UEFA</div>
+    <div class="podium-prob">93.9%</div>
+    <div class="podium-prob-label">Win Probability</div>
+  </div>
+  <div class="podium-card" onclick="void(0)">
+    <span class="medal">🥇</span>
+    <div class="podium-team">Brazil</div>
+    <div class="podium-conf">CONMEBOL</div>
+    <div class="podium-prob">93.95%</div>
+    <div class="podium-prob-label">Win Probability</div>
+  </div>
+  <div class="podium-card" onclick="void(0)">
+    <span class="medal">🥉</span>
+    <div class="podium-team">Spain</div>
+    <div class="podium-conf">UEFA</div>
+    <div class="podium-prob">92.7%</div>
+    <div class="podium-prob-label">Win Probability</div>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats-section">
+  <div class="stat-box">
+    <span class="stat-num">250</span>
+    <span class="stat-label">Teams Analyzed</span>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num">25</span>
+    <span class="stat-label">Features Used</span>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num">4</span>
+    <span class="stat-label">ML Models</span>
+  </div>
+  <div class="stat-box">
+    <span class="stat-num">~87%</span>
+    <span class="stat-label">Model AUC</span>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="table-section">
+  <div class="table-title">⚜ Grand Standings</div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Nation</th><th>Confederation</th>
+        <th>FIFA Pts</th><th>Avg Rating</th><th>Win Probability</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- Conf + Model -->
+<div class="conf-section">
+  <div class="conf-chart">
+    <div class="conf-title">⚜ By Confederation</div>
+    <div id="confBars"></div>
+  </div>
+  <div class="model-perf">
+    <div class="conf-title">⚜ Model Performance</div>
+    <div class="perf-row"><span class="perf-name">XGBoost AUC</span><span class="perf-val">0.873</span></div>
+    <div class="perf-row"><span class="perf-name">LightGBM AUC</span><span class="perf-val">0.871</span></div>
+    <div class="perf-row"><span class="perf-name">Random Forest AUC</span><span class="perf-val">0.845</span></div>
+    <div class="perf-row"><span class="perf-name">Ensemble AUC</span><span class="perf-val">0.878</span></div>
+    <div class="perf-row"><span class="perf-name">Training Samples</span><span class="perf-val">1,000</span></div>
+    <div class="perf-row"><span class="perf-name">CV Folds</span><span class="perf-val">5</span></div>
+  </div>
+</div>
+
+<footer>FIFA World Cup 2026 Prediction System · Powered by XGBoost + LightGBM Ensemble · ML Oracle</footer>
+
+<script>
+const teams=[
+  {r:1,t:'Brazil',c:'CONMEBOL',pts:1921.8,rat:84.9,p:0.9395},
+  {r:2,t:'England',c:'UEFA',pts:1872.6,rat:89.7,p:0.9389},
+  {r:3,t:'Spain',c:'UEFA',pts:1851.7,rat:83.8,p:0.9268},
+  {r:4,t:'Argentina',c:'CONMEBOL',pts:1784.8,rat:87.1,p:0.8987},
+  {r:5,t:'France',c:'UEFA',pts:1789.1,rat:88.2,p:0.8974},
+  {r:6,t:'Netherlands',c:'UEFA',pts:1809.6,rat:83.6,p:0.8683},
+  {r:7,t:'Portugal',c:'UEFA',pts:1821.3,rat:86.5,p:0.8421},
+  {r:8,t:'Germany',c:'UEFA',pts:1779.4,rat:85.1,p:0.8124},
+  {r:9,t:'Colombia',c:'CONMEBOL',pts:1698.2,rat:82.3,p:0.7436},
+  {r:10,t:'USA',c:'CONCACAF',pts:1681.5,rat:79.8,p:0.7218},
+  {r:11,t:'Morocco',c:'CAF',pts:1714.0,rat:81.0,p:0.6479},
+  {r:12,t:'Turkey',c:'UEFA',pts:1641.2,rat:78.4,p:0.5983},
+];
+const tbody=document.getElementById('tableBody');
+teams.forEach(({r,t,c,pts,rat,p})=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`
+    <td class="rank-cell">${r}</td>
+    <td class="team-name">${t}</td>
+    <td><span class="conf-badge ${c}">${c}</span></td>
+    <td>${pts.toFixed(1)}</td>
+    <td>${rat.toFixed(1)}</td>
+    <td>
+      <div class="prob-bar-wrap">
+        <div class="prob-bar-bg"><div class="prob-bar" data-w="${p*100}" style="width:0%"></div></div>
+        <span class="prob-val">${(p*100).toFixed(1)}%</span>
+      </div>
+    </td>`;
+  tbody.appendChild(tr);
+});
+
+// Confederation bars
+const confs=[
+  {n:'CONMEBOL',p:65.8,col:'linear-gradient(90deg,#00c864,#00e676)'},
+  {n:'UEFA',p:56.5,col:'linear-gradient(90deg,#1e90ff,#5eb8ff)'},
+  {n:'CONCACAF',p:46.6,col:'linear-gradient(90deg,#9c27b0,#ce93d8)'},
+  {n:'AFC',p:32.3,col:'linear-gradient(90deg,#ff4444,#ff8080)'},
+  {n:'CAF',p:29.4,col:'linear-gradient(90deg,#ff9800,#ffcc02)'},
+  {n:'OFC',p:12.8,col:'linear-gradient(90deg,#607d8b,#90a4ae)'},
+];
+const confDiv=document.getElementById('confBars');
+confs.forEach(({n,p,col})=>{
+  confDiv.innerHTML+=`
+  <div class="conf-row">
+    <div class="conf-name">${n}</div>
+    <div class="conf-bar-bg"><div class="conf-bar-fill" data-w="${p}" style="width:0%;background:${col}"></div></div>
+    <div class="conf-prob-text">${p}%</div>
+  </div>`;
+});
+
+// Animate bars
+setTimeout(()=>{
+  document.querySelectorAll('[data-w]').forEach(el=>{
+    el.style.width=el.dataset.w+'%';
+  });
+},300);
+</script>
+</body>
+</html>
