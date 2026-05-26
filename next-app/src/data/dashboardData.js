@@ -4,11 +4,36 @@
 // ═══════════════════════════════════════════════════════
 
 export const TEAMS = [
-  { name: 'Spain',       conf: 'UEFA',     prob: 0.8220, pts: 1862.4, rating: 86.95, mv: 917,  wr: 0.763, form: 8.76 },
-  { name: 'France',      conf: 'UEFA',     prob: 0.8205, pts: 1898.1, rating: 85.66, mv: 883,  wr: 0.749, form: 8.75 },
-  { name: 'Brazil',      conf: 'CONMEBOL', prob: 0.7956, pts: 1883.3, rating: 86.35, mv: 811,  wr: 0.766, form: 8.93 },
-  { name: 'England',     conf: 'UEFA',     prob: 0.7741, pts: 1891.5, rating: 85.84, mv: 967,  wr: 0.775, form: 8.48 },
-  { name: 'Argentina',   conf: 'CONMEBOL', prob: 0.7607, pts: 1872.8, rating: 86.22, mv: 982,  wr: 0.758, form: 8.35 },
+  { name: 'Spain',       conf: 'UEFA',     prob: 0.8220, pts: 1862.4, rating: 86.95, mv: 917,  wr: 0.763, form: 8.76, 
+    keyPlayers: [
+      { name: 'Rodri', pos: 'MID', pac: 72, sho: 80, pas: 92, dri: 84, def: 88, phy: 86 },
+      { name: 'Lamine Yamal', pos: 'FWD', pac: 92, sho: 78, pas: 83, dri: 90, def: 30, phy: 55 }
+    ]
+  },
+  { name: 'France',      conf: 'UEFA',     prob: 0.8205, pts: 1898.1, rating: 85.66, mv: 883,  wr: 0.749, form: 8.75,
+    keyPlayers: [
+      { name: 'K. Mbappé', pos: 'FWD', pac: 97, sho: 90, pas: 80, dri: 92, def: 36, phy: 78 },
+      { name: 'Griezmann', pos: 'MID', pac: 80, sho: 85, pas: 88, dri: 87, def: 55, phy: 72 }
+    ]
+  },
+  { name: 'Brazil',      conf: 'CONMEBOL', prob: 0.7956, pts: 1883.3, rating: 86.35, mv: 811,  wr: 0.766, form: 8.93,
+    keyPlayers: [
+      { name: 'Vinícius Jr', pos: 'FWD', pac: 95, sho: 84, pas: 81, dri: 93, def: 29, phy: 68 },
+      { name: 'Rodrygo', pos: 'FWD', pac: 89, sho: 82, pas: 79, dri: 88, def: 32, phy: 62 }
+    ]
+  },
+  { name: 'England',     conf: 'UEFA',     prob: 0.7741, pts: 1891.5, rating: 85.84, mv: 967,  wr: 0.775, form: 8.48,
+    keyPlayers: [
+      { name: 'J. Bellingham', pos: 'MID', pac: 82, sho: 84, pas: 85, dri: 88, def: 78, phy: 84 },
+      { name: 'Harry Kane', pos: 'FWD', pac: 68, sho: 93, pas: 84, dri: 83, def: 49, phy: 83 }
+    ]
+  },
+  { name: 'Argentina',   conf: 'CONMEBOL', prob: 0.7607, pts: 1872.8, rating: 86.22, mv: 982,  wr: 0.758, form: 8.35,
+    keyPlayers: [
+      { name: 'Lionel Messi', pos: 'FWD', pac: 79, sho: 89, pas: 90, dri: 92, def: 33, phy: 60 },
+      { name: 'E. Fernández', pos: 'MID', pac: 75, sho: 78, pas: 86, dri: 82, def: 80, phy: 81 }
+    ]
+  },
   { name: 'Mexico',      conf: 'CONCACAF', prob: 0.6688, pts: 1566.3, rating: 76.30, mv: 403,  wr: 0.528, form: 5.27 },
   { name: 'USA',         conf: 'CONCACAF', prob: 0.6476, pts: 1610.4, rating: 77.30, mv: 412,  wr: 0.501, form: 5.53 },
   { name: 'Ecuador',     conf: 'CONMEBOL', prob: 0.6162, pts: 1665.2, rating: 78.58, mv: 421,  wr: 0.498, form: 5.88 },
@@ -17,9 +42,19 @@ export const TEAMS = [
   { name: 'Netherlands', conf: 'UEFA',     prob: 0.5821, pts: 1729.8, rating: 81.78, mv: 616,  wr: 0.653, form: 7.10 },
   { name: 'Italy',       conf: 'UEFA',     prob: 0.5785, pts: 1710.6, rating: 81.74, mv: 590,  wr: 0.635, form: 7.30 },
   { name: 'Uruguay',     conf: 'CONMEBOL', prob: 0.5715, pts: 1790.7, rating: 82.30, mv: 675,  wr: 0.655, form: 7.88 },
-  { name: 'Germany',     conf: 'UEFA',     prob: 0.5683, pts: 1757.0, rating: 81.56, mv: 653,  wr: 0.634, form: 6.79 },
+  { name: 'Germany',     conf: 'UEFA',     prob: 0.5683, pts: 1757.0, rating: 81.56, mv: 653,  wr: 0.634, form: 6.79,
+    keyPlayers: [
+      { name: 'Florian Wirtz', pos: 'MID', pac: 84, sho: 80, pas: 86, dri: 88, def: 45, phy: 60 },
+      { name: 'J. Musiala', pos: 'MID', pac: 86, sho: 81, pas: 83, dri: 92, def: 50, phy: 58 }
+    ]
+  },
   { name: 'Japan',       conf: 'AFC',      prob: 0.5405, pts: 1603.9, rating: 78.02, mv: 342,  wr: 0.476, form: 5.17 },
-  { name: 'Portugal',    conf: 'UEFA',     prob: 0.5047, pts: 1751.9, rating: 82.08, mv: 688,  wr: 0.659, form: 7.23 },
+  { name: 'Portugal',    conf: 'UEFA',     prob: 0.5047, pts: 1751.9, rating: 82.08, mv: 688,  wr: 0.659, form: 7.23,
+    keyPlayers: [
+      { name: 'Bruno Fernandes', pos: 'MID', pac: 73, sho: 86, pas: 90, dri: 84, def: 70, phy: 78 },
+      { name: 'R. Leão', pos: 'FWD', pac: 93, sho: 78, pas: 75, dri: 87, def: 27, phy: 76 }
+    ]
+  },
   { name: 'Senegal',     conf: 'CAF',      prob: 0.4966, pts: 1661.4, rating: 76.91, mv: 453,  wr: 0.509, form: 5.30 },
   { name: 'Denmark',     conf: 'UEFA',     prob: 0.5157, pts: 1603.4, rating: 77.80, mv: 407,  wr: 0.540, form: 5.53 },
 ];

@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { TEAMS } from '@/data/dashboardData';
 import AnimatedNumber from '@/components/AnimatedNumber';
 import TypewriterInsight from '@/components/TypewriterInsight';
+import TacticalPitch from '@/components/TacticalPitch';
+import PlayerRadar from '@/components/PlayerRadar';
 import styles from './TeamDetail.module.css';
 
 export default function TeamDetail({ params }) {
@@ -37,10 +39,26 @@ export default function TeamDetail({ params }) {
           </span>
           <span className={styles.probLabel}>WIN PROBABILITY</span>
         </div>
-        
         <div style={{ marginTop: '32px' }}>
           <TypewriterInsight teamName={team.name} />
         </div>
+
+        <div style={{ marginTop: '32px' }}>
+          <TacticalPitch teamName={team.name} />
+        </div>
+
+        {team.keyPlayers && (
+          <div style={{ marginTop: '48px' }}>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: 'white', marginBottom: '24px', borderBottom: '1px solid rgba(0, 225, 255, 0.3)', paddingBottom: '12px' }}>
+              KEY IMPACT PLAYERS
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+              {team.keyPlayers.map(player => (
+                <PlayerRadar key={player.name} player={player} />
+              ))}
+            </div>
+          </div>
+        )}
       </motion.div>
 
       <div className={styles.statsGrid}>

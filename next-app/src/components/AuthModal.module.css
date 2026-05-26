@@ -1,0 +1,110 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: rgba(0, 20, 10, 0.95);
+  border: 1px solid rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 40px rgba(0, 255, 136, 0.1);
+  border-radius: 16px;
+  padding: 48px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.closeBtn:hover {
+  color: white;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #00ff88;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #00ff88;
+}
+
+.submitBtn {
+  background: linear-gradient(90deg, #00e1ff, #00ff88);
+  color: black;
+  font-weight: 800;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.submitBtn:hover {
+  transform: translateY(-2px);
+}
+
+.error {
+  color: #ff4081;
+  font-size: 12px;
+  background: rgba(255, 64, 129, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.toggleText {
+  margin-top: 24px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.toggleText span {
+  color: #00ff88;
+  cursor: pointer;
+  font-weight: bold;
+}
+.toggleText span:hover {
+  text-decoration: underline;
+}

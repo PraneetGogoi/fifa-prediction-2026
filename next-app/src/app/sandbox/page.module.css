@@ -1,0 +1,32 @@
+.main {
+  min-height: 100vh;
+  padding: 48px;
+  background: radial-gradient(circle at 50% 0%, rgba(0, 225, 255, 0.05) 0%, transparent 50%);
+}
+
+.header {
+  margin-bottom: 48px;
+  text-align: center;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #00e1ff, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  letter-spacing: 4px;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}

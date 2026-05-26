@@ -3,6 +3,7 @@ import NavBar from '@/components/NavBar';
 import ParticleBackground from '@/components/ParticleBackground';
 import BootLoader from '@/components/BootLoader';
 import CommandPalette from '@/components/CommandPalette';
+import AIAssistant from '@/components/AIAssistant';
 
 export const metadata = {
   title: 'FIFA WC 2026 — Prediction Dashboard',
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
       <body style={{ paddingTop: '80px' }}>
         <BootLoader />
         <CommandPalette />
+        <AIAssistant />
         <ParticleBackground />
         <NavBar />
         {children}

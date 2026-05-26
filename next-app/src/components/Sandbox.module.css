@@ -122,12 +122,36 @@
 
 .winnerName {
   font-family: 'Outfit', sans-serif;
-  font-size: 3rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.probValue {
+  font-family: 'Outfit', sans-serif;
+  font-size: 4rem;
   font-weight: 900;
-  color: var(--text-hi);
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  color: var(--gold);
+  text-shadow: 0 0 30px rgba(255, 201, 0, 0.4);
   margin-bottom: 24px;
   text-align: center;
+}
+
+.selectInput {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+}
+.selectInput option {
+  background: #111;
+  color: white;
 }
 
 .saveBtn {

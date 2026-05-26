@@ -7,7 +7,6 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
   padding: 32px;
-  overflow: hidden;
 }
 
 .header {
@@ -19,7 +18,7 @@
   font-family: 'Outfit', sans-serif;
   font-size: 1.4rem;
   font-weight: 800;
-  color: var(--text-hi);
+  color: var(--gold);
   text-transform: uppercase;
 }
 
@@ -28,133 +27,98 @@
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 3px;
-  color: var(--blue-light);
-  text-transform: uppercase;
+  color: var(--text-lo);
   margin-top: 6px;
 }
 
-.bracketContainer {
+.bracketWrapper {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 100%;
-  padding: 0 24px;
+  align-items: stretch;
+  gap: 16px;
+  min-height: 500px;
+  position: relative;
 }
 
-.stage {
+.column {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
+  justify-content: space-around;
   flex: 1;
-}
-
-.stageLabel {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: var(--text-mid);
-  letter-spacing: 2px;
-  margin-bottom: 16px;
-  text-align: center;
-}
-
-.matchNode {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(0, 225, 255, 0.2);
-  border-radius: 12px;
-  padding: 16px;
-  width: 160px;
   position: relative;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
   z-index: 2;
 }
 
-.finalNode {
-  border-color: var(--magenta);
-  box-shadow: 0 0 20px rgba(255, 0, 127, 0.2);
-}
+.colLeft { align-items: flex-start; }
+.colRight { align-items: flex-end; }
+.colCenter { align-items: center; justify-content: center; }
 
-.teamRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.teamName {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--text-hi);
-}
-
-.teamProb {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
-  font-weight: 900;
-  color: var(--blue-light);
-}
-
-.vsRow {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.6rem;
-  font-weight: 800;
-  color: var(--text-lo);
-  text-align: center;
-  margin: 8px 0;
-  letter-spacing: 1px;
-}
-
-.connector {
-  position: absolute;
-  top: calc(16px + 40px); /* Adjust based on matchNode height */
-  right: -50%;
-  width: 100%;
-  height: 2px;
-  background: rgba(255,255,255,0.05);
-  z-index: 1;
-}
-
-.connectorLine {
-  height: 100%;
-  background: var(--blue-light);
-  box-shadow: 0 0 10px var(--blue-light);
-}
-
-.trophyNode {
+.match {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgba(255, 201, 0, 0.2), rgba(255, 201, 0, 0.05));
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  box-shadow: 0 0 30px rgba(255, 201, 0, 0.3);
-  z-index: 2;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 4px;
+  width: 140px;
+  gap: 2px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
-.trophyIcon {
-  font-size: 2.5rem;
-  line-height: 1;
-  margin-bottom: 4px;
+.team {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.winnerName {
+.team:hover {
+  background: rgba(0, 225, 255, 0.1);
+  color: white;
+}
+
+.team.active {
+  color: white;
+}
+
+.team.winner {
+  background: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+  border-left: 2px solid #00ff88;
+}
+
+.prob {
   font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
+  font-weight: 800;
+  font-size: 10px;
+}
+
+.trophy {
+  font-size: 48px;
+  text-shadow: 0 0 20px rgba(255, 201, 0, 0.5);
+  margin-bottom: 16px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.championName {
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
   font-weight: 900;
   color: var(--gold);
-  letter-spacing: 1px;
-}
-
-@media (max-width: 1024px) {
-  .bracketContainer {
-    flex-direction: column;
-    gap: 32px;
-  }
-  .connector {
-    display: none;
-  }
+  text-shadow: 0 0 10px rgba(255, 201, 0, 0.3);
+  letter-spacing: 2px;
+  text-align: center;
 }
