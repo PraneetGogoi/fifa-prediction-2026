@@ -4,30 +4,30 @@ import { TEAMS } from '@/data/dashboardData';
 import styles from './FeatureRadar.module.css';
 
 export default function FeatureRadar({ activeTeam, onTeamSelect }) {
-  // A simple fake SVG radar
-  const features = ['XG', 'POSS', 'FORM', 'SQUAD VAL', 'DEF. ACTIONS'];
+  const features = ['XG', 'POSS', 'FORM', 'SQUAD VAL', 'DEF', 'PRESS', 'TRANS', 'SET PC'];
   
-  // Calculate points for the pentagon radar based on mock data
-  // Radius = 70. Center = 100, 100
   const getPoints = (scaleArray) => {
     return features.map((f, i) => {
-      const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+      const angle = (Math.PI * 2 * i) / features.length - Math.PI / 2;
       const r = 70 * scaleArray[i]; 
       return `${100 + r * Math.cos(angle)},${100 + r * Math.sin(angle)}`;
     }).join(' ');
   };
 
-  const bgPoints = getPoints([1, 1, 1, 1, 1]);
-  const innerPoints1 = getPoints([0.66, 0.66, 0.66, 0.66, 0.66]);
-  const innerPoints2 = getPoints([0.33, 0.33, 0.33, 0.33, 0.33]);
+  const bgPoints = getPoints(Array(features.length).fill(1));
+  const innerPoints1 = getPoints(Array(features.length).fill(0.66));
+  const innerPoints2 = getPoints(Array(features.length).fill(0.33));
   
-  // Dynamic data based on team length for variance
-  const dataScale = [(activeTeam.length % 5 + 5)/10, 0.9, 0.7, 0.85, 0.6];
+  // Dynamic pseudo-random data based on team string to show unique shapes per team
+  const dataScale = features.map((_, i) => {
+    const seed = activeTeam.length + i * 7;
+    return 0.4 + ((seed * 13) % 55) / 100;
+  });
   const dataPoints = getPoints(dataScale);
 
   const textPositions = features.map((f, i) => {
-      const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
-      const r = 90; 
+      const angle = (Math.PI * 2 * i) / features.length - Math.PI / 2;
+      const r = 88; 
       return { x: 100 + r * Math.cos(angle), y: 100 + r * Math.sin(angle), text: f };
   });
 
@@ -58,7 +58,7 @@ export default function FeatureRadar({ activeTeam, onTeamSelect }) {
 
           {/* Axes */}
           {textPositions.map((pos, i) => {
-            const angle = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+            const angle = (Math.PI * 2 * i) / features.length - Math.PI / 2;
             return (
               <line 
                 key={`line-${i}`} 

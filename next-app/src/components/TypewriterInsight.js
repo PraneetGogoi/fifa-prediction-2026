@@ -16,6 +16,7 @@ export default function TypewriterInsight({ teamName }) {
   const [displayedText, setDisplayedText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [insightIndex, setInsightIndex] = useState(0);
+  const [timestamp, setTimestamp] = useState('');
 
   useEffect(() => {
     // Generate a pseudo-random index based on team name length so it's consistent per team
@@ -23,6 +24,7 @@ export default function TypewriterInsight({ teamName }) {
     setInsightIndex(idx);
     setDisplayedText('');
     setIsTyping(true);
+    setTimestamp(new Date().toISOString().split('T')[1].substring(0, 12) + 'Z');
   }, [teamName]);
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export default function TypewriterInsight({ teamName }) {
           DEEP-KICK LIVE INSIGHT
         </div>
         <div className={styles.timestamp}>
-          {new Date().toISOString().split('T')[1].substring(0, 12)}Z
+          {timestamp}
         </div>
       </div>
 

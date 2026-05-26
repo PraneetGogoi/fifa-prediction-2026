@@ -1,106 +1,148 @@
 .container {
-  padding: 40px;
+  padding: 60px 40px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
+.hero {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
 .title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 3rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 4.5rem;
   font-weight: 900;
-  color: white;
-  margin-bottom: 8px;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  background: linear-gradient(90deg, #fff, #00e1ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  letter-spacing: 2px;
 }
 
 .sub {
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1rem;
   color: var(--text-mid);
-  margin-bottom: 40px;
-  letter-spacing: 2px;
+  letter-spacing: 4px;
   text-transform: uppercase;
+  font-weight: 700;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 32px;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
-  padding: 24px;
-  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 32px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  border-color: var(--blue-light);
-  box-shadow: 0 10px 30px rgba(0, 225, 255, 0.1);
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(0, 225, 255, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 225, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .cardHeader {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 16px;
+  align-items: center;
+  margin-bottom: 24px;
   z-index: 2;
+  position: relative;
 }
 
 .teamName {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.5rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 2.2rem;
   font-weight: 900;
   color: white;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 .rank {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
   font-weight: 800;
-  color: var(--gold);
-  background: rgba(255, 201, 0, 0.1);
-  padding: 2px 8px;
-  border-radius: 4px;
+  color: #000;
+  background: var(--green-neon);
+  padding: 6px 12px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(57, 255, 120, 0.3);
 }
 
-.statRow {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   z-index: 2;
+  position: relative;
+}
+
+.statCol {
+  background: rgba(0,0,0,0.3);
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
 }
 
 .statLabel {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.8rem;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.75rem;
   color: var(--text-lo);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
 }
 
 .statValue {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.9rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: var(--text-hi);
+  color: white;
 }
 
 .confBadge {
   position: absolute;
-  bottom: -20px;
+  top: -20px;
   right: -20px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 6rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 8rem;
   font-weight: 900;
-  opacity: 0.03;
+  opacity: 0.1;
   z-index: 1;
+  transform: rotate(10deg);
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.card:hover .confBadge {
+  opacity: 0.2;
+  transform: rotate(0deg) scale(1.1);
 }

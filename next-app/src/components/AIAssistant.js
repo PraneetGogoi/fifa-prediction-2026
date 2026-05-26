@@ -43,6 +43,12 @@ export default function AIAssistant() {
     }
   }, [messages, isTyping]);
 
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-ai-assistant', handleOpen);
+    return () => window.removeEventListener('open-ai-assistant', handleOpen);
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim()) return;

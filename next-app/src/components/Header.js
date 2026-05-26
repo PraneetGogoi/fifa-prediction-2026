@@ -41,8 +41,24 @@ export default function Header() {
               animate={{ rotate: 360 }}
               transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
             >
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="16" stroke="url(#paint0_linear)" strokeWidth="3"/>
+                <path d="M20 4 C12 12 12 28 20 36 C28 28 28 12 20 4 Z" stroke="url(#paint1_linear)" strokeWidth="2"/>
+                <path d="M4 20 C12 12 28 12 36 20 C28 28 12 28 4 20 Z" stroke="url(#paint2_linear)" strokeWidth="2"/>
+                <defs>
+                  <linearGradient id="paint0_linear" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#ff007f"/>
+                    <stop offset="1" stopColor="#00e1ff"/>
+                  </linearGradient>
+                  <linearGradient id="paint1_linear" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FFC900"/>
+                    <stop offset="1" stopColor="#ff007f"/>
+                  </linearGradient>
+                  <linearGradient id="paint2_linear" x1="4" y1="20" x2="36" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#00ff88"/>
+                    <stop offset="1" stopColor="#00e1ff"/>
+                  </linearGradient>
+                </defs>
               </svg>
             </motion.div>
             <div>

@@ -1,0 +1,102 @@
+.container {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 32px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 16px;
+}
+
+.title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+.blinker {
+  width: 10px;
+  height: 10px;
+  background: #ff0055;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #ff0055;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0px #ff0055; }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 15px #ff0055; }
+  100% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 0px #ff0055; }
+}
+
+.feedContainer {
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+.feedList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feedItem {
+  background: rgba(0, 0, 0, 0.2);
+  border-left: 2px solid var(--blue-light);
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-mid);
+}
+
+.timestamp {
+  color: rgba(255,255,255,0.3);
+}
+
+.matchup {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.prediction {
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-hi);
+}
+
+.prediction span {
+  font-weight: 700;
+  color: var(--blue-light);
+}

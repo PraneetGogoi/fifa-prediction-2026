@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import CommunityVotes from '@/components/CommunityVotes';
 import LiveChat from '@/components/LiveChat';
 import HallOfFame from '@/components/HallOfFame';
+import TrendingTopics from '@/components/TrendingTopics';
+import PredictionLeaderboard from '@/components/PredictionLeaderboard';
 import styles from './CommunityPage.module.css';
 
 export default function CommunityPage() {
@@ -14,10 +16,12 @@ export default function CommunityPage() {
       </motion.div>
 
       <div className={styles.grid}>
-        <div className={styles.col8}>
+        <div className={styles.col8} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <LiveChat />
+          <PredictionLeaderboard />
         </div>
-        <div className={styles.col4}>
+        <div className={styles.col4} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <TrendingTopics />
           <CommunityVotes />
         </div>
         <div className={styles.col12} style={{ gridColumn: 'span 12', marginTop: '20px' }}>

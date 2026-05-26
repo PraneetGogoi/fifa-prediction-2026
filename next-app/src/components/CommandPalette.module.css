@@ -30,7 +30,7 @@
   border: none;
   color: white;
   outline: none;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .searchInput::placeholder {

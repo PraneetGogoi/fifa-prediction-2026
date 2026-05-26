@@ -2,6 +2,8 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import styles from './Landing.module.css';
+import GlobalPoll from '@/components/GlobalPoll';
+import LiveFeed from '@/components/LiveFeed';
 
 export default function LandingPage() {
   return (
@@ -12,7 +14,7 @@ export default function LandingPage() {
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       
-      <div className={styles.content}>
+      <div className={styles.hero}>
         <motion.div 
           className={styles.eyebrow}
           initial={{ opacity: 0, y: 20 }}
@@ -48,6 +50,26 @@ export default function LandingPage() {
           <Link href="/dashboard" className={styles.launchBtn}>
             INITIALIZE DASHBOARD
           </Link>
+        </motion.div>
+      </div>
+
+      <div className={styles.dashboardGrid}>
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, type: 'spring' }}
+        >
+          <GlobalPoll />
+        </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, delay: 0.2, type: 'spring' }}
+        >
+          <LiveFeed />
         </motion.div>
       </div>
     </div>

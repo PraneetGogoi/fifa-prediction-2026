@@ -62,66 +62,66 @@ export default function Home() {
           gap: '24px',
         }}>
           {/* Hero Pitch (Spans 8 columns) */}
-          <div style={{ gridColumn: 'span 8', minHeight: '500px', display: 'flex', flexDirection: 'column' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 8', minHeight: '500px', display: 'flex', flexDirection: 'column' }}>
             <TacticalPitch activeTeam={activeTeam} onTeamSelect={handleTeamSelect} isSyncing={isSyncing} />
           </div>
 
           {/* Live Inference Widget (Spans 4 columns) */}
-          <div style={{ gridColumn: 'span 4' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 4' }}>
             <LiveInferenceWidget activeTeam={activeTeam} />
           </div>
 
           {/* Rankings (Spans 3 columns) */}
-          <div style={{ gridColumn: 'span 3', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 3', display: 'flex' }}>
             <RankingsSidebar activeTeam={activeTeam} onTeamSelect={handleTeamSelect} />
           </div>
 
           {/* Charts (Spans 6 columns) */}
-          <div style={{ gridColumn: 'span 6', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 6', display: 'flex' }}>
             <ChartsPanel activeTeam={activeTeam} onTeamSelect={handleTeamSelect} />
           </div>
 
           {/* Intel Sidebar (Spans 3 columns) */}
-          <div style={{ gridColumn: 'span 3', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 3', display: 'flex' }}>
             <IntelSidebar activeTeam={activeTeam} />
           </div>
 
           {/* New Visualizations Row */}
-          <div style={{ gridColumn: 'span 6', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 6', display: 'flex' }}>
             <TrendWidget activeTeam={activeTeam} />
           </div>
           
-          <div style={{ gridColumn: 'span 6', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 6', display: 'flex' }}>
             <HeatmapWidget activeTeam={activeTeam} />
           </div>
 
           {/* Phase 4 Visualizations Row */}
-          <div style={{ gridColumn: 'span 6', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 6', display: 'flex' }}>
             <MatchSimulator />
           </div>
 
-          <div style={{ gridColumn: 'span 6', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 6', display: 'flex' }}>
             <FeatureRadar activeTeam={activeTeam} onTeamSelect={handleTeamSelect} />
           </div>
 
           {/* Phase 5 Visualizations Row */}
-          <div style={{ gridColumn: 'span 12', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 12', display: 'flex' }}>
             <TournamentBracket activeTeam={activeTeam} />
           </div>
 
-          <div style={{ gridColumn: 'span 12', display: 'flex', minHeight: '500px' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 12', display: 'flex', minHeight: '500px' }}>
             <ValueMatrix activeTeam={activeTeam} />
           </div>
 
-          <div style={{ gridColumn: 'span 12', display: 'flex' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 12', display: 'flex' }}>
             <HeadToHead activeTeam={activeTeam} />
           </div>
 
-          <div style={{ gridColumn: 'span 12', display: 'flex', marginTop: '20px' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 12', display: 'flex', marginTop: '20px' }}>
             <AdminPanel />
           </div>
 
-          <div style={{ gridColumn: 'span 12', display: 'flex', marginTop: '20px' }}>
+          <div className="hover-float" style={{ gridColumn: 'span 12', display: 'flex', marginTop: '20px' }}>
             <Sandbox />
           </div>
         </section>

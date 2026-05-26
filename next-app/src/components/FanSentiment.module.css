@@ -1,0 +1,94 @@
+.container {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-hi);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 225, 255, 0.3);
+  padding-bottom: 8px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.btnBull {
+  flex: 1;
+  background: rgba(39, 174, 96, 0.1);
+  border: 1px solid var(--green-neon);
+  color: var(--green-neon);
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.btnBull:hover {
+  background: var(--green-neon);
+  color: black;
+}
+
+.btnBear {
+  flex: 1;
+  background: rgba(192, 57, 43, 0.1);
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.btnBear:hover {
+  background: var(--red);
+  color: white;
+}
+
+.barContainer {
+  width: 100%;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  position: relative;
+}
+
+.bullFill {
+  height: 100%;
+  background: var(--green-neon);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bearFill {
+  height: 100%;
+  background: var(--red);
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.statsRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.bullText { color: var(--green-neon); }
+.bearText { color: var(--red); }

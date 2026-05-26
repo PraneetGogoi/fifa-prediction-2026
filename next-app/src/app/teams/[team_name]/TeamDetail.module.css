@@ -5,7 +5,7 @@
 }
 
 .backBtn {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 0.9rem;
   color: var(--blue-light);
   text-decoration: none;
@@ -30,16 +30,19 @@
 }
 
 .title {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 5rem;
   font-weight: 900;
-  color: white;
-  line-height: 1;
+  background: linear-gradient(90deg, #ffffff, var(--blue-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
   text-transform: uppercase;
+  text-shadow: 0 4px 20px rgba(0, 225, 255, 0.2);
 }
 
 .conf {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1.2rem;
   color: var(--text-mid);
   letter-spacing: 4px;
@@ -52,7 +55,7 @@
   color: var(--gold);
   padding: 16px 24px;
   border-radius: 12px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Oswald', sans-serif;
   text-align: center;
 }
 
@@ -84,7 +87,7 @@
 }
 
 .statBoxLabel {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 0.8rem;
   color: var(--text-lo);
   text-transform: uppercase;
@@ -92,14 +95,14 @@
 }
 
 .statBoxVal {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 2rem;
   font-weight: 800;
   color: white;
 }
 
 .notfound {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 2rem;
   color: white;
   text-align: center;

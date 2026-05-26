@@ -1,14 +1,16 @@
 .bootScreen {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+  background: rgba(28, 13, 63, 0.85); /* Deep translucent purple */
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
   z-index: 99999;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: white;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 
 .logoContainer {

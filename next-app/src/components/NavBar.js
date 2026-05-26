@@ -57,37 +57,25 @@ export default function NavBar() {
   };
 
   const AnimatedLogo = () => (
-    <motion.svg 
-      width="32" 
-      height="32" 
-      viewBox="0 0 100 100" 
-      style={{ overflow: 'visible' }}
-    >
-      <motion.circle 
-        cx="50" cy="50" r="40" 
-        stroke="var(--blue-light)" 
-        strokeWidth="2" 
-        fill="none" 
-        strokeDasharray="40 20"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.circle 
-        cx="50" cy="50" r="25" 
-        stroke="var(--magenta)" 
-        strokeWidth="4" 
-        fill="none" 
-        strokeDasharray="20 40"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.circle 
-        cx="50" cy="50" r="10" 
-        fill="var(--gold)" 
-        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </motion.svg>
+    <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="16" stroke="url(#paint0_linear_nav)" strokeWidth="3"/>
+      <path d="M20 4 C12 12 12 28 20 36 C28 28 28 12 20 4 Z" stroke="url(#paint1_linear_nav)" strokeWidth="2"/>
+      <path d="M4 20 C12 12 28 12 36 20 C28 28 12 28 4 20 Z" stroke="url(#paint2_linear_nav)" strokeWidth="2"/>
+      <defs>
+        <linearGradient id="paint0_linear_nav" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#ff007f"/>
+          <stop offset="1" stopColor="#00e1ff"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_nav" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#FFC900"/>
+          <stop offset="1" stopColor="#ff007f"/>
+        </linearGradient>
+        <linearGradient id="paint2_linear_nav" x1="4" y1="20" x2="36" y2="20" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#00ff88"/>
+          <stop offset="1" stopColor="#00e1ff"/>
+        </linearGradient>
+      </defs>
+    </svg>
   );
 
   return (
@@ -107,9 +95,12 @@ export default function NavBar() {
         ))}
       </div>
 
-      <Link href="/dashboard" className={styles.launchBtn}>
+      <button 
+        onClick={() => window.dispatchEvent(new Event('open-ai-assistant'))} 
+        className={styles.launchBtn}
+      >
         LAUNCH AI
-      </Link>
+      </button>
     </motion.nav>
   );
 }

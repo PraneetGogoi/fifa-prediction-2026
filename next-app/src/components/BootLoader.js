@@ -49,37 +49,44 @@ export default function BootLoader() {
         >
           <div className={styles.logoContainer}>
             <div className={styles.glow} />
-            <motion.svg 
-              width="100" 
-              height="100" 
-              viewBox="0 0 100 100" 
-              style={{ overflow: 'visible', position: 'relative', zIndex: 10 }}
-            >
-              <motion.circle 
-                cx="50" cy="50" r="45" 
-                stroke="var(--blue-light)" 
-                strokeWidth="2" 
-                fill="none" 
-                strokeDasharray="40 20"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-              />
-              <motion.circle 
-                cx="50" cy="50" r="30" 
-                stroke="var(--magenta)" 
-                strokeWidth="4" 
-                fill="none" 
-                strokeDasharray="20 40"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              />
-              <motion.circle 
-                cx="50" cy="50" r="12" 
-                fill="var(--gold)" 
-                animate={{ scale: [1, 1.3, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              />
-            </motion.svg>
+              <svg width="80" height="80" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible', position: 'relative', zIndex: 10 }}>
+                <motion.circle 
+                  cx="20" cy="20" r="16" 
+                  stroke="url(#paint0_linear)" 
+                  strokeWidth="3"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  strokeDasharray="25 15"
+                />
+                <motion.path 
+                  d="M20 4 C12 12 12 28 20 36 C28 28 28 12 20 4 Z" 
+                  stroke="url(#paint1_linear)" 
+                  strokeWidth="2"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.path 
+                  d="M4 20 C12 12 28 12 36 20 C28 28 12 28 4 20 Z" 
+                  stroke="url(#paint2_linear)" 
+                  strokeWidth="2"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                />
+                <defs>
+                  <linearGradient id="paint0_linear" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#ff007f"/>
+                    <stop offset="1" stopColor="#00e1ff"/>
+                  </linearGradient>
+                  <linearGradient id="paint1_linear" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#FFC900"/>
+                    <stop offset="1" stopColor="#ff007f"/>
+                  </linearGradient>
+                  <linearGradient id="paint2_linear" x1="4" y1="20" x2="36" y2="20" gradientUnits="userSpaceOnUse">
+                    <stop stopColor="#00ff88"/>
+                    <stop offset="1" stopColor="#00e1ff"/>
+                  </linearGradient>
+                </defs>
+              </svg>
           </div>
 
           <motion.div 

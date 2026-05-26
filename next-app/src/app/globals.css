@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Oswald:wght@400;500;600;700&display=swap');
 
 /* ═══════════════════════════════════════════════════════════
    DESIGN TOKENS – FIFA WC 2026 Brand: Vibrant & Bold
@@ -12,30 +12,30 @@
   --line:         rgba(255, 255, 255, 0.8);
 
   /* Surfaces */
-  --surface-0:    #030305; /* Deep obsidian background */
-  --surface-1:    rgba(255, 255, 255, 0.02); /* Glass panels */
-  --surface-2:    rgba(255, 255, 255, 0.1);
-  --surface-3:    rgba(255, 255, 255, 0.15);
+  --surface-0:    #0B131E; /* Deep navy/charcoal */
+  --surface-1:    rgba(255, 255, 255, 0.03); /* Glass panels */
+  --surface-2:    rgba(255, 255, 255, 0.08);
+  --surface-3:    rgba(255, 255, 255, 0.12);
 
   /* Borders */
-  --border-dim:   rgba(255, 255, 255, 0.1);
-  --border-mid:   rgba(255, 255, 255, 0.2);
-  --border-hi:    rgba(255, 255, 255, 0.4);
+  --border-dim:   rgba(255, 255, 255, 0.08);
+  --border-mid:   rgba(255, 255, 255, 0.15);
+  --border-hi:    rgba(255, 255, 255, 0.3);
 
   /* Accents */
-  --gold:         #FFC900;
-  --gold-dim:     #cc9f00;
-  --gold-glow:    rgba(255, 201, 0, 0.4);
+  --gold:         #d4af37; /* Metallic gold */
+  --gold-dim:     #aa8c2c;
+  --gold-glow:    rgba(212, 175, 55, 0.3);
 
-  --red:          #ff3b3b;
-  --green-neon:   #00ff88;
-  --blue-light:   #00e1ff;
-  --magenta:      #ff007f;
+  --red:          #c0392b; /* Deep crimson */
+  --green-neon:   #27ae60; /* Professional green */
+  --blue-light:   #3498db; /* Clear blue */
+  --magenta:      #8e44ad; /* Deep purple */
 
   /* Text */
-  --text-hi:      #ffffff;
-  --text-mid:     rgba(255, 255, 255, 0.7);
-  --text-lo:      rgba(255, 255, 255, 0.4);
+  --text-hi:      #f0f4f8; /* Soft off-white */
+  --text-mid:     #94a3b8; /* Cool slate gray */
+  --text-lo:      #475569; /* Dark slate gray */
 
   /* Confederation Colors (Vibrant variants) */
   --UEFA:         #00e1ff; /* Bright Cyan */
@@ -69,32 +69,39 @@ html {
 body {
   background: var(--surface-0);
   background-image: 
-    radial-gradient(circle at 15% 30%, rgba(0, 225, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 85% 70%, rgba(138, 43, 226, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 50% 10%, rgba(0, 255, 136, 0.05) 0%, transparent 40%);
-  font-family: 'Inter', sans-serif;
+    radial-gradient(circle at 15% 30%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 85% 70%, rgba(39, 174, 96, 0.1) 0%, transparent 50%);
+  font-family: 'Roboto', sans-serif;
   color: var(--text-hi);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* 3D Cyber-Grid Background */
+/* Energetic Diagonal Festival Stripes */
 body::before {
   content: '';
   position: fixed;
-  inset: -150%;
-  top: 30%; /* Start lower to create a horizon */
+  inset: -100%;
+  top: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: 
-    linear-gradient(rgba(0, 225, 255, 0.3) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 225, 255, 0.3) 1px, transparent 1px);
-  background-size: 60px 60px;
-  transform: perspective(1000px) rotateX(75deg) translateY(0);
-  animation: gridFlow 15s linear infinite;
-  mask-image: radial-gradient(ellipse at center 0%, black 10%, transparent 50%);
-  -webkit-mask-image: radial-gradient(ellipse at center 0%, black 10%, transparent 50%);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 4px,
+    transparent 4px,
+    transparent 20px
+  );
+  transform: translateY(0);
+  animation: stripePan 20s linear infinite;
+  mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+}
+
+@keyframes stripePan {
+  0% { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(50px) translateX(-50px); }
 }
 
 body::after {
@@ -146,4 +153,57 @@ body::after {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MICRO-ANIMATIONS
+══════════════════════════════════════════════════════════════ */
+
+/* Interactive Elements Base Transitions */
+button, select, input, a {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.2s ease, 
+              background-color 0.2s ease,
+              border-color 0.2s ease !important;
+  will-change: transform;
+}
+
+/* Squish effect on click */
+button:active, a:active, .btn:active {
+  transform: scale(0.95) !important;
+}
+
+/* Subtle float effect for cards/widgets */
+.hover-float {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform;
+}
+.hover-float:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 10px rgba(52, 152, 219, 0.1);
+  border-color: var(--border-hi);
+}
+
+/* Data Row Slide-in (For Tables/Lists) */
+.hover-slide-right {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.2s ease;
+  will-change: transform;
+}
+.hover-slide-right:hover {
+  transform: translateX(6px);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Glow Effect */
+.hover-glow:hover {
+  box-shadow: 0 0 15px var(--gold-glow);
+}
+
+/* Smooth Image/Icon Scale */
+.hover-scale {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
 }

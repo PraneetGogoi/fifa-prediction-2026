@@ -209,6 +209,7 @@ export const CONF_COLORS = {
 
 // Generic lineup generator for unlisted teams
 export function getLineup(teamName) {
+  if (!teamName || typeof teamName !== 'string') teamName = 'Generic';
   if (LINEUPS[teamName]) return LINEUPS[teamName];
   const forms = ['4-3-3', '4-2-3-1', '4-4-2', '3-5-2'];
   const index = Math.abs(teamName.split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0)) % forms.length;

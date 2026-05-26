@@ -56,7 +56,7 @@ function PitchSVG() {
   );
 }
 
-export default function TacticalPitch({ activeTeam, onTeamSelect, isSyncing }) {
+export default function TacticalPitch({ activeTeam = 'Generic', onTeamSelect = () => {}, isSyncing }) {
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   
   const teamObj = TEAMS.find(t => t.name === activeTeam) || TEAMS[0];

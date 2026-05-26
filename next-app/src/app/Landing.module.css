@@ -4,9 +4,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 40px 20px 100px;
 }
 
 .bgGlow {
@@ -14,25 +15,33 @@
   width: 800px;
   height: 800px;
   background: radial-gradient(circle, rgba(0, 225, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-  top: 50%;
+  top: 20%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 0;
   pointer-events: none;
 }
 
-.content {
+.hero {
   position: relative;
   z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 40px;
+  padding: 60px 120px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 60px;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(255, 255, 255, 0.02);
+  margin-bottom: 60px;
 }
 
 .eyebrow {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 6px;
@@ -42,7 +51,7 @@
 }
 
 .title {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 6rem;
   font-weight: 900;
   line-height: 1;
@@ -58,7 +67,7 @@
 }
 
 .desc {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1.2rem;
   color: var(--text-mid);
   max-width: 600px;
@@ -69,7 +78,7 @@
 .launchBtn {
   background: linear-gradient(135deg, var(--gold), #ff9900);
   color: black;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Oswald', sans-serif;
   font-size: 1.2rem;
   font-weight: 900;
   padding: 16px 48px;
@@ -84,8 +93,27 @@
   box-shadow: 0 15px 40px rgba(255, 201, 0, 0.5);
 }
 
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 900px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .title {
     font-size: 4rem;
+  }
+  .hero {
+    padding: 40px;
   }
 }

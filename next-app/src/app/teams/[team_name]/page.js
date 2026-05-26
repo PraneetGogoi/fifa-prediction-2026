@@ -5,8 +5,10 @@ import { motion } from 'framer-motion';
 import { TEAMS } from '@/data/dashboardData';
 import AnimatedNumber from '@/components/AnimatedNumber';
 import TypewriterInsight from '@/components/TypewriterInsight';
-import TacticalPitch from '@/components/TacticalPitch';
+import { TacticalBoard, RadarChart } from '@/components/IntelSidebar';
 import PlayerRadar from '@/components/PlayerRadar';
+import SquadRoster from '@/components/SquadRoster';
+import FanSentiment from '@/components/FanSentiment';
 import styles from './TeamDetail.module.css';
 
 export default function TeamDetail({ params }) {
@@ -39,12 +41,20 @@ export default function TeamDetail({ params }) {
           </span>
           <span className={styles.probLabel}>WIN PROBABILITY</span>
         </div>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <div style={{ marginTop: '32px' }}>
           <TypewriterInsight teamName={team.name} />
         </div>
 
-        <div style={{ marginTop: '32px' }}>
-          <TacticalPitch teamName={team.name} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginTop: '48px', alignItems: 'start' }}>
+          <div className="hover-float" style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <TacticalBoard activeTeam={team.name} />
+          </div>
+          <div className="hover-float" style={{ background: 'rgba(255, 255, 255, 0.02)', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <RadarChart activeTeam={team.name} />
+          </div>
         </div>
 
         {team.keyPlayers && (
@@ -81,6 +91,11 @@ export default function TeamDetail({ params }) {
           <span className={styles.statBoxLabel}>Squad Market Value</span>
           <span className={styles.statBoxVal}>€{team.mv}M</span>
         </motion.div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px', marginTop: '48px' }}>
+        <SquadRoster teamName={team.name} />
+        <FanSentiment teamName={team.name} />
       </div>
 
     </div>

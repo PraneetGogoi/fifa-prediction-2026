@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { TEAMS, CONF_DATA, CONF_COLORS } from '@/data/dashboardData';
+import { TEAMS, CONF_DATA, CONF_COLORS, getLineup } from '@/data/dashboardData';
 import styles from './IntelSidebar.module.css';
 
 /* ─── Confederation Donut ─── */
@@ -105,9 +105,13 @@ const RADAR_DIMS = [
   { k: 'form',   label: 'Form',      max: 9.5  },
   { k: 'pts',    label: 'FIFA Pts',  max: 1950 },
   { k: 'mv',     label: 'Market €M', max: 1000 },
+  { k: 'xg',     label: 'Atk xG',    max: 1, isPseudo: true },
+  { k: 'xga',    label: 'Def xGA',   max: 1, isPseudo: true },
+  { k: 'poss',   label: 'Poss %',    max: 1, isPseudo: true },
+  { k: 'press',  label: 'Pressing',  max: 1, isPseudo: true },
 ];
 
-function RadarChart({ activeTeam }) {
+export function RadarChart({ activeTeam }) {
   const teamObj = TEAMS.find(t => t.name === activeTeam) || TEAMS[0];
   const col = CONF_COLORS[teamObj.conf];
   
@@ -136,7 +140,14 @@ function RadarChart({ activeTeam }) {
     return { x: cx + (r + 16) * Math.cos(a), y: cy + (r + 16) * Math.sin(a) + 3, label: d.label };
   });
 
-  const vals = RADAR_DIMS.map(d => Math.min(teamObj[d.k] / d.max, 1));
+  const vals = RADAR_DIMS.map((d, i) => {
+    if (d.isPseudo) {
+      const seed = activeTeam.length + i * 11;
+      return 0.45 + ((seed * 7) % 50) / 100;
+    }
+    return Math.min(teamObj[d.k] / d.max, 1);
+  });
+  
   const polyPts = vals.map((v, i) => {
     const a = angle(i);
     return `${cx + r * v * Math.cos(a)},${cy + r * v * Math.sin(a)}`;
@@ -191,12 +202,51 @@ function RadarChart({ activeTeam }) {
   );
 }
 
+/* ─── Tactical Board ─── */
+export function TacticalBoard({ activeTeam }) {
+  const lineup = getLineup(activeTeam);
+  const teamObj = TEAMS.find(t => t.name === activeTeam) || TEAMS[0];
+  const col = CONF_COLORS[teamObj.conf];
+
+  return (
+    <div className={styles.tacticalSection}>
+      <div className={styles.radarTitle}>Tactical Setup: {lineup.formation}</div>
+      <div className={styles.pitch}>
+        <div className={styles.pitchField}>
+          <div className={styles.pitchLineMid} />
+          <div className={styles.pitchCircle} />
+          <div className={styles.pitchBoxTop} />
+          <div className={styles.pitchBoxBottom} />
+          
+          <AnimatePresence mode="wait">
+            {lineup.players.map((p, i) => (
+              <motion.div 
+                key={`${activeTeam}-${i}`}
+                className={styles.playerDot}
+                style={{ left: `${p.x}%`, top: `${p.y}%`, background: col }}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{ delay: i * 0.04, duration: 0.3 }}
+                title={p.name}
+              >
+                <span className={styles.playerPos}>{p.pos}</span>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function IntelSidebar({ activeTeam }) {
   return (
     <aside className={styles.sidebar}>
       <ConfDonut />
       <KPITiles />
       <RadarChart activeTeam={activeTeam} />
+      <TacticalBoard activeTeam={activeTeam} />
     </aside>
   );
 }
