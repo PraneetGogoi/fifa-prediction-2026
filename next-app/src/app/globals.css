@@ -1,56 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Oswald:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@300,400,500&display=swap');
 
 /* ═══════════════════════════════════════════════════════════
-   DESIGN TOKENS – FIFA WC 2026 Brand: Vibrant & Bold
+   DESIGN TOKENS – Match Day War Room
 ══════════════════════════════════════════════════════════════ */
 :root {
-  /* Pitch Colors */
-  --pitch-dark:   #0e4522;
-  --pitch-mid:    #156531;
-  --pitch-light:  #1d8c44;
-  --pitch-bright: #29b65b;
-  --line:         rgba(255, 255, 255, 0.8);
-
   /* Surfaces */
-  --surface-0:    #0B131E; /* Deep navy/charcoal */
-  --surface-1:    rgba(255, 255, 255, 0.03); /* Glass panels */
-  --surface-2:    rgba(255, 255, 255, 0.08);
-  --surface-3:    rgba(255, 255, 255, 0.12);
-
-  /* Borders */
-  --border-dim:   rgba(255, 255, 255, 0.08);
-  --border-mid:   rgba(255, 255, 255, 0.15);
-  --border-hi:    rgba(255, 255, 255, 0.3);
+  --surface-0:    #060A0F; /* Near-black with cold blue */
+  --surface-1:    #0C1520; /* Deep navy panel */
+  --surface-2:    #112030; /* Card backgrounds */
+  --surface-3:    rgba(0, 212, 255, 0.04);
 
   /* Accents */
-  --gold:         #d4af37; /* Metallic gold */
-  --gold-dim:     #aa8c2c;
-  --gold-glow:    rgba(212, 175, 55, 0.3);
+  --gold:         #FFB800; /* Amber gold */
+  --gold-glow:    rgba(255, 184, 0, 0.3);
+  --cyan:         #00D4FF; /* Electric cyan */
+  --cyan-glow:    rgba(0, 212, 255, 0.15);
+  
+  --red:          #FF3D57; /* Hot red */
+  --green-neon:   #00E676; /* Neon green */
+  --magenta:      #FF007F; /* Keeping for compat */
+  --blue-light:   #00D4FF; /* Mapping old to new cyan */
 
-  --red:          #c0392b; /* Deep crimson */
-  --green-neon:   #27ae60; /* Professional green */
-  --blue-light:   #3498db; /* Clear blue */
-  --magenta:      #8e44ad; /* Deep purple */
+  /* Text & Typography Colors */
+  --text-hi:        #E8F4FF; /* Cold white */
+  --text-primary:   #E8F4FF; /* Barlow display, active labels */
+  --text-gold:      #FFB800; /* KPI numbers, rank 1-3, probabilities */
+  --text-cyan:      #00D4FF; /* Active states, hover, highlights */
+  --text-data:      #A8C8D8; /* JetBrains default data colour */
+  --text-success:   #00E676; /* Win prob > 80% */
+  --text-danger:    #FF3D57; /* Win prob < 30% */
+  --text-secondary: #5A8090; /* Cabinet sublabels, descriptions */
+  --text-mid:       #5A8090; /* Legacy mapped */
+  --text-dim:       #1E3040; /* Disabled, placeholder, axis grid */
+  --text-lo:        #1E3040; /* Legacy mapped */
 
-  /* Text */
-  --text-hi:      #f0f4f8; /* Soft off-white */
-  --text-mid:     #94a3b8; /* Cool slate gray */
-  --text-lo:      #475569; /* Dark slate gray */
+  /* Borders */
+  --border-dim:   rgba(0, 180, 255, 0.08);
+  --border-mid:   rgba(0, 212, 255, 0.25);
+  --border-hi:    rgba(255, 184, 0, 0.30);
 
-  /* Confederation Colors (Vibrant variants) */
-  --UEFA:         #00e1ff; /* Bright Cyan */
-  --CONMEBOL:     #00ff88; /* Bright Green */
-  --CAF:          #FFC900; /* Gold */
-  --CONCACAF:     #ff007f; /* Magenta */
-  --AFC:          #ff5e00; /* Orange */
-  --OFC:          #b8a0ff; /* Light Violet */
+  /* Font Families */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
+  --font-data:    'JetBrains Mono', 'Courier New', monospace;
+  --font-body:    'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
 
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  /* Type Scale */
+  --t1:  52px;   /* page title */
+  --t2:  36px;   /* hero team name */
+  --t3:  28px;   /* kpi number */
+  --t4:  22px;   /* section header */
+  --t5:  18px;   /* rank prob % */
+  --t6:  14px;   /* card title */
+  --t7:  13px;   /* ui label */
+  --t8:  12px;   /* chart axis */
+  --t9:  11px;   /* sub-label */
+  --t10: 10px;   /* meta caps */
+  --t11:  9px;   /* tick labels */
+  --t12:  8px;   /* dim notes */
 
-  --ease: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --transition: 0.4s var(--ease);
+  /* Confederation Colors (War Room versions) */
+  --UEFA:         #00D4FF;
+  --CONMEBOL:     #00E676;
+  --CAF:          #FFB800;
+  --CONCACAF:     #FF007F;
+  --AFC:          #FF5E00;
+  --OFC:          #B8A0FF;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition: 0.25s var(--ease);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -68,84 +90,45 @@ html {
 
 body {
   background: var(--surface-0);
-  background-image: 
-    radial-gradient(circle at 15% 30%, rgba(52, 152, 219, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 85% 70%, rgba(39, 174, 96, 0.1) 0%, transparent 50%);
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   color: var(--text-hi);
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Energetic Diagonal Festival Stripes */
+/* Tactical Pitch Hexagonal Grid */
 body::before {
   content: '';
   position: fixed;
-  inset: -100%;
-  top: 0;
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.02) 0px,
-    rgba(255, 255, 255, 0.02) 4px,
-    transparent 4px,
-    transparent 20px
-  );
-  transform: translateY(0);
-  animation: stripePan 20s linear infinite;
-  mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
-  -webkit-mask-image: radial-gradient(circle at center, black 20%, transparent 80%);
+  background-image: url("data:image/svg+xml,%3Csvg width='40' height='69.2820323027551' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 17.32050807568877l-20 11.547005383792516L0 17.32050807568877V-5.773502691896258l20-11.547005383792516 20 11.547005383792516V17.32050807568877zm0 46.188021538379254l-20 11.547005383792516-20-11.547005383792516V40.414518846483l20-11.547005383792516 20 11.547005383792516v23.094010767584984z' fill='none' stroke='rgba(0,212,255,0.05)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 40px 69.28px;
 }
 
-@keyframes stripePan {
-  0% { transform: translateY(0) translateX(0); }
-  100% { transform: translateY(50px) translateX(-50px); }
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: -1;
-  background: radial-gradient(
-    800px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
-    rgba(0, 225, 255, 0.05),
-    transparent 40%
-  );
-  transition: opacity 0.3s ease;
-}
-
-@keyframes gridMove {
-  0% {
-    transform: perspective(1000px) rotateX(75deg) translateY(0);
-  }
-  100% {
-    transform: perspective(1000px) rotateX(75deg) translateY(60px);
-  }
-}
-
-/* Subtle Noise Texture overlay for premium feel */
+/* Scanline Overlay */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: 9999;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.5;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.2) 51%
+  );
+  background-size: 100% 4px;
+  opacity: 0.15;
 }
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar         { width: 6px; height: 6px; }
-::-webkit-scrollbar-track   { background: transparent; }
-::-webkit-scrollbar-thumb   { background: var(--border-hi); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+::-webkit-scrollbar-track   { background: var(--surface-0); }
+::-webkit-scrollbar-thumb   { background: var(--border-mid); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
 
 /* Utility: ensure content appears above pseudo-elements */
 #__next, main { position: relative; z-index: 2; }
@@ -153,6 +136,92 @@ body::after {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ── TYPOGRAPHY UTILITY CLASSES ───────────────────────────── */
+
+/* Display */
+.type-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--t1);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  line-height: 0.95;
+}
+.type-hero {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t2);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.type-section {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t4);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.type-card-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t6);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Data */
+.type-kpi {
+  font-family: var(--font-data);
+  font-weight: 600;
+  font-size: var(--t3);
+  letter-spacing: 0.5px;
+}
+.type-prob {
+  font-family: var(--font-data);
+  font-weight: 600;
+  font-size: var(--t5);
+  letter-spacing: 0.5px;
+}
+.type-axis {
+  font-family: var(--font-data);
+  font-weight: 400;
+  font-size: var(--t8);
+  letter-spacing: 0.5px;
+}
+.type-tick {
+  font-family: var(--font-data);
+  font-weight: 400;
+  font-size: var(--t11);
+  letter-spacing: 0.5px;
+}
+
+/* Body */
+.type-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--t7);
+  letter-spacing: 0.3px;
+}
+.type-sublabel {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--t9);
+}
+.type-meta {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--t10);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.type-dim {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--t12);
+  letter-spacing: 1px;
 }
 
 /* ═══════════════════════════════════════════════════════════

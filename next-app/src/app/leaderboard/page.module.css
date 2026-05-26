@@ -34,7 +34,7 @@
 .loading {
   text-align: center;
   color: #00ff88;
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   letter-spacing: 4px;
   animation: pulse 1.5s infinite;
 }
@@ -60,7 +60,7 @@
 .table th {
   background: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.5);
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -72,13 +72,13 @@
 .table td {
   padding: 16px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
   color: white;
 }
 
 .winnerCol {
-  font-family: 'Oswald', sans-serif !important;
+  font-family: var(--font-display);
   font-weight: 800;
   color: #00ff88 !important;
 }

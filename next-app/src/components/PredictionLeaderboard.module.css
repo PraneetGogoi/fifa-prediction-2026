@@ -21,7 +21,7 @@
 }
 
 .title {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 800;
   color: white;
@@ -33,7 +33,7 @@
 }
 
 .sub {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--text-mid);
   text-transform: uppercase;
@@ -43,7 +43,7 @@
 .tableHeader {
   display: grid;
   grid-template-columns: 0.5fr 2fr 1.5fr 1fr;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   color: var(--text-mid);
   font-weight: 700;
   text-transform: uppercase;
@@ -77,14 +77,14 @@
 }
 
 .rank {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 900;
   color: var(--gold);
 }
 
 .user {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 700;
   color: white;
   display: flex;
@@ -105,13 +105,13 @@
 }
 
 .pick {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   color: var(--blue-light);
   font-weight: 700;
 }
 
 .score {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 700;
   color: var(--magenta);
   text-align: right;

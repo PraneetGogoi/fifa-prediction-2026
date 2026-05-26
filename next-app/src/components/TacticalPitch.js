@@ -15,20 +15,20 @@ function PitchSVG() {
       {/* Pitch background */}
       <defs>
         <linearGradient id="pitchGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="var(--pitch-mid)" />
-          <stop offset="100%" stopColor="var(--pitch-dark)" />
+          <stop offset="0%" stopColor="rgba(0, 212, 255, 0.02)" />
+          <stop offset="100%" stopColor="rgba(0, 212, 255, 0.08)" />
         </linearGradient>
         <pattern id="stripes" width="40" height="260" patternUnits="userSpaceOnUse">
-          <rect x="0" y="0" width="20" height="260" fill="rgba(255, 255, 255, 0.04)" />
+          <rect x="0" y="0" width="20" height="260" fill="rgba(0, 212, 255, 0.03)" />
           <rect x="20" y="0" width="20" height="260" fill="transparent" />
         </pattern>
       </defs>
       
-      <rect width="400" height="260" fill="url(#pitchGrad)" rx="8" />
+      <rect width="400" height="260" fill="url(#pitchGrad)" rx="8" stroke="rgba(0, 212, 255, 0.2)" strokeWidth="1" />
       <rect width="400" height="260" fill="url(#stripes)" rx="8" />
 
-      {/* Pitch lines */}
-      <g stroke="var(--line)" strokeWidth="1.5" fill="none">
+      {/* Pitch lines - Holographic style */}
+      <g stroke="rgba(0, 212, 255, 0.3)" strokeWidth="1.5" fill="none" filter="drop-shadow(0 0 2px rgba(0,212,255,0.5))">
         {/* Outer boundary */}
         <rect x="12" y="12" width="376" height="236" rx="4" />
         {/* Center line */}
@@ -36,7 +36,7 @@ function PitchSVG() {
         {/* Center circle */}
         <circle cx="200" cy="130" r="36" />
         {/* Center spot */}
-        <circle cx="200" cy="130" r="3" fill="var(--line)" stroke="none" />
+        <circle cx="200" cy="130" r="3" fill="rgba(0, 212, 255, 0.5)" stroke="none" />
         {/* Left penalty box */}
         <rect x="12" y="60" width="60" height="140" />
         {/* Right penalty box */}
@@ -46,8 +46,8 @@ function PitchSVG() {
         {/* Right goal box */}
         <rect x="364" y="94" width="24" height="72" />
         {/* Penalty spots */}
-        <circle cx="48" cy="130" r="2" fill="var(--line)" stroke="none" />
-        <circle cx="352" cy="130" r="2" fill="var(--line)" stroke="none" />
+        <circle cx="48" cy="130" r="2" fill="rgba(0, 212, 255, 0.5)" stroke="none" />
+        <circle cx="352" cy="130" r="2" fill="rgba(0, 212, 255, 0.5)" stroke="none" />
         {/* Penalty arcs */}
         <path d="M72,100 A32,32 0 0,1 72,160" />
         <path d="M328,100 A32,32 0 0,0 328,160" />

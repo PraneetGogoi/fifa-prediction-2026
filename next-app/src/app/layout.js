@@ -23,7 +23,6 @@ export default function RootLayout({ children }) {
         <BootLoader />
         <CommandPalette />
         <AIAssistant />
-        <ParticleBackground />
         <NavBar />
         {children}
       </body>

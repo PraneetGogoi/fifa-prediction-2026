@@ -25,7 +25,7 @@
 }
 
 .chartTitle {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0px;
@@ -34,7 +34,7 @@
 }
 
 .chartSub {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 2px;
@@ -107,7 +107,7 @@
 }
 
 .psTag {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 1px;
@@ -119,7 +119,7 @@
 }
 
 .psName {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.82rem;
   color: var(--text-hi);
@@ -139,7 +139,7 @@
 }
 
 .psVal {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.95rem;
   color: var(--blue-light);
@@ -156,7 +156,7 @@
 }
 
 .mcName {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.78rem;
   color: var(--text-hi);
@@ -177,7 +177,7 @@
 }
 
 .mcAuc {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 1rem;
   min-width: 44px;
@@ -186,7 +186,7 @@
 }
 
 .mcAcc {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-lo);
@@ -206,7 +206,7 @@
 .histCount {
   font-size: 0.6rem;
   color: var(--text-lo);
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
 }
 
@@ -223,7 +223,7 @@
 }
 
 .histLabel {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.55rem;
   font-weight: 700;
   color: var(--text-hi);
@@ -241,7 +241,7 @@
 }
 
 .featNum {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.9rem;
   color: var(--text-lo);
@@ -249,7 +249,7 @@
 }
 
 .featName {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.78rem;
   color: var(--text-hi);
@@ -271,7 +271,7 @@
 }
 
 .featPct {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 0.95rem;
   color: var(--blue-light);

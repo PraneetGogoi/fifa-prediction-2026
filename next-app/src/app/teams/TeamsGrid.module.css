@@ -10,7 +10,7 @@
 }
 
 .title {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 4.5rem;
   font-weight: 900;
   background: linear-gradient(90deg, #fff, #00e1ff);
@@ -21,7 +21,7 @@
 }
 
 .sub {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: var(--text-mid);
   letter-spacing: 4px;
@@ -78,7 +78,7 @@
 }
 
 .teamName {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 2.2rem;
   font-weight: 900;
   color: white;
@@ -86,7 +86,7 @@
 }
 
 .rank {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 800;
   color: #000;
@@ -113,7 +113,7 @@
 }
 
 .statLabel {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-lo);
   text-transform: uppercase;
@@ -122,7 +122,7 @@
 }
 
 .statValue {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   font-weight: 700;
   color: white;
@@ -132,7 +132,7 @@
   position: absolute;
   top: -20px;
   right: -20px;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 8rem;
   font-weight: 900;
   opacity: 0.1;

@@ -16,7 +16,7 @@
 }
 
 .donutTitle {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0px;
@@ -55,7 +55,7 @@
 }
 
 .dcNum {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 2rem;
   color: var(--blue-light);
@@ -64,7 +64,7 @@
 }
 
 .dcLabel {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -102,21 +102,21 @@
 }
 
 .legendName {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.78rem;
   color: var(--text-hi);
 }
 
 .legendTeams {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.65rem;
   font-weight: 500;
   color: var(--text-lo);
 }
 
 .legendProb {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 1rem;
   color: var(--blue-light);
@@ -144,7 +144,7 @@
 .kpiTile:nth-child(4) { border-bottom: none; }
 
 .kpiNum {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.6rem;
   color: var(--blue-light);
@@ -153,7 +153,7 @@
 }
 
 .kpiLabel {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 1.5px;
@@ -168,7 +168,7 @@
 }
 
 .radarTitle {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.1rem;
   letter-spacing: 0px;
@@ -264,7 +264,7 @@
 }
 
 .playerPos {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.5rem;
   font-weight: 800;
   color: var(--surface-0);

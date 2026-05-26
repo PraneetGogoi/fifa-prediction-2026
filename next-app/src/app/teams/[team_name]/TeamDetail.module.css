@@ -5,7 +5,7 @@
 }
 
 .backBtn {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: var(--blue-light);
   text-decoration: none;
@@ -30,7 +30,7 @@
 }
 
 .title {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 5rem;
   font-weight: 900;
   background: linear-gradient(90deg, #ffffff, var(--blue-light));
@@ -42,7 +42,7 @@
 }
 
 .conf {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   color: var(--text-mid);
   letter-spacing: 4px;
@@ -55,7 +55,7 @@
   color: var(--gold);
   padding: 16px 24px;
   border-radius: 12px;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   text-align: center;
 }
 
@@ -87,7 +87,7 @@
 }
 
 .statBoxLabel {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--text-lo);
   text-transform: uppercase;
@@ -95,14 +95,14 @@
 }
 
 .statBoxVal {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 800;
   color: white;
 }
 
 .notfound {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-display);
   font-size: 2rem;
   color: white;
   text-align: center;
